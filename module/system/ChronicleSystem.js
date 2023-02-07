@@ -144,6 +144,18 @@ async function handleRollAsync(rollType, actor, showModifierDialog = false) {
 
 function adjustFormulaByWeapon (actor, formula, weapon) {
     let weaponData = weapon.system;
+
+    // update weapon formula with custom modifiers
+    if (weaponData.customPoolModifier) {
+        formula.pool += weaponData.customPoolModifier;
+    }
+    if (weaponData.customBonusDiceModifier) {
+        formula.bonusDice += weaponData.customBonusDiceModifier;
+    }
+    if (weaponData.customTestModifier) {
+        formula.modifier += weaponData.customTestModifier;
+    }
+
     if (!weaponData.training)
         return formula;
     let poolModifier = formula.bonusDice - weaponData.training;
