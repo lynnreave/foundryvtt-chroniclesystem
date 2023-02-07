@@ -98,12 +98,12 @@
                 </section>
                 <section class="disposition">
                     <header class="subheader-field">
-                        <span>Current Disposition</span>
+                        <span>Current Disposition (Per/Dec/DR) </span>
                     </header>
                     <div class="disposition-list">
                         {{#each dispositions}}
                                 <div class="disposition option capitalize {{showIfEquals this.rating ../character.currentDisposition "selected"}}" data-id="{{this.rating}}">
-                                    {{localize this.name}} ({{this.persuasionModifier}} / {{this.deceptionModifier}})
+                                    {{localize this.name}} ({{this.persuasionModifier}}/{{this.deceptionModifier}}/{{this.rating}} )
                                 </div>
                         {{/each}}
                     </div>
