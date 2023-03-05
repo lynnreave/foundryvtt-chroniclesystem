@@ -65,34 +65,29 @@ export class CSActorSheet extends ActorSheet {
         LOGGER.trace("On Drop Actor | CSActorSheet | csActorSheet.js");
 
         // drop actor to create new relationship (if it does not already exist)
-        console.log(data);
         let embeddedItem = [];
         let sourceId = this.actor._id;
         let sourceActor = this.actor;
         let targetId = data.uuid.replace('Actor.', '');
         let targetActor = game.actors.get(targetId);
         let isRelationshipPermitted = true;
-        console.log(sourceId);
-        console.log(sourceActor);
-        console.log(targetId);
-        console.log(targetActor);
 
         // determine if relationship can be created
         const existingRelationship = sourceActor.items.find((i) => {
             return i.name === targetActor.name;
         });
         if (!this.isItemPermitted("relationship")) {
-            console.log(`Relationships are not permitted for this actor type.`);
+            LOGGER.trace("Relationships are not permitted for this actor type.");
         } else if (existingRelationship) {
-            console.log(`${sourceActor.name} already has a relationship with ${targetActor.name}.`);
+            LOGGER.trace(`${sourceActor.name} already has a relationship with ${targetActor.name}.`);
             isRelationshipPermitted = false;
         } else {
-            console.log(`${sourceActor.name} does not yet have a relationship with ${targetActor.name}.`);
+            LOGGER.trace(`${sourceActor.name} does not yet have a relationship with ${targetActor.name}.`);
         }
 
         // create relationship
         if (isRelationshipPermitted) {
-            console.log(`Creating relationship with ${targetActor.name} for ${sourceActor.name}`);
+            LOGGER.trace(`Creating relationship with ${targetActor.name} for ${sourceActor.name}`);
             let relationshipDataObject = {
                 id: targetId,
                 type: "relationship",
@@ -108,7 +103,6 @@ export class CSActorSheet extends ActorSheet {
                 });
         }
 
-        console.log(embeddedItem);
         return embeddedItem;
     }
     

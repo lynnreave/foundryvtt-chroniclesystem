@@ -7,18 +7,11 @@
                 <span>{{localize "CS.sheets.generalLabels.details"}}</span>
             </header>
             <div class="form-group">
-                <label for="system.disposition">Disposition:</label>
+                <label for="system.disposition">{{localize "CS.sheets.character.relationships.disposition"}}  </label>
                 <span class="form-fields">
-                    {{!-- TODO: change to select --}}
-                    <input
-                            id="system.rating"
-                            class="large-field"
-                            name="system.disposition"
-                            type="text"
-                            value="{{item.system.disposition}}"
-                            placeholder="Disposition"
-                            data-dtype="String"
-                    />
+                    <select name="system.disposition">
+                        {{selectOptions dispositionChoices selected=item.system.disposition localize=true}}
+                    </select>
                 </span>
             </div>
         </section>
