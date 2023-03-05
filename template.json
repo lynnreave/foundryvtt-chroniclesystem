@@ -80,7 +80,8 @@
           "drawbacks": [],
           "abilities": [],
           "powers": [],
-          "benefits": []
+          "benefits": [],
+          "relationships": []
         },
         "currentStress": 0,
         "allies": "",
@@ -159,7 +160,7 @@
     }
   },
   "Item": {
-    "types": ["armor", "weapon", "ability", "equipment", "benefit", "drawback", "event", "holding", "technique"],
+    "types": ["armor", "weapon", "ability", "equipment", "benefit", "drawback", "event", "holding", "technique", "relationship"],
     "templates": {
       "physicalItem": {
         "weight": 0
@@ -283,6 +284,12 @@
       "arts": [],
       "scales": "",
       "works": []
+    },
+    "relationship": {
+      "templates": [
+        "itemDescription"
+      ],
+      "disposition": "Indifferent"
     }
   }
 }

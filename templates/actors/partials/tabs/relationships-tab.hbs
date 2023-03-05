@@ -1,0 +1,24 @@
+<div class="tab flexrow" data-group="primary" data-tab="relationships">
+    <section class="relationships flex4">
+        <header class="header-field">
+            <span>{{localize "CS.sheets.character.tabs.relationships"}}</span>
+        </header>
+        <ol  class="relationships-list">
+            {{#each character.owned.relationships as |relationship key|}}
+                <li  class="item relationship flexrow" data-item-id="{{relationship._id}}">
+                    <div class="profile-list-img-container">
+                        <img class="profile-list-img" src="{{relationship.img}}" title="{{relationship.name}}" alt="{{relationship.name}} Picture" />
+                    </div>
+                    <label class="relationship-label"><a >{{relationship.name}}</a></label>
+                    <label class="relationship-disposition item-edit"><a >{{relationship.system.disposition}}</a></label>
+                    <div class="relationship-description">
+                        <a >
+                            <!-- TODO: make actually editable OR find better way to strip description tags -->
+                            {{editor relationship.system.description target="system.description" button=true owner=owner editable=editable}}
+                        </a>
+                    </div>
+                </li>
+            {{/each}}
+        </ol>
+    </section>
+</div>

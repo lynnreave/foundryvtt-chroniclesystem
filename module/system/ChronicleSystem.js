@@ -229,6 +229,10 @@ ChronicleSystem.dispositions = [
     new Disposition("CS.sheets.character.dispositions.malicious", 7, 3, -6),
 ];
 
+ChronicleSystem.dispositions_options = [
+    "Affectionate", "Friendly", "Amiable", "Indifferent", "Dislike", "Unfriendly", "Malicious"
+];
+
 ChronicleSystem.equippedConstants = {
     IS_NOT_EQUIPPED: 0,
     WEARING: 1,

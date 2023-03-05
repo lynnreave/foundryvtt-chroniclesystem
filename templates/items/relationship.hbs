@@ -1,0 +1,29 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+    "systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body flexrow">
+        <section class="item-stats">
+            <header class="header-field">
+                <span>{{localize "CS.sheets.generalLabels.details"}}</span>
+            </header>
+            <div class="form-group">
+                <label for="system.disposition">Disposition:</label>
+                <span class="form-fields">
+                    {{!-- TODO: change to select --}}
+                    <input
+                            id="system.rating"
+                            class="large-field"
+                            name="system.disposition"
+                            type="text"
+                            value="{{item.system.disposition}}"
+                            placeholder="Disposition"
+                            data-dtype="String"
+                    />
+                </span>
+            </div>
+        </section>
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+        </section>
+    </main>
+</form>

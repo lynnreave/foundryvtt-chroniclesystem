@@ -19,6 +19,7 @@ import {CSAbilityItemSheet} from "../items/sheets/csAbilityItemSheet.js";
 import {CSEventItemSheet} from "../items/sheets/csEventItemSheet.js";
 import {CSHoldingItemSheet} from "../items/sheets/csHoldingItemSheet.js";
 import {CSTechniqueItemSheet} from "../items/sheets/cs-technique-item-sheet.js";
+import {CSRelationshipItemSheet} from "../items/sheets/csRelationshipItemSheet.js";
 import {migrateData} from "../migrations/migration.js";
 import {CsCombat} from "../combat/cs-combat.js";
 import {CsCombatant} from "../combat/cs-combatant.js";
@@ -65,6 +66,8 @@ Hooks.once("init", async function() {
         { label: SystemUtils.localize("CS.sheets.holdingItemSheet"), types: ["holding"], makeDefault: true });
     Items.registerSheet("chroniclesystem", CSTechniqueItemSheet,
         { label: SystemUtils.localize("CS.sheets.techniqueItemSheet"), types: ["technique"], makeDefault: true });
+    Items.registerSheet("chroniclesystem", CSRelationshipItemSheet,
+        { label: SystemUtils.localize("CS.sheets.relationshipItemSheet"), types: ["relationship"], makeDefault: true });
 
     registerSystemSettings();
     await preloadHandlebarsTemplates();

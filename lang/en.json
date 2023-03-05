@@ -145,12 +145,16 @@
           "unfriendly": "unfriendly",
           "malicious": "malicious"
         },
+        "relationships": {
+          "disposition": "Disposition"
+        },
         "tabs": {
           "abilities": "Abilities",
           "combat-intrigue": "Combat and Intrigue",
           "qualities": "Qualities",
           "sorcery": "Sorcery",
           "equipments": "Equipments",
+          "relationships": "Relationships",
           "description": "Description"
         }
       },

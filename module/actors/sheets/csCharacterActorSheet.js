@@ -18,7 +18,8 @@ export class CSCharacterActorSheet extends CSActorSheet {
       "equipment",
       "benefit",
       "drawback",
-      "technique"
+      "technique",
+      "relationship"
   ]
 
   /** @override */
@@ -57,6 +58,7 @@ export class CSCharacterActorSheet extends CSActorSheet {
     character.owned.drawbacks = this._checkNull(data.itemsByType['drawback']);
     character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
+    character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
 
     data.dispositions = ChronicleSystem.dispositions;
 

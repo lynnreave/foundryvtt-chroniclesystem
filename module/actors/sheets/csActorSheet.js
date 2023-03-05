@@ -3,10 +3,6 @@ import LOGGER from "../../utils/logger.js";
 
 export class CSActorSheet extends ActorSheet {
 
-    async _onDropActor(event, data) {
-        LOGGER.trace("On Drop Actor | CSActorSheet | csActorSheet.js");
-    }
-
     activateListeners(html) {
         super.activateListeners(html);
 
@@ -63,6 +59,57 @@ export class CSActorSheet extends ActorSheet {
             return items;
         }
         return [];
+    }
+
+    async _onDropActor(event, data) {
+        LOGGER.trace("On Drop Actor | CSActorSheet | csActorSheet.js");
+
+        // drop actor to create new relationship (if it does not already exist)
+        console.log(data);
+        let embeddedItem = [];
+        let sourceId = this.actor._id;
+        let sourceActor = this.actor;
+        let targetId = data.uuid.replace('Actor.', '');
+        let targetActor = game.actors.get(targetId);
+        let isRelationshipPermitted = true;
+        console.log(sourceId);
+        console.log(sourceActor);
+        console.log(targetId);
+        console.log(targetActor);
+
+        // determine if relationship can be created
+        const existingRelationship = sourceActor.items.find((i) => {
+            return i.name === targetActor.name;
+        });
+        if (!this.isItemPermitted("relationship")) {
+            console.log(`Relationships are not permitted for this actor type.`);
+        } else if (existingRelationship) {
+            console.log(`${sourceActor.name} already has a relationship with ${targetActor.name}.`);
+            isRelationshipPermitted = false;
+        } else {
+            console.log(`${sourceActor.name} does not yet have a relationship with ${targetActor.name}.`);
+        }
+
+        // create relationship
+        if (isRelationshipPermitted) {
+            console.log(`Creating relationship with ${targetActor.name} for ${sourceActor.name}`);
+            let relationshipDataObject = {
+                id: targetId,
+                type: "relationship",
+                name: targetActor.name,
+                img: targetActor.img,
+                disposition: "Indifferent",
+                description: ""
+            }
+            // this.actor.items.push({ key: targetId, value: relationshipDataObject })
+            this.actor.createEmbeddedDocuments("Item", [relationshipDataObject])
+                .then(function(result) {
+                    embeddedItem.concat(result);
+                });
+        }
+
+        console.log(embeddedItem);
+        return embeddedItem;
     }
     
     async _onDropItemCreate(itemData) {
