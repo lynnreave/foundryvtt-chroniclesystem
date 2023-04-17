@@ -330,10 +330,12 @@
       "templates": [
         "itemDescription"
       ],
-      "disposition": "Indifferent"
+      "disposition": "Indifferent",
+      "targetId": ""
     },
     "hero": {
-      "equipped": 0
+      "equipped": 0,
+      "targetId": ""
     }
   }
 }

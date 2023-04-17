@@ -74,6 +74,10 @@ export class CSUnitActorSheet extends CSActorSheet {
             weapon.formula = formula;
         });
 
+        //
+        // console.log(character.commander)
+        // console.log(game.actors.get(character.commander._id))
+
         data.character = character;
         return data;
     }
@@ -262,7 +266,8 @@ export class CSUnitActorSheet extends CSActorSheet {
                 id: targetId,
                 type: "hero",
                 name: targetActor.name,
-                img: targetActor.img
+                img: targetActor.img,
+                system: {targetId: targetId}
             }
             this.actor.createEmbeddedDocuments("Item", [heroDataObject])
                 .then(function (result) {

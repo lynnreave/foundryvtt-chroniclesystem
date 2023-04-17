@@ -17,6 +17,9 @@ export class CSActorSheet extends ActorSheet {
         // Update Inventory Item
         html.find('.item-edit').click(this._showEmbeddedItemSheet.bind(this));
         html.find('.rollable').click(this._onClickRoll.bind(this));
+
+        // open another sheet
+        html.find('.actor-open').click(this._showLinkedActorSheet.bind(this));
     }
 
     async _onClickRoll(event, targets) {
@@ -28,6 +31,15 @@ export class CSActorSheet extends ActorSheet {
         const li = $(event.currentTarget).parents('.item');
         const item = this.actor.items.get(li.data('itemId'));
         item.sheet.render(true);
+    }
+
+    _showLinkedActorSheet(event) {
+        event.preventDefault();
+        const li = $(event.currentTarget).parents('.item');
+        const linkedActor = this.actor.items.get(li.data('itemId'));
+        const linkedActorId = linkedActor.system.targetId;
+        const actor = game.actors.get(linkedActorId);
+        actor.sheet.render(true);
     }
 
     isItemPermitted(type) {

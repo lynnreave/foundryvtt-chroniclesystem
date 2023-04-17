@@ -236,7 +236,7 @@
                         {{#each character.owned.weapons as |weapon index|}}
                             {{#ifDifferent weapon.system.equipped ../notEquipped}}
                                 <tr>
-                                    <td>{{weapon.name}} {{showIfEquals weapon.system.equipped 3 "(Off-hand)" : ""}}</td>
+                                    <td>{{weapon.name}}</td>
                                     <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
                                         <a>{{format-formula weapon.formula}}</a>
                                     </td>
@@ -283,7 +283,7 @@
                 </li>
             {{#each character.owned.heroes as |hero index|}}
                 <li class="item heroes flexrow" data-item-id="{{_id}}">
-                    <div class="armor-label item-edit field"><a>{{hero.name}}</a></div>
+                    <div class="armor-label actor-open field"><a>{{hero.name}}</a></div>
                     <div class="item-controls">
                         <a class="checkButton equipped {{showIfEquals "5" hero.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "5" hero.system.equipped 0 5}}" data-type="hero"><i class="fas fa-star"></i></a>
                         <a class="item-control owned-item-control" title="Delete" data-index="{{index}}" data-list="heroes" data-action="delete"><i class="fas fa-trash"></i></a>

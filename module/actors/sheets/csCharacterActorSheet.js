@@ -412,7 +412,8 @@ export class CSCharacterActorSheet extends CSActorSheet {
         name: targetActor.name,
         img: targetActor.img,
         disposition: "Indifferent",
-        description: ""
+        description: "",
+        system: {targetId: targetId}
       }
       // this.actor.items.push({ key: targetId, value: relationshipDataObject })
       this.actor.createEmbeddedDocuments("Item", [relationshipDataObject])
