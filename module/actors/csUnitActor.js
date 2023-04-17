@@ -54,6 +54,7 @@ export class CSUnitActor extends CSActor {
         // discipline
         // TODO: find a better way to do this (using the modifier/penalty system)
         data.discipline.modifier = parseInt(data.discipline.disorganisationModifier) + parseInt(data.discipline.ordersReceivedModifier);
+        data.discipline.subtotal = data.discipline.value + parseInt(data.discipline.disorganisationModifier)
         data.discipline.total = data.discipline.value + parseInt(data.discipline.modifier);
 
         // commander

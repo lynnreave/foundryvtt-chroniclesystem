@@ -422,3 +422,22 @@
     margin: 3px;
     flex: 0.4;
 }
+
+.flex-6 {
+    margin: 3px;
+    flex: 0.6;
+}
+
+.flex-2 {
+    margin: 3px;
+    flex: 0.2;
+}
+
+.white-label {
+    background: white;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    margin: 3px;
+    padding: 3px;
+}
