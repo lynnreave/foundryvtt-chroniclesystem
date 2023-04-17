@@ -1,0 +1,290 @@
+<div class="tab flexrow" data-group="primary" data-tab="combat-and-intrigue">
+    <section class="derived-statistics">
+        <section class="command">
+            <header class="header-field">
+                <span>Command</span>
+            </header>
+            <section class="flexrow">
+                <section class="commander">
+                    <header class="subheader-field">
+                        <span>Commander</span>
+                    </header>
+                    <ol  class="list equipment-list">
+                        <li class="item flexrow">
+                            <div class="commander-profile-img-container">
+                                <img class="profile-list-img" src="{{character.commander.img}}" title="{{character.commander.name}}" />
+                            </div>
+                            <div class="commander-txt-container"><label>{{character.commander.name}}</label></div>
+                        </li>
+                    </ol>
+                </section>
+                <section class="status">
+                    <header class="subheader-field">
+                        <span>Status</span>
+                    </header>
+                    <div class="disposition-list">
+                        {{#each statuses}}
+                            <div class="disposition option capitalize {{showIfEquals this.rating ../character.currentStatus "selected"}}" data-id="{{this.rating}}">
+                                {{localize this.name}}
+                            </div>
+                        {{/each}}
+                    </div>
+                </section>
+                <section class="discipline">
+                    <header class="subheader-field">
+                        <span>Discipline</span>
+                    </header>
+                    <ol clsas="list equipment-list">
+                        <li class="list-header flexrow">
+                            <div class="">Base</div>
+                            <div class="center">Mod</div>
+                            <div class="item-controls">Total</div>
+                        </li>
+                        <li  class="item flexrow">
+                            <input
+                                    id="system.discipline.value"
+                                    class="small-field"
+                                    name="system.discipline.value"
+                                    type="text"
+                                    value="{{character.discipline.value}}"
+                                    placeholder="0"
+                                    data-dtype="Number"
+                            />
+                            <b>+</b>
+                            <input
+                                    id="system.discipline.modifier"
+                                    class="small-field"
+                                    name="system.discipline.modifier"
+                                    type="text"
+                                    value="{{character.discipline.modifier}}"
+                                    placeholder="0"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                            <b>=</b>
+                            <input
+                                    id="system.discipline.total"
+                                    class="small-field"
+                                    name="system.discipline.total"
+                                    type="text"
+                                    value="{{character.discipline.total}}"
+                                    placeholder="0"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </li>
+                    </ol>
+                </section>
+            </section>
+        </section>
+        <section class="combat">
+            <header class="header-field">
+                <span>Combat</span>
+            </header>
+            <section class="content flexrow">
+                <section class="stats">
+                    <header class="subheader-field">
+                        <span>Combat Defense</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <input
+                                    name="system.derivedStats.combatDefense.value"
+                                    type="text"
+                                    value="{{character.derivedStats.combatDefense.value}}"
+                                    placeholder="Value"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                            <b>+</b>
+                            <input
+                                    name="system.derivedStats.combatDefense.modifier"
+                                    type="text"
+                                    value="{{character.derivedStats.combatDefense.modifier}}"
+                                    placeholder="Modifier"
+                                    data-dtype="Number"
+                            />
+                            <b>=</b>
+                            <input
+                                    name="system.derivedStats.combatDefense.value"
+                                    type="text"
+                                    value="{{character.derivedStats.combatDefense.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <header class="subheader-field">
+                        <span>Health</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <input
+                                    name="system.derivedStats.health.value"
+                                    type="text"
+                                    value="{{character.derivedStats.health.value}}"
+                                    placeholder="Value"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                            <b>+</b>
+                            <input
+                                    name="system.derivedStats.health.modifier"
+                                    type="text"
+                                    value="{{character.derivedStats.health.modifier}}"
+                                    placeholder="Modifier"
+                                    data-dtype="Number"
+                            />
+                            <b>=</b>
+                            <input
+                                    name="system.derivedStats.health.value"
+                                    type="text"
+                                    value="{{character.derivedStats.health.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="system.derivedStats.health.current">Current</label>
+                        <span class="form-fields">
+                            <input
+                                    name="system.derivedStats.health.current"
+                                    type="text"
+                                    value="{{character.derivedStats.health.current}}"
+                                    placeholder="Current"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <header class="subheader-field">
+                        <span>Disorganisation</span>
+                    </header>
+                    {{> (ratingCheckbox) max=character.disorganisation.total currentValue=character.disorganisation.current dataType="Disorganisation" }}
+                    <header class="subheader-field">
+                        <span>Movement</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <input
+                                    name="system.movement.base"
+                                    type="text"
+                                    value="{{character.movement.base}}"
+                                    placeholder="Base"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                            <b>+</b>
+                            <input
+                                    name="system.derivedStats.movement.runBonus"
+                                    type="text"
+                                    value="{{character.movement.runBonus}}"
+                                    placeholder="Run Bonus"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                            <b>-</b>
+                            <input
+                                    name="system.movement.bulk"
+                                    type="text"
+                                    value="{{character.movement.bulk}}"
+                                    placeholder="Bulk"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                            <b>+</b>
+                            <input
+                                    name="system.movement.modifier"
+                                    type="text"
+                                    value="{{character.movement.modifier}}"
+                                    placeholder="Modifier"
+                                    data-dtype="Number"
+                            />
+                            <b>=</b>
+                            <input
+                                    name="system.derivedStats.movement.total"
+                                    type="text"
+                                    value="{{character.movement.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                </section>
+                <section class="weapons">
+                    <header class="subheader-field">
+                        <span>Current Equipped Weapons</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Weapon</th>
+                            <th>Test</th>
+                            <th>Damage</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.weapons as |weapon index|}}
+                            {{#ifDifferent weapon.system.equipped ../notEquipped}}
+                                <tr>
+                                    <td>{{weapon.name}} {{showIfEquals weapon.system.equipped 3 "(Off-hand)" : ""}}</td>
+                                    <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
+                                        <a>{{format-formula weapon.formula}}</a>
+                                    </td>
+                                    <td> {{weapon.damageValue}}</td>
+                                </tr>
+                            {{/ifDifferent}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <header class="subheader-field">
+                        <span>Current Equipped Armor</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Armor</th>
+                            <th>Rating</th>
+                            <th>Penalty</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.armors as |armor index|}}
+                            {{#ifDifferent armor.system.equipped ../notEquipped}}
+                                <tr>
+                                    <td>{{armor.name}}</td>
+                                    <td>{{armor.system.rating}}</td>
+                                    <td>{{armor.system.penalty}}</td>
+                                </tr>
+                            {{/ifDifferent}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+        </section>
+        <section class="heroes">
+            <header class="header-field">
+                <span>Heroes</span>
+            </header>
+            <ol  class="armors-list list equipment-list">
+                <li class="list-header flexrow">
+                    <div class="armor-label">Name</div>
+                    <div class="item-controls"><i class="fas fa-cog"></i></div>
+                </li>
+            {{#each character.owned.heroes as |hero index|}}
+                <li class="item heroes flexrow" data-item-id="{{_id}}">
+                    <div class="armor-label item-edit field"><a>{{hero.name}}</a></div>
+                    <div class="item-controls">
+                        <a class="checkButton equipped {{showIfEquals "5" hero.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "5" hero.system.equipped 0 5}}" data-type="hero"><i class="fas fa-star"></i></a>
+                        <a class="item-control owned-item-control" title="Delete" data-index="{{index}}" data-list="heroes" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>
+            {{/each}}
+        </ol>
+        </section>
+    </section>
+</div>

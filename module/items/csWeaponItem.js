@@ -27,7 +27,6 @@ export class CSWeaponItem extends CSItem {
         LOGGER.trace(`Weapon ${oldId} Discarded from actor | csWeaponItem.js`);
         super.onDiscardedFromActor(actor, oldId);
         let qualities = this.getCSData().qualities;
-        console.log(qualities);
         Object.values(qualities).forEach(quality => {
             switch (quality.name.toLowerCase())
             {

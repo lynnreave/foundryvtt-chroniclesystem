@@ -4,6 +4,7 @@ import LOGGER from "../utils/logger.js";
 import {CSRoll} from "../rolls/cs-roll.js";
 import {CSConstants} from "./csConstants.js";
 import SystemUtils from "../utils/systemUtils.js";
+import {UnitStatus} from "../unitStatus.js";
 
 export const ChronicleSystem ={}
 
@@ -229,12 +230,20 @@ ChronicleSystem.dispositions = [
     new Disposition("CS.sheets.character.dispositions.malicious", 7, 3, -6),
 ];
 
+ChronicleSystem.unitStatuses = [
+    new UnitStatus("CS.sheets.unit.statuses.organised", 1),
+    new UnitStatus("CS.sheets.unit.statuses.disorganised", 2),
+    new UnitStatus("CS.sheets.unit.statuses.routed", 3),
+    new UnitStatus("CS.sheets.unit.statuses.destroyed", 4)
+]
+
 ChronicleSystem.equippedConstants = {
     IS_NOT_EQUIPPED: 0,
     WEARING: 1,
     MAIN_HAND: 2,
     OFFHAND: 3,
-    BOTH_HANDS: 4
+    BOTH_HANDS: 4,
+    COMMANDER: 5,
 };
 
 ChronicleSystem.defaultMovement = 4;
@@ -252,7 +261,8 @@ ChronicleSystem.modifiersConstants = {
 
     BULK: "bulk",
     DAMAGE_TAKEN: "damage_taken",
-    COMBAT_DEFENSE: "combat_defense"
+    COMBAT_DEFENSE: "combat_defense",
+    DISCIPLINE: "discipline"
 }
 
 ChronicleSystem.keyConstants = {
@@ -284,8 +294,9 @@ ChronicleSystem.keyConstants = {
     INJURY: "CS.constants.others.injuries",
     FRUSTRATION: "CS.constants.others.frustrations",
     STRESS: "CS.constants.others.stress",
-    FATIGUE: "CS.constants.others.fatigue"
-
+    FATIGUE: "CS.constants.others.fatigue",
+    DISORGANISATION: "CS.constants.others.disorganisation",
+    DISCIPLINE: "CS.constants.others.discipline"
 }
 
 ChronicleSystem.lawModifiers = [

@@ -60,51 +60,6 @@ export class CSActorSheet extends ActorSheet {
         }
         return [];
     }
-
-    async _onDropActor(event, data) {
-        LOGGER.trace("On Drop Actor | CSActorSheet | csActorSheet.js");
-
-        // drop actor to create new relationship (if it does not already exist)
-        let embeddedItem = [];
-        let sourceId = this.actor._id;
-        let sourceActor = this.actor;
-        let targetId = data.uuid.replace('Actor.', '');
-        let targetActor = game.actors.get(targetId);
-        let isRelationshipPermitted = true;
-
-        // determine if relationship can be created
-        const existingRelationship = sourceActor.items.find((i) => {
-            return i.name === targetActor.name;
-        });
-        if (!this.isItemPermitted("relationship")) {
-            LOGGER.trace("Relationships are not permitted for this actor type.");
-        } else if (existingRelationship) {
-            LOGGER.trace(`${sourceActor.name} already has a relationship with ${targetActor.name}.`);
-            isRelationshipPermitted = false;
-        } else {
-            LOGGER.trace(`${sourceActor.name} does not yet have a relationship with ${targetActor.name}.`);
-        }
-
-        // create relationship
-        if (isRelationshipPermitted) {
-            LOGGER.trace(`Creating relationship with ${targetActor.name} for ${sourceActor.name}`);
-            let relationshipDataObject = {
-                id: targetId,
-                type: "relationship",
-                name: targetActor.name,
-                img: targetActor.img,
-                disposition: "Indifferent",
-                description: ""
-            }
-            // this.actor.items.push({ key: targetId, value: relationshipDataObject })
-            this.actor.createEmbeddedDocuments("Item", [relationshipDataObject])
-                .then(function(result) {
-                    embeddedItem.concat(result);
-                });
-        }
-
-        return embeddedItem;
-    }
     
     async _onDropItemCreate(itemData) {
         let embeddedItem = [];

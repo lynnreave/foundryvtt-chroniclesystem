@@ -12,6 +12,7 @@ import actorConstructor from "../actors/actorConstructor.js";
 import registerSystemSettings from "./settings.js";
 import {CSCharacterActorSheet} from "../actors/sheets/csCharacterActorSheet.js";
 import {CSHouseActorSheet} from "../actors/sheets/csHouseActorSheet.js";
+import {CSUnitActorSheet} from "../actors/sheets/csUnitActorSheet.js";
 import SystemUtils from "../utils/systemUtils.js";
 import LOGGER from "../utils/logger.js";
 import itemConstructor from "../items/itemConstructor.js";
@@ -54,6 +55,8 @@ Hooks.once("init", async function() {
         { label: SystemUtils.localize("CS.sheets.characterSheet"), types: ["character"], makeDefault: true });
     Actors.registerSheet("chroniclesystem", CSHouseActorSheet,
         { label: SystemUtils.localize("CS.sheets.houseSheet"), types: ["house"], makeDefault: true });
+    Actors.registerSheet("chroniclesystem", CSUnitActorSheet,
+        { label: SystemUtils.localize("CS.sheets.unitSheet"), types: ["unit"], makeDefault: true });
 
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("chroniclesystem", CSItemSheet,

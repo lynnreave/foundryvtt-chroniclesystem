@@ -396,3 +396,29 @@
     margin: 3px;
     flex: 0.2;
 }
+
+.commander-profile-img-container {
+    height: auto;
+    width: auto;
+    max-height: 100px;
+    max-width: 100px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    background: white;
+    margin: 3px;
+    flex: 0.5;
+}
+
+.commander-txt-container {
+    height: auto;
+    width: auto;
+    max-height: 100px;
+    max-width: 100px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+    background: white;
+    margin: 3px;
+    flex: 0.4;
+}

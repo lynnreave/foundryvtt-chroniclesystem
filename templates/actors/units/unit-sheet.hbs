@@ -1,0 +1,29 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+            <div class="complements flexrow">
+                <label  class="attribute-label"> Owner: </label>
+                <input  class="medium-field flex2" type="text"  name="system.owner"  value="{{character.owner}}"  data-dtype="String"/>
+            </div>
+        </div>
+    </header>
+    {{log character}}
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav  class="sheet-tabs flexrow tabs" data-group="primary">
+        <a  class="item"  data-tab="abilities">{{localize "CS.sheets.character.tabs.abilities"}}</a>
+        <a  class="item size150"  data-tab="combat-and-intrigue">{{localize "CS.sheets.unit.tabs.warfare"}}</a>
+        <a  class="item"  data-tab="equipments">{{localize "CS.sheets.character.tabs.equipments"}}</a>
+        <a  class="item"  data-tab="actor-description">{{localize "CS.sheets.character.tabs.description"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/abilities-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/warfare-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/equipments-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/description-tab.hbs"}}
+    </section>
+</form>

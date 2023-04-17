@@ -71,8 +71,11 @@
     "sheets": {
       "characterSheet": "Character Sheet",
       "houseSheet": "House Sheet",
+      "unitSheet": "Unit Sheet",
       "itemSheet": "Item Sheet",
       "abilityItemSheet": "Ability Sheet",
+      "relationshipItemSheet": "Relationship Sheet",
+      "heroItemSheet": "Hero Sheet",
       "generalLabels": {
         "none": "None",
         "description": "Description",
@@ -137,13 +140,13 @@
         "others": "Others",
         "techniques": "Techniques",
         "dispositions": {
-          "affectionate": "affectionate",
-          "friendly": "friendly",
-          "amiable": "amiable",
-          "indifferent": "indifferent",
-          "dislike": "dislike",
-          "unfriendly": "unfriendly",
-          "malicious": "malicious"
+          "affectionate": "Affectionate",
+          "friendly": "Friendly",
+          "amiable": "Amiable",
+          "indifferent": "Indifferent",
+          "dislike": "Dislike",
+          "unfriendly": "Unfriendly",
+          "malicious": "Malicious"
         },
         "relationships": {
           "disposition": "Disposition"
@@ -156,6 +159,26 @@
           "equipments": "Equipments",
           "relationships": "Relationships",
           "description": "Description"
+        }
+      },
+      "unit": {
+        "heroes": {
+          "role": "Role"
+        },
+        "roles": {
+          "commander": "Commander",
+          "subcommander": "Subcommander",
+          "hero": "Hero"
+        },
+        "statuses": {
+          "organised": "Organised",
+          "disorganised": "Disorganised",
+          "routed": "Routed",
+          "destroyed": "Destroyed"
+        },
+        "tabs": {
+          "heroes": "Heroes",
+          "warfare": "Warfare"
         }
       },
       "eventItem": {
@@ -235,7 +258,9 @@
         "injuries": "Injuries",
         "frustrations": "Frustrations",
         "stress": "Stress",
-        "fatigue": "Fatigue"
+        "fatigue": "Fatigue",
+        "disorganisation": "Disorganisation",
+        "discipline": "Discipline"
       }
     }
   }
