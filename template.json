@@ -176,9 +176,16 @@
       "discipline": {
         "value": 0,
         "modifier": 0,
+        "disorganisationModifier": 0,
+        "ordersReceivedModifier": 0,
         "current": 0
       },
       "disorganisation": {
+        "value": 0,
+        "modifier": 0,
+        "current": 0
+      },
+      "ordersReceived": {
         "value": 0,
         "modifier": 0,
         "current": 0

@@ -47,7 +47,13 @@ export class CSUnitActor extends CSActor {
         data.disorganisation.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
         data.disorganisation.total = data.disorganisation.value + parseInt(data.disorganisation.modifier);
 
+        // num of orders received / turn
+        data.ordersReceived.value = 5
+        data.ordersReceived.total = data.ordersReceived.value + parseInt(data.ordersReceived.modifier);
+
         // discipline
+        // TODO: find a better way to do this (using the modifier/penalty system)
+        data.discipline.modifier = parseInt(data.discipline.disorganisationModifier) + parseInt(data.discipline.ordersReceivedModifier);
         data.discipline.total = data.discipline.value + parseInt(data.discipline.modifier);
 
         // commander

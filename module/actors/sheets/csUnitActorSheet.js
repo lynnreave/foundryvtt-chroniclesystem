@@ -121,15 +121,33 @@ export class CSUnitActorSheet extends CSActorSheet {
 
         if (value > 0) {
             this.actor.addPenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION, value, false);
-            mod += value * 3;
+            // TODO: find a better way to do this (using the modifier/penalty system)
+            mod += value*3;
         } else {
             this.actor.removePenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION);
         }
 
         this.actor.update({
             "system.disorganisation.current": value,
-            "system.discipline.modifier": mod,
+            "system.discipline.disorganisationModifier": mod,
             "system.penalties": this.actor.penalties
+        });
+    }
+
+    async setOrdersReceivedValue(newValue) {
+        let value = Math.max(Math.min(parseInt(newValue), this.actor.getCSData().ordersReceived.total), 0);
+        let mod = Math.max(Math.min(parseInt(newValue), this.actor.getCSData().ordersReceived.modifier), 0);
+
+        this.actor.updateTempPenalties();
+
+        if (value > 0) {
+            // TODO: find a better way to do this (using the modifier/penalty system)
+            mod += value*3;
+        }
+
+        this.actor.update({
+            "system.ordersReceived.current": value,
+            "system.discipline.ordersReceivedModifier": mod,
         });
     }
 

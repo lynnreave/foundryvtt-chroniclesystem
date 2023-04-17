@@ -73,6 +73,12 @@
                                     data-dtype="Number"
                             />
                         </li>
+                        <li class="list-header flexrow">
+                            <div class="center">Orders Received</div>
+                        </li>
+                        <li class="item flexrow">
+                            {{> (ratingCheckbox) max=character.ordersReceived.total currentValue=character.ordersReceived.current dataType="OrdersReceived" }}
+                        </li>
                     </ol>
                 </section>
             </section>

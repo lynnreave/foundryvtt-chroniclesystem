@@ -296,7 +296,8 @@ ChronicleSystem.keyConstants = {
     STRESS: "CS.constants.others.stress",
     FATIGUE: "CS.constants.others.fatigue",
     DISORGANISATION: "CS.constants.others.disorganisation",
-    DISCIPLINE: "CS.constants.others.discipline"
+    DISCIPLINE: "CS.constants.others.discipline",
+    ORDERS_RECEIVED: "CS.constants.others.ordersReceived"
 }
 
 ChronicleSystem.lawModifiers = [
