@@ -11,6 +11,7 @@ import {CSConstants} from "../system/csConstants.js";
 export class CSCharacterActor extends CSActor {
     modifiers;
     penalties;
+    bonuses;
 
     prepareData() {
         super.prepareData();
@@ -159,6 +160,44 @@ export class CSCharacterActor extends CSActor {
         return { total: total, detail: detail};
     }
 
+    getBonus(type, includeDetail = false, includeModifierGlobal = false) {
+        this.updateTempBonuses();
+
+        let total = 0;
+        let detail = [];
+
+        if (this.bonuses[type]) {
+            this.bonuses[type].forEach((bonus) => {
+                total += bonus.mod;
+                if (includeDetail) {
+                    let tempItem = bonus._id;
+                    if (bonus.isDocument) {
+                        tempItem = this.getEmbeddedDocument('Item', bonus._id);
+                    }
+                    if (tempItem) {
+                        detail.push({docName: tempItem.name, mod: bonus.mod});
+                    }
+                }
+            });
+        }
+
+        if (includeModifierGlobal && this.bonuses[ChronicleSystem.modifiersConstants.ALL]) {
+            this.bonuses[ChronicleSystem.modifiersConstants.ALL].forEach((bonus) => {
+                total += bonus.mod;
+                if (includeDetail) {
+                    let tempItem = bonus._id;
+                    if (bonus.isDocument) {
+                        tempItem = this.getEmbeddedDocument('Item', bonus._id);
+                    }
+                    if (tempItem)
+                        detail.push({docName: tempItem.name, mod: bonus.mod});
+                }
+            });
+        }
+
+        return { total: total, detail: detail};
+    }
+
     addModifier(type, documentId, value, isDocument = true, save = false) {
         LOGGER.trace(`add ${documentId} modifier to ${type} | csCharacterActor.js`);
 
@@ -210,6 +249,34 @@ export class CSCharacterActor extends CSActor {
         }
     }
 
+    addBonus(type, documentId, value, isDocument = true, save = false) {
+        LOGGER.trace(`add ${documentId} bonus to ${type} | csUnitActor.js`);
+
+        console.assert(this.bonuses, "call actor.updateTempBonuses before adding a bonus!");
+
+        if (!this.bonuses[type]) {
+            this.bonuses[type] = [];
+        }
+
+        let index = this.bonuses[type].findIndex((mod) => {
+            return mod._id === documentId
+        });
+
+        if (index >= 0) {
+            this.bonuses[type][index].mod = value;
+        } else {
+            this.bonuses[type].push({
+                _id: documentId,
+                mod: value,
+                isDocument: isDocument
+            });
+        }
+
+        if (save) {
+            this.update({"system.bonuses": this.bonuses});
+        }
+    }
+
     removeModifier(type, documentId, save = false) {
         LOGGER.trace(`remove ${documentId} modifier to ${type} | csCharacterActor.js`);
 
@@ -236,6 +303,32 @@ export class CSCharacterActor extends CSActor {
             this.update({"data.penalties" : this.penalties});
     }
 
+    removeBonus(type, documentId, save = false) {
+        LOGGER.trace(`remove ${documentId} bonus to ${type} | csUnitActor.js`);
+
+        console.assert(this.bonuses, "call actor.updateTempBonuses before removing a bonus!");
+
+        if (this.bonuses[type]) {
+            let index = this.bonuses[type].indexOf((mod) => mod._id === documentId);
+            this.bonuses[type].splice(index, 1);
+        }
+        if (save)
+            this.update({"system.penalties" : this.bonuses});
+    }
+
+    calcCombatDefense() {
+        let value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.AWARENESS)) +
+            this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.AGILITY)) +
+            this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ATHLETICS));
+
+        if (game.settings.get(CSConstants.Settings.SYSTEM_NAME, CSConstants.Settings.ASOIAF_DEFENSE_STYLE)){
+            let mod = this.getModifier(ChronicleSystem.modifiersConstants.COMBAT_DEFENSE);
+            value += mod.total;
+        }
+
+        return value;
+    }
+
     getMaxInjuries() {
         return this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
     }
@@ -252,6 +345,11 @@ export class CSCharacterActor extends CSActor {
     savePenalties() {
         console.assert(this.penalties, "call actor.updateTempPenalties before saving the penalties!");
         this.update({"data.penalties" : this.penalties}, {diff:false});
+    }
+
+    saveBonuses() {
+        console.assert(this.bonuses, "call actor.updateTempBonuses before saving the bonuses!");
+        this.update({"system.bonuses" : this.bonuses}, {diff:false});
     }
 
     getAbilityValue(abilityName) {
@@ -329,5 +427,10 @@ export class CSCharacterActor extends CSActor {
     updateTempPenalties() {
         let data = this.getCSData()
         this.penalties = data.penalties;
+    }
+
+    updateTempBonuses() {
+        let data = this.getCSData()
+        this.bonuses = data.bonuses;
     }
 }

@@ -139,4 +139,8 @@ export const registerCustomHelpers = function () {
     Handlebars.registerHelper('showIfLess', function(arg1, arg2, result, result2 = "", options) {
         return new Handlebars.SafeString(arg1 < arg2 ? result : result2);
     });
+
+    Handlebars.registerHelper('showAbs', function(arg1) {
+        return Math.abs(arg1)
+    });
 };

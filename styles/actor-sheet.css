@@ -428,9 +428,34 @@
     flex: 0.6;
 }
 
+.flex-8 {
+    margin: 3px;
+    flex: 0.8;
+}
+
+.flex-5 {
+    margin: 3px;
+    flex: 0.5;
+}
+
+.flex-4 {
+    margin: 3px;
+    flex: 0.4;
+}
+
+.flex-3 {
+    margin: 3px;
+    flex: 0.3;
+}
+
 .flex-2 {
     margin: 3px;
     flex: 0.2;
+}
+
+.flex-1{
+    margin: 3px;
+    flex: 0.1;
 }
 
 .white-label {
@@ -438,6 +463,19 @@
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
+    margin: 3px;
+    padding: 3px;
+}
+
+.font-small {
+    font-size: 10px;
+}
+
+.font-xsmall {
+    font-size: 8px;
+}
+
+.padding-3 {
     margin: 3px;
     padding: 3px;
 }

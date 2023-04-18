@@ -55,6 +55,7 @@
         "currentDisposition": 4,
         "modifiers": {},
         "penalties": {},
+        "bonuses": {},
         "movement": {
           "base": 4,
           "runBonus": 0,
@@ -172,13 +173,23 @@
         "character-common"
       ],
       "commander": "",
+      "currentFacing": 1,
+      "currentFormation": 1,
       "currentStatus": 1,
       "discipline": {
         "value": 0,
         "modifier": 0,
-        "disorganisationModifier": 0,
-        "ordersReceivedModifier": 0,
-        "current": 0
+        "ordersReceivedModifier": 0
+      },
+      "discreteDefenses": {
+        "vFighting": {
+          "value": 0,
+          "modifier": 0
+        },
+        "vMarksmanship": {
+          "value": 0,
+          "modifier": 0
+        }
       },
       "disorganisation": {
         "value": 0,

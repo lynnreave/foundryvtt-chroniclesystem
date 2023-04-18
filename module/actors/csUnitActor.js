@@ -15,6 +15,7 @@ import {CSConstants} from "../system/csConstants.js";
 export class CSUnitActor extends CSActor {
     modifiers;
     penalties;
+    bonuses;
 
     prepareData() {
         super.prepareData();
@@ -38,8 +39,37 @@ export class CSUnitActor extends CSActor {
 
     calculateDerivedValues() {
         let data = this.getCSData();
+
+        // "equipped" hardcoded entities
+        // commander
+        data.commander = this.getCommander();
+        // formation
+        data.equippedFormation = ChronicleSystem.formations.find(
+            (item) => item.rating === data.currentFormation
+        );
+
+        // base combat defense
         data.derivedStats.combatDefense.value = this.calcCombatDefense();
-        data.derivedStats.combatDefense.total = data.derivedStats.combatDefense.value + parseInt(data.derivedStats.combatDefense.modifier);
+        data.derivedStats.combatDefense.total = data.derivedStats.combatDefense.value
+            + parseInt(data.derivedStats.combatDefense.modifier);
+        // discrete defense
+        // v. fighting
+        data.discreteDefenses.vFighting.value = data.derivedStats.combatDefense.total;
+        data.discreteDefenses.vFighting.modifier = this.getModifier(
+            ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
+            false, true
+        ).total;
+        data.discreteDefenses.vFighting.total = data.discreteDefenses.vFighting.value
+            + data.discreteDefenses.vFighting.modifier;
+        // v. marksmanship
+        data.discreteDefenses.vMarksmanship.value = data.derivedStats.combatDefense.total;
+        data.discreteDefenses.vMarksmanship.modifier = this.getModifier(
+            ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
+            false, true
+        ).total;
+        data.discreteDefenses.vMarksmanship.total = data.discreteDefenses.vMarksmanship.value
+            + data.discreteDefenses.vMarksmanship.modifier;
+
         data.derivedStats.health.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE)) * 3;
         data.derivedStats.health.total = data.derivedStats.health.value + parseInt(data.derivedStats.health.modifier);
 
@@ -48,17 +78,16 @@ export class CSUnitActor extends CSActor {
         data.disorganisation.total = data.disorganisation.value + parseInt(data.disorganisation.modifier);
 
         // num of orders received / turn
-        data.ordersReceived.value = 5
-        data.ordersReceived.total = data.ordersReceived.value + parseInt(data.ordersReceived.modifier);
+        data.ordersReceived.value = 5;
+        data.ordersReceived.total = data.ordersReceived.value;
 
         // discipline
-        // TODO: find a better way to do this (using the modifier/penalty system)
-        data.discipline.modifier = parseInt(data.discipline.disorganisationModifier) + parseInt(data.discipline.ordersReceivedModifier);
-        data.discipline.subtotal = data.discipline.value + parseInt(data.discipline.disorganisationModifier)
-        data.discipline.total = data.discipline.value + parseInt(data.discipline.modifier);
-
-        // commander
-        data.commander = this.getCommander();
+        data.discipline.modifier = this.getModifier(
+            ChronicleSystem.modifiersConstants.DISCIPLINE, false, true
+        ).total;
+        data.discipline.total = data.discipline.value + data.discipline.modifier;
+        data.discipline.totalWithOrders = data.discipline.total
+            + parseInt(data.discipline.ordersReceivedModifier);
     }
 
     getAbilities() {
@@ -98,6 +127,7 @@ export class CSUnitActor extends CSActor {
         return [ability, specialty];
     }
 
+    // TODO: consolidate these?
     getModifier(type, includeDetail = false, includeModifierGlobal = false) {
         this.updateTempModifiers();
 
@@ -174,6 +204,45 @@ export class CSUnitActor extends CSActor {
         return { total: total, detail: detail};
     }
 
+    getBonus(type, includeDetail = false, includeModifierGlobal = false) {
+        this.updateTempBonuses();
+
+        let total = 0;
+        let detail = [];
+
+        if (this.bonuses[type]) {
+            this.bonuses[type].forEach((bonus) => {
+                total += bonus.mod;
+                if (includeDetail) {
+                    let tempItem = bonus._id;
+                    if (bonus.isDocument) {
+                        tempItem = this.getEmbeddedDocument('Item', bonus._id);
+                    }
+                    if (tempItem) {
+                        detail.push({docName: tempItem.name, mod: bonus.mod});
+                    }
+                }
+            });
+        }
+
+        if (includeModifierGlobal && this.bonuses[ChronicleSystem.modifiersConstants.ALL]) {
+            this.bonuses[ChronicleSystem.modifiersConstants.ALL].forEach((bonus) => {
+                total += bonus.mod;
+                if (includeDetail) {
+                    let tempItem = bonus._id;
+                    if (bonus.isDocument) {
+                        tempItem = this.getEmbeddedDocument('Item', bonus._id);
+                    }
+                    if (tempItem)
+                        detail.push({docName: tempItem.name, mod: bonus.mod});
+                }
+            });
+        }
+
+        return { total: total, detail: detail};
+    }
+
+    // TODO: consolidate these?
     saveModifiers() {
         console.assert(this.modifiers, "call actor.updateTempModifiers before saving the modifiers!");
         this.update({"system.modifiers" : this.modifiers}, {diff:false});
@@ -184,11 +253,18 @@ export class CSUnitActor extends CSActor {
         this.update({"data.penalties" : this.penalties}, {diff:false});
     }
 
+    saveBonuses() {
+        console.assert(this.bonuses, "call actor.updateTempBonuses before saving the bonuses!");
+        this.update({"system.bonuses" : this.bonuses}, {diff:false});
+    }
+
     getAbilityValue(abilityName) {
         const [ability,] = this.getAbility(abilityName);
         return ability !== undefined? ability.getCSData().rating : 2;
     }
 
+    // TODO: consolidate these functions
+    // TODO: push up to parent Actor?
     addModifier(type, documentId, value, isDocument = true, save = false) {
         LOGGER.trace(`add ${documentId} modifier to ${type} | csUnitActor.js`);
 
@@ -208,7 +284,7 @@ export class CSUnitActor extends CSActor {
         }
 
         if (save) {
-            this.update({"data.modifiers": this.modifiers});
+            this.update({"system.modifiers": this.modifiers});
         }
     }
 
@@ -236,10 +312,39 @@ export class CSUnitActor extends CSActor {
         }
 
         if (save) {
-            this.update({"data.penalties": this.penalties});
+            this.update({"system.penalties": this.penalties});
         }
     }
 
+    addBonus(type, documentId, value, isDocument = true, save = false) {
+        LOGGER.trace(`add ${documentId} bonus to ${type} | csUnitActor.js`);
+
+        console.assert(this.bonuses, "call actor.updateTempBonuses before adding a bonus!");
+
+        if (!this.bonuses[type]) {
+            this.bonuses[type] = [];
+        }
+
+        let index = this.bonuses[type].findIndex((mod) => {
+            return mod._id === documentId
+        });
+
+        if (index >= 0) {
+            this.bonuses[type][index].mod = value;
+        } else {
+            this.bonuses[type].push({
+                _id: documentId,
+                mod: value,
+                isDocument: isDocument
+            });
+        }
+
+        if (save) {
+            this.update({"system.bonuses": this.bonuses});
+        }
+    }
+
+    // TODO: consolidate these functions
     removeModifier(type, documentId, save = false) {
         LOGGER.trace(`remove ${documentId} modifier to ${type} | csUnitActor.js`);
 
@@ -266,6 +371,19 @@ export class CSUnitActor extends CSActor {
             this.update({"data.penalties" : this.penalties});
     }
 
+    removeBonus(type, documentId, save = false) {
+        LOGGER.trace(`remove ${documentId} bonus to ${type} | csUnitActor.js`);
+
+        console.assert(this.bonuses, "call actor.updateTempBonuses before removing a bonus!");
+
+        if (this.bonuses[type]) {
+            let index = this.bonuses[type].indexOf((mod) => mod._id === documentId);
+            this.bonuses[type].splice(index, 1);
+        }
+        if (save)
+            this.update({"system.penalties" : this.bonuses});
+    }
+
     calcCombatDefense() {
         let value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.AWARENESS)) +
             this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.AGILITY)) +
@@ -286,7 +404,10 @@ export class CSUnitActor extends CSActor {
         data.movement.runBonus = Math.floor(runFormula.bonusDice / 2);
         let bulkMod = this.getModifier(SystemUtils.localize(ChronicleSystem.modifiersConstants.BULK));
         data.movement.bulk = Math.floor(bulkMod.total/2);
-        data.movement.total = Math.max(data.movement.base + data.movement.runBonus - data.movement.bulk + parseInt(data.movement.modifier), 1);
+        data.movement.modifier = this.getModifier(
+            ChronicleSystem.modifiersConstants.MOVEMENT, false, true
+        ).total;
+        data.movement.total = Math.max(data.movement.base + data.movement.runBonus - data.movement.bulk + data.movement.modifier, 1);
         data.movement.sprintTotal = data.movement.total * data.movement.sprintMultiplier - data.movement.bulk;
     }
 
@@ -322,6 +443,7 @@ export class CSUnitActor extends CSActor {
         this.saveModifiers();
     }
 
+    // TODO: consolidate these?
     updateTempModifiers() {
         let data = this.getCSData()
         this.modifiers = data.modifiers;
@@ -330,5 +452,10 @@ export class CSUnitActor extends CSActor {
     updateTempPenalties() {
         let data = this.getCSData()
         this.penalties = data.penalties;
+    }
+
+    updateTempBonuses() {
+        let data = this.getCSData()
+        this.bonuses = data.bonuses;
     }
 }

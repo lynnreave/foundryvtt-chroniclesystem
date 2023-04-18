@@ -1,4 +1,4 @@
-<div class="tab flexrow" data-group="primary" data-tab="combat-and-intrigue">
+<div class="tab flexrow" data-group="primary" data-tab="warfare">
     <section class="derived-statistics">
         <section class="command">
             <header class="header-field">
@@ -24,7 +24,7 @@
                     </header>
                     <div class="disposition-list">
                         {{#each statuses}}
-                            <div class="disposition option capitalize {{showIfEquals this.rating ../character.currentStatus "selected"}}" data-id="{{this.rating}}">
+                            <div class="disposition status option capitalize {{showIfEquals this.rating ../character.currentStatus "selected"}}" data-id="{{this.rating}}">
                                 {{localize this.name}}
                             </div>
                         {{/each}}
@@ -34,13 +34,13 @@
                     <header class="subheader-field">
                         <span>Discipline</span>
                     </header>
-                    <ol clsas="list equipment-list">
+                    <ol class="list equipment-list">
                         <li class="list-header flexrow">
                             <div class="">Base</div>
-                            <div class="center">Mod</div>
+                            <div class="">Mod</div>
                             <div class="item-controls">Total</div>
                         </li>
-                        <li  class="item flexrow">
+                        <li  class="flexrow">
                             <input
                                     id="system.discipline.value"
                                     class="small-field"
@@ -56,7 +56,7 @@
                                     class="small-field"
                                     name="system.discipline.modifier"
                                     type="text"
-                                    value="{{character.discipline.disorganisationModifier}}"
+                                    value="{{character.discipline.modifier}}"
                                     placeholder="0"
                                     readonly="readonly"
                                     data-dtype="Number"
@@ -67,21 +67,23 @@
                                     class="small-field"
                                     name="system.discipline.total"
                                     type="text"
-                                    value="{{character.discipline.subtotal}}"
+                                    value="{{character.discipline.total}}"
                                     placeholder="0"
                                     readonly="readonly"
                                     data-dtype="Number"
                             />
                         </li>
                         <li class="list-header flexrow">
-                            <div class="center">Orders Received</div>
+                            <div class="center flex-6">By Orders Received</div>
+                            <div class="flex-2"></div>
+                            <div class="flex-2"></div>
                         </li>
-                        <li class="item flexrow">
+                        <li class="flexrow">
                             <div class="flex-6">
                                 {{> (ratingCheckbox) max=character.ordersReceived.total currentValue=character.ordersReceived.current dataType="OrdersReceived" }}
                             </div>
-                            <div class="white-label flex-2">DR:</div>
-                            <div class="white-label flex-2">{{character.discipline.total}}</div>
+                            <div class="flex-2"></div>
+                            <div class="flex-2 white-label">{{character.discipline.totalWithOrders}}</div>
                         </li>
                     </ol>
                 </section>
@@ -91,11 +93,16 @@
             <header class="header-field">
                 <span>Combat</span>
             </header>
-            <section class="content flexrow">
-                <section class="stats">
+            <section class="flexrow">
+                <section class="stats flex-2">
                     <header class="subheader-field">
-                        <span>Combat Defense</span>
+                        <span>Defense</span>
                     </header>
+                    <li class="list-header flexrow">
+                        <div class="">Base</div>
+                        <div class="center">Mod</div>
+                        <div class="item-controls">Total</div>
+                    </li>
                     <div class="form-group">
                         <span class="form-fields">
                             <input
@@ -125,6 +132,20 @@
                             />
                         </span>
                     </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>v. Melee</th>
+                            <th>v. Ranged</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{character.discreteDefenses.vFighting.total}}</td>
+                                <td>{{character.discreteDefenses.vMarksmanship.total}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <header class="subheader-field">
                         <span>Health</span>
                     </header>
@@ -204,12 +225,13 @@
                                     readonly="readonly"
                                     data-dtype="Number"
                             />
-                            <b>+</b>
+                            <b>{{showIfLess character.movement.modifier 0 "-" : "+"}}</b>
                             <input
                                     name="system.movement.modifier"
                                     type="text"
-                                    value="{{character.movement.modifier}}"
+                                    value="{{showAbs character.movement.modifier}}"
                                     placeholder="Modifier"
+                                    readonly="readonly"
                                     data-dtype="Number"
                             />
                             <b>=</b>
@@ -224,7 +246,30 @@
                         </span>
                     </div>
                 </section>
-                <section class="weapons">
+                <section class="facing flex-4">
+                    <header class="subheader-field">
+                        <span>Facing</span>
+                    </header>
+                    <li class="list-header flexrow">
+                        <div class="flex-8">Target</div>
+                        <div class="flex-1 center">TD</div>
+                        <div class="flex-1 center">BD</div>
+                    </li>
+                    <div class="disposition-list">
+                        {{#each facings}}
+                            <div class="disposition facing option flexrow {{showIfEquals this.rating ../character.currentFacing "selected"}}" data-id="{{this.rating}}">
+                                <label class="flex-8" data-id="{{this.rating}}">{{localize this.name}}</label>
+                                <label class="flex-1 center" data-id="{{this.rating}}">
+                                    {{showIfDifferent 0 this.testDiceModifier this.testDiceModifier : ""}}
+                                </label>
+                                <label class="flex-1 center" data-id="{{this.rating}}">
+                                    {{showIfDifferent 0 this.bonusDiceModifier this.bonusDiceModifier : ""}}
+                                </label>
+                            </div>
+                        {{/each}}
+                    </div>
+                </section>
+                <section class="weapons flex-4">
                     <header class="subheader-field">
                         <span>Current Equipped Weapons</span>
                     </header>
@@ -273,28 +318,29 @@
                         {{/each}}
                         </tbody>
                     </table>
+                    <header class="subheader-field">
+                        <span>Current Formation</span>
+                    </header>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="flex-6">Name</th>
+                                {{#each character.equippedFormation.conditionalModifiers}}
+                                    <th class="flex-2"></th>
+                                {{/each}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="flex-6">{{localize character.equippedFormation.name}}</td>
+                                {{#each character.equippedFormation.conditionalModifiers}}
+                                    <td class="font-xsmall padding-3 flex-2">{{this}}</td>
+                                {{/each}}
+                            </tr>
+                        </tbody>
+                    </table>
                 </section>
             </section>
-        </section>
-        <section class="heroes">
-            <header class="header-field">
-                <span>Heroes</span>
-            </header>
-            <ol  class="armors-list list equipment-list">
-                <li class="list-header flexrow">
-                    <div class="armor-label">Name</div>
-                    <div class="item-controls"><i class="fas fa-cog"></i></div>
-                </li>
-            {{#each character.owned.heroes as |hero index|}}
-                <li class="item heroes flexrow" data-item-id="{{_id}}">
-                    <div class="armor-label actor-open field"><a>{{hero.name}}</a></div>
-                    <div class="item-controls">
-                        <a class="checkButton equipped {{showIfEquals "5" hero.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "5" hero.system.equipped 0 5}}" data-type="hero"><i class="fas fa-star"></i></a>
-                        <a class="item-control owned-item-control" title="Delete" data-index="{{index}}" data-list="heroes" data-action="delete"><i class="fas fa-trash"></i></a>
-                    </div>
-                </li>
-            {{/each}}
-        </ol>
         </section>
     </section>
 </div>

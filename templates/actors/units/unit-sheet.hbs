@@ -14,7 +14,8 @@
     {{!-- Sheet Tab Navigation --}}
     <nav  class="sheet-tabs flexrow tabs" data-group="primary">
         <a  class="item"  data-tab="abilities">{{localize "CS.sheets.character.tabs.abilities"}}</a>
-        <a  class="item size150"  data-tab="combat-and-intrigue">{{localize "CS.sheets.unit.tabs.warfare"}}</a>
+        <a  class="item size150"  data-tab="warfare">{{localize "CS.sheets.unit.tabs.warfare"}}</a>
+        <a  class="item"  data-tab="formation">{{localize "CS.sheets.unit.tabs.formation"}}</a>
         <a  class="item"  data-tab="equipments">{{localize "CS.sheets.character.tabs.equipments"}}</a>
         <a  class="item"  data-tab="actor-description">{{localize "CS.sheets.character.tabs.description"}}</a>
     </nav>
@@ -23,6 +24,7 @@
     <section class="sheet-body">
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/abilities-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/warfare-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/formation-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/equipments-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/description-tab.hbs"}}
     </section>

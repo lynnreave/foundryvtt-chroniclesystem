@@ -1,0 +1,70 @@
+<div class="tab" data-group="primary" data-tab="formation">
+    <section class="">
+        <section class="formation">
+            <header class="header-field">
+                <span>Formation</span>
+            </header>
+            <li class="list-header flexrow">
+                <div class="flex-6">Name</div>
+                <div class="flex-1 center">DIFFIC</div>
+                <div class="flex-1 center">DSC</div>
+                <div class="flex-1 center">DEF</div>
+                <div class="flex-1 center">MOV</div>
+                <div class="flex-1 center">TD</div>
+            </li>
+            <div class="disposition-list">
+                {{#each formations}}
+                    <div class="disposition formation option {{showIfEquals this.rating ../character.currentFormation "selected"}}" data-id="{{this.rating}}">
+                        <li class="flexrow" data-id="{{this.rating}}">
+                            <label class="flex-6" data-id="{{this.rating}}">{{localize this.name}}</label>
+                            <label class="flex-1 center" data-id="{{this.rating}}">
+                                {{showIfDifferent 0 this.difficulty this.difficulty : ""}}
+                            </label>
+                            <label class="flex-1 center" data-id="{{this.rating}}">
+                                {{showIfDifferent 0 this.disciplineModifier this.disciplineModifier : ""}}
+                            </label>
+                            <label class="flex-1 center" data-id="{{this.rating}}">
+                                {{showIfDifferent 0 this.fightingDefenseModifier this.fightingDefenseModifier : ""}}
+                                /
+                                {{showIfDifferent 0 this.marksmanshipDefenseModifier this.marksmanshipDefenseModifier : ""}}
+                            </label>
+                            <label class="flex-1 center" data-id="{{this.rating}}">
+                                {{showIfEquals -99 this.movementModifier "NO" : ""}}
+                                {{showIfContains "-4|-3|-2|-1|1|2|3|4" this.movementModifier this.movementModifier : ""}}
+                            </label>
+                            <label class="flex-1 center" data-id="{{this.rating}}">
+                                {{showIfEquals -99 this.testDiceModifier "NO" : ""}}
+                                {{showIfContains "-4|-3|-2|-1|1|2|3|4" this.testDiceModifier this.testDiceModifier : ""}}
+                            </label>
+                        </li>
+                        <li class="flexrow" data-id="{{this.rating}}">
+                            {{#each this.conditionalModifiers}}
+                                <label class="font-small padding-3" data-id="{{this.rating}}">{{this}}</label>
+                            {{/each}}
+                        </li>
+                    </div>
+                {{/each}}
+            </div>
+        </section>
+        <section class="heroes">
+            <header class="header-field">
+                <span>Heroes</span>
+            </header>
+            <ol  class="list equipment-list">
+                <li class="list-header flexrow">
+                    <div class="">Name</div>
+                    <div class="item-controls"><i class="fas fa-cog"></i></div>
+                </li>
+                {{#each character.owned.heroes as |hero index|}}
+                    <li class="item heroes flexrow" data-item-id="{{_id}}">
+                        <div class="actor-open field"><a>{{hero.name}}</a></div>
+                        <div class="item-controls">
+                            <a class="checkButton equipped {{showIfEquals "5" hero.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "5" hero.system.equipped 0 5}}" data-type="hero"><i class="fas fa-star"></i></a>
+                            <a class="item-control owned-item-control" title="Delete" data-index="{{index}}" data-list="heroes" data-action="delete"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </li>
+                {{/each}}
+            </ol>
+        </section>
+    </section>
+</div>

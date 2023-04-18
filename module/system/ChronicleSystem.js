@@ -5,6 +5,8 @@ import {CSRoll} from "../rolls/cs-roll.js";
 import {CSConstants} from "./csConstants.js";
 import SystemUtils from "../utils/systemUtils.js";
 import {UnitStatus} from "../unitStatus.js";
+import {UnitFacing} from "../unitFacing.js";
+import {Formation} from "../formation.js";
 
 export const ChronicleSystem ={}
 
@@ -71,6 +73,13 @@ function _getFormula(roll_definition, actor) {
         case 'formula':
             formula = DiceRollFormula.fromStr(roll_definition[2]);
             break;
+    }
+
+    // handle negative penalty
+    // TODO: don't overload penalty; change to TD modifier?
+    if (formula.dicePenalty < 0) {
+        formula.pool += Math.abs(formula.dicePenalty)
+        formula.dicePenalty = 0
     }
 
     return formula;
@@ -195,20 +204,22 @@ function getActorTestFormula(actor, abilityName, specialtyName = null) {
     formula.reRoll = 0;
     if (ability !== undefined) {
         let penalties = actor.getPenalty(ability.name.toLowerCase(), false, true);
+        let bonuses = actor.getBonus(ability.name.toLowerCase(), false, true)
         formula.pool = ability.getCSData().rating;
         formula.dicePenalty = penalties.total;
 
         let modifiers = actor.getModifier(ability.name.toLowerCase(),false, true);
         formula.modifier = ability.getCSData().modifier + specModifier + modifiers.total;
-        formula.bonusDice = specValue;
+        formula.bonusDice = specValue + bonuses.total;
     } else {
         let penalties = actor.getPenalty(abilityName.toLowerCase(), false, true);
+        let bonuses = actor.getBonus(abilityName.toLowerCase(), false, true)
         formula.pool = 2;
         formula.dicePenalty = penalties.total;
 
         let modifiers = actor.getModifier(abilityName.toLowerCase(),false, true);
         formula.modifier = specModifier + modifiers.total;
-        formula.bonusDice = specValue;
+        formula.bonusDice = specValue + bonuses.total;
     }
 
     return formula;
@@ -237,6 +248,82 @@ ChronicleSystem.unitStatuses = [
     new UnitStatus("CS.sheets.unit.statuses.destroyed", 4)
 ]
 
+ChronicleSystem.unitFacings = [
+    new UnitFacing("CS.sheets.unit.facings.front", 1, 0, 0),
+    new UnitFacing("CS.sheets.unit.facings.flank", 2, 0, 1),
+    new UnitFacing("CS.sheets.unit.facings.rear", 3, 1, 0),
+    new UnitFacing("CS.sheets.unit.facings.surroundedFront", 4, 0, 1),
+    new UnitFacing("CS.sheets.unit.facings.surroundedFlank", 5, 1, 0),
+    new UnitFacing("CS.sheets.unit.facings.surroundedRear", 6, 2, 0),
+    new UnitFacing("CS.sheets.unit.facings.flanking", 7, -1, 0),
+]
+
+ChronicleSystem.formations = [
+    new Formation(
+        "CS.sheets.unit.formations.battle", 1,
+        0, 0,
+        0, 0, -1, 0,
+        []
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.checkered", 2,
+        0, 3,
+        0, 5, -1, 0,
+        [
+            "+1D on Fighting tests against mobs"
+        ]
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.column", 3,
+        0, 0,
+        0, 0, 0, -1,
+        []
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.mob", 4,
+        -3, 6,
+        -5, -5, 0, 0,
+        []
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.phalanx", 5,
+        9, 0,
+        5, -5, -2, 0,
+        []
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.shieldWall", 6,
+        6, 0,
+        5, 0, -99, 0,
+        [
+            "Negates benefits of enemy Charge action",
+            "+5 Defense from cover to any unit directly behind this one"
+        ]
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.square", 7,
+        6, 0,
+        0, 0, -99, 0,
+        [
+            "Negates benefits of enemy attacks to the flank and rear of this unit"
+        ]
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.tortoise", 8,
+        9, 0,
+        5, 5, -2, -99,
+        []
+    ),
+    new Formation(
+        "CS.sheets.unit.formations.wedge", 9,
+        3, 0,
+        0, -5, 0, 0,
+        [
+            "+1D on Fighting tests to conduct or withstand a Charge"
+        ]
+    ),
+]
+
 ChronicleSystem.equippedConstants = {
     IS_NOT_EQUIPPED: 0,
     WEARING: 1,
@@ -256,12 +343,16 @@ ChronicleSystem.modifiersConstants = {
     AWARENESS: "awareness",
     CUNNING: "cunning",
     DECEPTION: "deception",
+    FIGHTING: "fighting",
     PERSUASION: "persuasion",
     STATUS: "status",
 
     BULK: "bulk",
     DAMAGE_TAKEN: "damage_taken",
     COMBAT_DEFENSE: "combat_defense",
+    COMBAT_DEFENSE_FIGHTING: "combat_defense_fighting",
+    COMBAT_DEFENSE_MARKSMANSHIP: "combat_defense_marksmanship",
+    MOVEMENT: "movement",
     DISCIPLINE: "discipline"
 }
 
@@ -297,7 +388,9 @@ ChronicleSystem.keyConstants = {
     FATIGUE: "CS.constants.others.fatigue",
     DISORGANISATION: "CS.constants.others.disorganisation",
     DISCIPLINE: "CS.constants.others.discipline",
-    ORDERS_RECEIVED: "CS.constants.others.ordersReceived"
+    ORDERS_RECEIVED: "CS.constants.others.ordersReceived",
+    FACING: "CS.constants.others.facing",
+    FORMATION: "CS.constants.others.formation"
 }
 
 ChronicleSystem.lawModifiers = [

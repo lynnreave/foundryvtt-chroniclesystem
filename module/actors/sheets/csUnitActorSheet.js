@@ -54,6 +54,8 @@ export class CSUnitActorSheet extends CSActorSheet {
         character.owned.heroes = this._checkNull(data.itemsByType['hero']).sort((a, b) => a.name.localeCompare(b.name));
 
         data.statuses = ChronicleSystem.unitStatuses;
+        data.facings = ChronicleSystem.unitFacings;
+        data.formations = ChronicleSystem.formations;
 
         data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
 
@@ -74,10 +76,6 @@ export class CSUnitActorSheet extends CSActorSheet {
             weapon.formula = formula;
         });
 
-        //
-        // console.log(character.commander)
-        // console.log(game.actors.get(character.commander._id))
-
         data.character = character;
         return data;
     }
@@ -95,7 +93,9 @@ export class CSUnitActorSheet extends CSActorSheet {
             $(ev.currentTarget).parents('.item').find('.description').slideToggle();
         });
 
-        html.find('.disposition.option').click(this._onUnitStatusChanged.bind(this));
+        html.find('.status.option').click(this._onUnitStatusChanged.bind(this));
+        html.find('.facing.option').click(this._onUnitFacingChanged.bind(this));
+        html.find('.formation.option').click(this._onUnitFormationChanged.bind(this));
 
         html.find('.equipped').click(this._onEquippedStateChanged.bind(this));
 
@@ -122,19 +122,20 @@ export class CSUnitActorSheet extends CSActorSheet {
         let mod = Math.max(Math.min(parseInt(newValue), this.actor.getCSData().disorganisation.modifier), 0);
 
         this.actor.updateTempPenalties();
+        this.actor.updateTempModifiers();
 
         if (value > 0) {
             this.actor.addPenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION, value, false);
-            // TODO: find a better way to do this (using the modifier/penalty system)
-            mod += value*3;
+            this.actor.addModifier(ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION, value*3, false)
         } else {
             this.actor.removePenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION);
+            this.actor.removeModifier(ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION)
         }
 
         this.actor.update({
             "system.disorganisation.current": value,
-            "system.discipline.disorganisationModifier": mod,
-            "system.penalties": this.actor.penalties
+            "system.penalties": this.actor.penalties,
+            "system.modifiers": this.actor.modifiers
         });
     }
 
@@ -142,12 +143,7 @@ export class CSUnitActorSheet extends CSActorSheet {
         let value = Math.max(Math.min(parseInt(newValue), this.actor.getCSData().ordersReceived.total), 0);
         let mod = Math.max(Math.min(parseInt(newValue), this.actor.getCSData().ordersReceived.modifier), 0);
 
-        this.actor.updateTempPenalties();
-
-        if (value > 0) {
-            // TODO: find a better way to do this (using the modifier/penalty system)
-            mod += value*3;
-        }
+        if (value > 0) { mod += value*3 }
 
         this.actor.update({
             "system.ordersReceived.current": value,
@@ -218,6 +214,137 @@ export class CSUnitActorSheet extends CSActorSheet {
             return;
         }
         this.actor.update({"system.currentStatus": rating});
+    }
+
+    async _onUnitFacingChanged(event, targets) {
+        event.preventDefault();
+        let rating = parseInt(event.target.dataset.id);
+        const facing = ChronicleSystem.unitFacings.find((item) => item.rating === rating);
+        if (!facing) {
+            LOGGER.warn(`the informed unit facing ${rating} does not exist.`);
+            return;
+        }
+
+        this.actor.updateTempPenalties();
+        this.actor.updateTempBonuses();
+
+        // test dice modifier (only fighting)
+        // override the penalty workflow to get test dice modifiers to work (by getting opposite value)
+        // TODO: change getPenalty() to be getTestDiceMod() and add support for getBonusDiceMod()?
+        if (facing.testDiceModifier !== 0) {
+            let penalty = -(facing.testDiceModifier)
+            this.actor.addPenalty(
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
+                penalty, false
+            );
+        } else {
+            this.actor.removePenalty(
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
+            );
+        }
+        // bonus dice modifier (only fighting)
+        if (facing.bonusDiceModifier > 0) {
+            this.actor.addBonus(
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
+                facing.bonusDiceModifier, false
+            );
+        } else {
+            this.actor.removeBonus(
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
+            );
+        }
+
+        this.actor.update({
+            "system.currentFacing": rating,
+            "system.penalties": this.actor.penalties,
+            "system.bonuses": this.actor.bonuses
+        });
+    }
+
+    async _onUnitFormationChanged(event, targets) {
+        event.preventDefault();
+        let rating = parseInt(event.target.dataset.id);
+        const formation = ChronicleSystem.formations.find((item) => item.rating === rating);
+        if (!formation) {
+            LOGGER.warn(`the informed unit formation ${rating} does not exist.`);
+            return;
+        }
+
+        this.actor.updateTempModifiers();
+        this.actor.updateTempPenalties();
+
+        // TODO: see _onUnitFacingChanged()
+        // TODO: consolidate these with a loop, grabbing fields from Formation() object
+        // update modifiers/penalties/bonuses
+        // discipline
+        if (formation.disciplineModifier !== 0) {
+            this.actor.addModifier(
+                ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.FORMATION,
+                formation.disciplineModifier, false
+            );
+        } else {
+            this.actor.removeModifier(
+                ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.FORMATION
+            );
+        }
+        // fighting defense
+        if (formation.fightingDefenseModifier !== 0) {
+            this.actor.addModifier(
+                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
+                ChronicleSystem.keyConstants.FORMATION,
+                formation.fightingDefenseModifier, false
+            );
+        } else {
+            this.actor.removeModifier(
+                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
+                ChronicleSystem.keyConstants.FORMATION
+            );
+        }
+        // marksmanship defense
+        if (formation.marksmanshipDefenseModifier !== 0) {
+            this.actor.addModifier(
+                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
+                ChronicleSystem.keyConstants.FORMATION,
+                formation.marksmanshipDefenseModifier, false
+            );
+        } else {
+            this.actor.removeModifier(
+                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
+                ChronicleSystem.keyConstants.FORMATION
+            );
+        }
+        // movement
+        if (formation.movementModifier !== 0) {
+            this.actor.addModifier(
+                ChronicleSystem.modifiersConstants.MOVEMENT,
+                ChronicleSystem.keyConstants.FORMATION,
+                formation.movementModifier, false
+            );
+        } else {
+            this.actor.removeModifier(
+                ChronicleSystem.modifiersConstants.MOVEMENT,
+                ChronicleSystem.keyConstants.FORMATION
+            );
+        }
+        // fighting
+        if (formation.testDiceModifier !== 0) {
+            let penalty = -(formation.testDiceModifier)
+            this.actor.addPenalty(
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION,
+                penalty, false
+            );
+        } else {
+            this.actor.removePenalty(
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION
+            );
+        }
+
+        // save
+        this.actor.update({
+            "system.currentFormation": rating,
+            "system.modifiers": this.actor.modifiers,
+            "system.penalties": this.actor.penalties
+        });
     }
 
     /* -------------------------------------------- */

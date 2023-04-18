@@ -162,13 +162,26 @@
         }
       },
       "unit": {
-        "heroes": {
-          "role": "Role"
+        "facings": {
+          "front": "Enemy Front",
+          "flank": "Enemy Flank",
+          "rear": "Enemy Rear",
+          "surroundedFront": "Surrounded Enemy Front",
+          "surroundedFlank": "Surrounded Enemy Flank",
+          "surroundedRear": "Surrounded Enemy Rear",
+          "flanking": "Flanking Enemy"
         },
-        "roles": {
-          "commander": "Commander",
-          "subcommander": "Subcommander",
-          "hero": "Hero"
+        "formations": {
+          "battle": "Battle",
+          "checkered": "Checkered",
+          "column": "Column",
+          "mob": "Mob",
+          "phalanx": "Phalanx",
+          "shieldWall": "Shield Wall",
+          "square": "Square",
+          "tortoise": "Tortoise",
+          "wedge": "Wedge"
+
         },
         "statuses": {
           "organised": "Organised",
@@ -177,7 +190,7 @@
           "destroyed": "Destroyed"
         },
         "tabs": {
-          "heroes": "Heroes",
+          "formation": "Formation",
           "warfare": "Warfare"
         }
       },
@@ -261,7 +274,9 @@
         "fatigue": "Fatigue",
         "disorganisation": "Disorganisation",
         "ordersReceived": "Orders Received",
-        "discipline": "Discipline"
+        "discipline": "Discipline",
+        "facing": "Facing",
+        "formation": "Formation"
       }
     }
   }
