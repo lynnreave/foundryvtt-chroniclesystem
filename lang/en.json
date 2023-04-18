@@ -165,6 +165,7 @@
         "facings": {
           "front": "Enemy Front",
           "flank": "Enemy Flank",
+          "none": "None",
           "rear": "Enemy Rear",
           "surroundedFront": "Surrounded Enemy Front",
           "surroundedFlank": "Surrounded Enemy Flank",
@@ -176,6 +177,7 @@
           "checkered": "Checkered",
           "column": "Column",
           "mob": "Mob",
+          "none": "None",
           "phalanx": "Phalanx",
           "shieldWall": "Shield Wall",
           "square": "Square",

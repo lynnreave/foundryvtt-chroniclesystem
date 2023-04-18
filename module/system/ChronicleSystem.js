@@ -249,6 +249,7 @@ ChronicleSystem.unitStatuses = [
 ]
 
 ChronicleSystem.unitFacings = [
+    new UnitFacing("CS.sheets.unit.facings.none", 0, 0, 0),
     new UnitFacing("CS.sheets.unit.facings.front", 1, 0, 0),
     new UnitFacing("CS.sheets.unit.facings.flank", 2, 0, 1),
     new UnitFacing("CS.sheets.unit.facings.rear", 3, 1, 0),
@@ -259,6 +260,12 @@ ChronicleSystem.unitFacings = [
 ]
 
 ChronicleSystem.formations = [
+    new Formation(
+        "CS.sheets.unit.formations.none", 0,
+        0, 0,
+        0, 0, 0, 0,
+        []
+    ),
     new Formation(
         "CS.sheets.unit.formations.battle", 1,
         0, 0,

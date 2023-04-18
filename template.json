@@ -173,8 +173,8 @@
         "character-common"
       ],
       "commander": "",
-      "currentFacing": 1,
-      "currentFormation": 1,
+      "currentFacing": 0,
+      "currentFormation": 0,
       "currentStatus": 1,
       "discipline": {
         "value": 0,
