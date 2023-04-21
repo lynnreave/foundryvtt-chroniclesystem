@@ -1,9 +1,31 @@
 {
+  "id": "chroniclesystem",
+  "name": "chroniclesystem",
   "title": "Chronicle System (Unofficial)",
   "description": "An implementation for Green Ronin's Chronicle System, used by SIFRP and Sword Chronicles.",
   "version": "0.5.0",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10.290"
+  },
+  "minimumCoreVersion": "10",
+  "authors": [
+    {
+      "name": "Kirlian '3darkman' Silvestre"
+    },
+    {
+      "name": "Sephone 'lynnreave' Slattery",
+      "discord": "Sephone#3998"
+    }
+  ],
+  "url": "https://github.com/lynnreave/foundryvtt-chroniclesystem/",
+  "bugs": "",
+  "flags": {
+    "allowBugReporter": true
+  },
+  "scripts": [],
   "esmodules": [
-    "module/system/config.js"
+    "src/module/main.js"
   ],
   "styles": [
     "styles/global.css",
@@ -19,23 +41,12 @@
       "flags": {}
     }
   ],
+  "packs": [],
+  "manifest": "https://raw.githubusercontent.com/3darkman/foundryvtt-chroniclesystem/master/system.json",
+  "download": "https://raw.githubusercontent.com/3darkman/foundryvtt-chroniclesystem/master/chroniclesystem.zip",
   "gridDistance": 5,
   "gridUnits": "ft",
   "primaryTokenAttribute": "health",
   "secondaryTokenAttribute": "power",
-  "url": "https://github.com/3darkman/foundryvtt-chroniclesystem/",
-  "manifest": "https://raw.githubusercontent.com/3darkman/foundryvtt-chroniclesystem/master/system.json",
-  "download": "https://raw.githubusercontent.com/3darkman/foundryvtt-chroniclesystem/master/chroniclesystem.zip",
-  "license": "ISC",
-  "id": "chroniclesystem",
-  "authors": [
-    {
-      "name": "Kirlian '3darkman' Silvestre",
-      "flags": {}
-    }
-  ],
-  "compatibility": {
-    "minimum": "10",
-    "verified": "10.290"
-  }
+  "license": "ISC"
 }

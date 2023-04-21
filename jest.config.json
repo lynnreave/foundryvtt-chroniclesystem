@@ -1,0 +1,8 @@
+{
+    "testEnvironment": "node",
+    "modulePaths": [
+        "<rootDir>",
+        "<rootDir>/src"
+    ],
+    "preset": "es-jest"
+}
