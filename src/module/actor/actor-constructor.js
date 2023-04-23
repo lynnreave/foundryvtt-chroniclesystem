@@ -1,7 +1,7 @@
 import factory from "../../util/factory.js";
 import { Character } from "./character/character.js";
 import { House } from "./house/house.js";
-import { Unit } from "./character/unit.js";
+import { Unit } from "./character/unit/unit.js";
 
 // define available actor types
 const actorTypes = {};

@@ -3,3 +3,4 @@
 .vs/
 /chroniclesystem.lock
 node_modules/
+/coverage/

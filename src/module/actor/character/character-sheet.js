@@ -159,14 +159,14 @@ export class CharacterSheet extends CharacterSheetBase {
   async setFrustrationValue(newValue) {
     let value = Math.max(Math.min(parseInt(newValue), this.actor.getData().derivedStats.frustration.total), 0);
 
-    this.actor.updateTempPenalties();
+    this.actor.updateTempTransformers();
 
     if (value > 0) {
-      this.actor.addPenalty(ChronicleSystem.modifiersConstants.DECEPTION, ChronicleSystem.keyConstants.FRUSTRATION, value, false);
-      this.actor.addPenalty(ChronicleSystem.modifiersConstants.PERSUASION, ChronicleSystem.keyConstants.FRUSTRATION, value, false);
+      this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.DECEPTION, ChronicleSystem.keyConstants.FRUSTRATION, value, false);
+      this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.PERSUASION, ChronicleSystem.keyConstants.FRUSTRATION, value, false);
     } else {
-      this.actor.removePenalty(ChronicleSystem.modifiersConstants.DECEPTION, ChronicleSystem.keyConstants.FRUSTRATION);
-      this.actor.removePenalty(ChronicleSystem.modifiersConstants.PERSUASION, ChronicleSystem.keyConstants.FRUSTRATION);
+      this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.DECEPTION, ChronicleSystem.keyConstants.FRUSTRATION);
+      this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.PERSUASION, ChronicleSystem.keyConstants.FRUSTRATION);
     }
 
     this.actor.update({
@@ -178,12 +178,12 @@ export class CharacterSheet extends CharacterSheetBase {
   async setFatigueValue(newValue) {
     let value = Math.max(Math.min(parseInt(newValue), this.actor.getData().derivedStats.fatigue.total), 0);
 
-    this.actor.updateTempModifiers();
+    this.actor.updateTempTransformers();
 
     if (value > 0) {
-      this.actor.addModifier(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.FATIGUE, -value, false);
+      this.actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.FATIGUE, -value, false);
     } else {
-      this.actor.removeModifier(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.FATIGUE);
+      this.actor.removeTransformer("modifiers", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.FATIGUE);
     }
 
     this.actor.update({
@@ -195,16 +195,16 @@ export class CharacterSheet extends CharacterSheetBase {
   async setStressValue(newValue) {
     let value = Math.max(Math.min(parseInt(newValue), this.actor.getData().derivedStats.frustration.total), 0);
 
-    this.actor.updateTempPenalties();
+    this.actor.updateTempTransformers();
 
     if (value > 0) {
-      this.actor.addPenalty(ChronicleSystem.modifiersConstants.AWARENESS, ChronicleSystem.keyConstants.STRESS, value, false);
-      this.actor.addPenalty(ChronicleSystem.modifiersConstants.CUNNING, ChronicleSystem.keyConstants.STRESS, value, false);
-      this.actor.addPenalty(ChronicleSystem.modifiersConstants.STATUS, ChronicleSystem.keyConstants.STRESS, value, false);
+      this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.AWARENESS, ChronicleSystem.keyConstants.STRESS, value, false);
+      this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.CUNNING, ChronicleSystem.keyConstants.STRESS, value, false);
+      this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.STATUS, ChronicleSystem.keyConstants.STRESS, value, false);
     } else {
-      this.actor.removePenalty(ChronicleSystem.modifiersConstants.AWARENESS, ChronicleSystem.keyConstants.STRESS);
-      this.actor.removePenalty(ChronicleSystem.modifiersConstants.CUNNING, ChronicleSystem.keyConstants.STRESS);
-      this.actor.removePenalty(ChronicleSystem.modifiersConstants.STATUS, ChronicleSystem.keyConstants.STRESS);
+      this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.AWARENESS, ChronicleSystem.keyConstants.STRESS);
+      this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.CUNNING, ChronicleSystem.keyConstants.STRESS);
+      this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.STATUS, ChronicleSystem.keyConstants.STRESS);
     }
 
     this.actor.update({
@@ -221,8 +221,8 @@ export class CharacterSheet extends CharacterSheetBase {
     if (wounds.length >= this.actor.getMaxWounds())
       return;
     wounds.push(wound);
-    this.actor.updateTempPenalties();
-    this.actor.addPenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.WOUNDS, wounds.length, false);
+    this.actor.updateTempTransformers();
+    this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.WOUNDS, wounds.length, false);
     this.actor.update({
       "data.wounds" : wounds,
       "data.penalties" : this.actor.penalties
@@ -240,11 +240,11 @@ export class CharacterSheet extends CharacterSheetBase {
       let wounds = Object.values(data.wounds);
       wounds.splice(index,1);
 
-      this.actor.updateTempPenalties();
+      this.actor.updateTempTransformers();
       if (wounds.length === 0) {
-        this.actor.removePenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.WOUNDS);
+        this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.WOUNDS);
       } else {
-        this.actor.addPenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.WOUNDS, wounds.length, false);
+        this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.WOUNDS, wounds.length, false);
       }
       this.actor.update({
         "data.wounds" : wounds,
@@ -263,8 +263,8 @@ export class CharacterSheet extends CharacterSheetBase {
 
     injuries.push(injury);
 
-    this.actor.updateTempModifiers();
-    this.actor.addModifier(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.INJURY, -injuries.length, false);
+    this.actor.updateTempTransformers();
+    this.actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.INJURY, -injuries.length, false);
 
     this.actor.update({
       "data.injuries" : injuries,
@@ -283,11 +283,11 @@ export class CharacterSheet extends CharacterSheetBase {
       let injuries = Object.values(data.injuries);
       injuries.splice(index,1);
 
-      this.actor.updateTempModifiers();
+      this.actor.updateTempTransformers();
       if (injuries.length === 0) {
-        this.actor.removeModifier(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.INJURY);
+        this.actor.removeTransformer("modifiers", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.INJURY);
       } else {
-        this.actor.addModifier(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.INJURY, -injuries.length, false);
+        this.actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.INJURY, -injuries.length, false);
       }
 
       this.actor.update({
@@ -325,7 +325,7 @@ export class CharacterSheet extends CharacterSheetBase {
       }
     }
 
-    this.actor.updateTempModifiers();
+    this.actor.updateTempTransformers();
 
     tempCollection.forEach((item) => {
       collection.push({_id: item._id, "data.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
@@ -335,7 +335,7 @@ export class CharacterSheet extends CharacterSheetBase {
     collection.push({_id: documment._id, "data.equipped": documment.getCSData().equipped});
     documment.onEquippedChanged(this.actor, documment.getCSData().equipped > 0);
 
-    this.actor.saveModifiers();
+    this.actor.saveTransformers();
 
     this.actor.updateEmbeddedDocuments('Item', collection);
   }

@@ -1,8 +1,18 @@
 {
+    "collectCoverage": true,
     "testEnvironment": "node",
     "modulePaths": [
         "<rootDir>",
         "<rootDir>/src"
     ],
+    "moduleNameMapper": {
+        "^@actor/(.*)$": "<rootDir>/src/module/actor/$1",
+        "^@actor$": "<rootDir>/src/module/actor",
+        "^@item/(.*)$": "<rootDir>/src/module/item/$1",
+        "^@item$": "<rootDir>/src/module/item",
+        "^@module/(.*)$": "<rootDir>/src/module/$1",
+        "^@system/(.*)$": "<rootDir>/src/module/system/$1",
+        "^@util$": "<rootDir>/src/util"
+    },
     "preset": "es-jest"
 }

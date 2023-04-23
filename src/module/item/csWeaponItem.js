@@ -17,7 +17,7 @@ export class CSWeaponItem extends CSItem {
             switch (quality.name.toLowerCase())
             {
                 case ChronicleSystem.modifiersConstants.BULK:
-                    actor.addModifier(ChronicleSystem.modifiersConstants.BULK, this._id, parseInt(quality.parameter));
+                    actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.BULK, this._id, parseInt(quality.parameter));
                     break;
             }
         });
@@ -31,7 +31,7 @@ export class CSWeaponItem extends CSItem {
             switch (quality.name.toLowerCase())
             {
                 case ChronicleSystem.modifiersConstants.BULK:
-                    actor.removeModifier(ChronicleSystem.modifiersConstants.BULK, oldId);
+                    actor.removeTransformer("modifiers", ChronicleSystem.modifiersConstants.BULK, oldId);
                     break;
             }
         });

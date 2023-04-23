@@ -5,12 +5,13 @@ export async function task030() {
             if (ownedItem.type === "armor") {
                 let data = ownedItem.getCSData();
                 if (data.equipped === 1) {
-                    actor.updateTempModifiers();
-                    actor.addModifier(ChronicleSystem.modifiersConstants.COMBAT_DEFENSE,
+                    // actor.updateTempModifiers();
+                    actor.updateTempTransformers();
+                    actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.COMBAT_DEFENSE,
                         ownedItem._id,
                         data.penalty,
                         true);
-                    actor.saveModifiers();
+                    actor.saveTransformers();
                 }
             }
         }

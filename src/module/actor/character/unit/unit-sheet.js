@@ -1,6 +1,7 @@
-import LOGGER from "../../../util/logger.js";
-import { CharacterSheetBase } from "./character-sheet-base.js";
-import { ChronicleSystem } from "../../system/ChronicleSystem.js";
+import LOGGER from "../../../../util/logger.js";
+import { CharacterSheetBase } from "../character-sheet-base.js";
+import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
+import { getAttachedHeroes, updateAttachedHeroesEffects } from "./helpers.js";
 
 /**
  * The ActorSheet entity for handling warfare units.
@@ -63,6 +64,7 @@ export class UnitSheet extends CharacterSheetBase {
             }
             weapon.formula = formula;
         });
+        updateAttachedHeroesEffects(this.actor)
 
         data.character = character;
         return data;
@@ -109,15 +111,14 @@ export class UnitSheet extends CharacterSheetBase {
         let value = Math.max(Math.min(parseInt(newValue), this.actor.getData().disorganisation.total), 0);
         let mod = Math.max(Math.min(parseInt(newValue), this.actor.getData().disorganisation.modifier), 0);
 
-        this.actor.updateTempPenalties();
-        this.actor.updateTempModifiers();
+        this.actor.updateTempTransformers();
 
         if (value > 0) {
-            this.actor.addPenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION, value, false);
-            this.actor.addModifier(ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION, value*3, false)
+            this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION, value, false);
+            this.actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION, value*3, false)
         } else {
-            this.actor.removePenalty(ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION);
-            this.actor.removeModifier(ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION)
+            this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION);
+            this.actor.removeTransformer("modifiers", ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION)
         }
 
         this.actor.update({
@@ -155,8 +156,9 @@ export class UnitSheet extends CharacterSheetBase {
         } else {
             if (isCommander) {
                 documment.getCSData().equipped = ChronicleSystem.equippedConstants.COMMANDER;
-                tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === ChronicleSystem.equippedConstants.COMMANDER);
-                this.actor.getData().commander = tempCollection[0]
+                let items = this.actor.getEmbeddedCollection('Item')
+                tempCollection = items.filter((item) => item.getCSData().equipped === ChronicleSystem.equippedConstants.COMMANDER);
+                this.actor.getData().commander = tempCollection[0];
             }
             else if (isArmor) {
                 documment.getCSData().equipped = ChronicleSystem.equippedConstants.WEARING;
@@ -173,7 +175,8 @@ export class UnitSheet extends CharacterSheetBase {
             }
         }
 
-        this.actor.updateTempModifiers();
+        this.actor.updateTempTransformers();
+        updateAttachedHeroesEffects(this.actor)
 
         tempCollection.forEach((item) => {
             collection.push({_id: item._id, "data.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
@@ -183,7 +186,7 @@ export class UnitSheet extends CharacterSheetBase {
         collection.push({_id: documment._id, "data.equipped": documment.getCSData().equipped});
         documment.onEquippedChanged(this.actor, documment.getCSData().equipped > 0);
 
-        this.actor.saveModifiers();
+        this.actor.saveTransformers();
 
         this.actor.updateEmbeddedDocuments('Item', collection);
     }
@@ -207,31 +210,30 @@ export class UnitSheet extends CharacterSheetBase {
             return;
         }
 
-        this.actor.updateTempPenalties();
-        this.actor.updateTempBonuses();
+        this.actor.updateTempTransformers();
 
         // test dice modifier (only fighting)
         // override the penalty workflow to get test dice modifiers to work (by getting opposite value)
         // TODO: change getPenalty() to be getTestDiceMod() and add support for getBonusDiceMod()?
         if (facing.testDiceModifier !== 0) {
             let penalty = -(facing.testDiceModifier)
-            this.actor.addPenalty(
+            this.actor.addTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
                 penalty, false
             );
         } else {
-            this.actor.removePenalty(
+            this.actor.removeTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
             );
         }
         // bonus dice modifier (only fighting)
         if (facing.bonusDiceModifier > 0) {
-            this.actor.addBonus(
+            this.actor.addTransformer("bonuses",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
                 facing.bonusDiceModifier, false
             );
         } else {
-            this.actor.removeBonus(
+            this.actor.removeTransformer("bonuses",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
             );
         }
@@ -252,58 +254,57 @@ export class UnitSheet extends CharacterSheetBase {
             return;
         }
 
-        this.actor.updateTempModifiers();
-        this.actor.updateTempPenalties();
+        this.actor.updateTempTransformers();
 
         // TODO: see _onUnitFacingChanged()
         // TODO: consolidate these with a loop, grabbing fields from Formation() object
         // update modifiers/penalties/bonuses
         // discipline
         if (formation.disciplineModifier !== 0) {
-            this.actor.addModifier(
+            this.actor.addTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.FORMATION,
                 formation.disciplineModifier, false
             );
         } else {
-            this.actor.removeModifier(
+            this.actor.removeTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.FORMATION
             );
         }
         // fighting defense
         if (formation.fightingDefenseModifier !== 0) {
-            this.actor.addModifier(
+            this.actor.addTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
                 ChronicleSystem.keyConstants.FORMATION,
                 formation.fightingDefenseModifier, false
             );
         } else {
-            this.actor.removeModifier(
+            this.actor.removeTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
                 ChronicleSystem.keyConstants.FORMATION
             );
         }
         // marksmanship defense
         if (formation.marksmanshipDefenseModifier !== 0) {
-            this.actor.addModifier(
+            this.actor.addTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
                 ChronicleSystem.keyConstants.FORMATION,
                 formation.marksmanshipDefenseModifier, false
             );
         } else {
-            this.actor.removeModifier(
+            this.actor.removeTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
                 ChronicleSystem.keyConstants.FORMATION
             );
         }
         // movement
         if (formation.movementModifier !== 0) {
-            this.actor.addModifier(
+            this.actor.addTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.MOVEMENT,
                 ChronicleSystem.keyConstants.FORMATION,
                 formation.movementModifier, false
             );
         } else {
-            this.actor.removeModifier(
+            this.actor.removeTransformer("modifiers",
                 ChronicleSystem.modifiersConstants.MOVEMENT,
                 ChronicleSystem.keyConstants.FORMATION
             );
@@ -311,12 +312,12 @@ export class UnitSheet extends CharacterSheetBase {
         // fighting
         if (formation.testDiceModifier !== 0) {
             let penalty = -(formation.testDiceModifier)
-            this.actor.addPenalty(
+            this.actor.addTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION,
                 penalty, false
             );
         } else {
-            this.actor.removePenalty(
+            this.actor.removeTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION
             );
         }
@@ -369,6 +370,7 @@ export class UnitSheet extends CharacterSheetBase {
                 .then(function (result) {
                     embeddedItem.concat(result);
                 });
+            updateAttachedHeroesEffects(this.actor)
         }
     }
 }

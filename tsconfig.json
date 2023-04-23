@@ -13,6 +13,14 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "noEmitOnError": false,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "paths": {
+      "@actor/*": ["src/module/actor/*"],
+      "@item/*": ["src/module/item/*"],
+      "@system/*": ["src/module/system/*"],
+      "@module/*": ["src/module/*"],
+      "@scripts/*": ["src/scripts/*"],
+      "@util/*": ["src/util/*"],
+    }
   }
 }

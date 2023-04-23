@@ -1,8 +1,9 @@
-import LOGGER from "../../../util/logger.js";
-import SystemUtils from "../../../util/systemUtils.js";
-import { CharacterBase } from "./character-base.js";
-import { ChronicleSystem } from "../../system/ChronicleSystem.js";
-import { CSConstants } from "../../system/csConstants.js";
+import LOGGER from "../../../../util/logger.js";
+import SystemUtils from "../../../../util/systemUtils.js";
+import { CharacterBase } from "../character-base.js";
+import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
+import { CSConstants } from "../../../system/csConstants.js";
+import { getCommander } from "./helpers.js";
 
 /**
  * The Actor entity for handling warfare units.
@@ -14,9 +15,10 @@ export class Unit extends CharacterBase {
     calculateDerivedValues() {
         let data = this.getData();
 
-        // "equipped" hardcoded entities
         // commander
-        data.commander = this.getCommander();
+        data.commander = getCommander(this.getEmbeddedCollection("Item"));
+
+        // "equipped" hardcoded entities
         // formation
         data.equippedFormation = ChronicleSystem.formations.find(
             (item) => item.rating === data.currentFormation
@@ -29,7 +31,7 @@ export class Unit extends CharacterBase {
         // discrete defense
         // v. fighting
         data.discreteDefenses.vFighting.value = data.derivedStats.combatDefense.total;
-        data.discreteDefenses.vFighting.modifier = this.getModifier(
+        data.discreteDefenses.vFighting.modifier = this.getTransformation("modifiers",
             ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
             false, true
         ).total;
@@ -37,7 +39,7 @@ export class Unit extends CharacterBase {
             + data.discreteDefenses.vFighting.modifier;
         // v. marksmanship
         data.discreteDefenses.vMarksmanship.value = data.derivedStats.combatDefense.total;
-        data.discreteDefenses.vMarksmanship.modifier = this.getModifier(
+        data.discreteDefenses.vMarksmanship.modifier = this.getTransformation("modifiers",
             ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
             false, true
         ).total;
@@ -56,16 +58,11 @@ export class Unit extends CharacterBase {
         data.ordersReceived.total = data.ordersReceived.value;
 
         // discipline
-        data.discipline.modifier = this.getModifier(
+        data.discipline.modifier = this.getTransformation("modifiers",
             ChronicleSystem.modifiersConstants.DISCIPLINE, false, true
         ).total;
         data.discipline.total = data.discipline.value + data.discipline.modifier;
         data.discipline.totalWithOrders = data.discipline.total
             + parseInt(data.discipline.ordersReceivedModifier);
-    }
-
-    getCommander() {
-        let items = this.getEmbeddedCollection("Item");
-        return items.find((item) => item.type === 'hero' && item.system.equipped === 5);
     }
 }

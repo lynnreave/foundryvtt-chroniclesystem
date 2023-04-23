@@ -278,7 +278,8 @@
         "ordersReceived": "Orders Received",
         "discipline": "Discipline",
         "facing": "Facing",
-        "formation": "Formation"
+        "formation": "Formation",
+        "heroes": "Heroes"
       }
     }
   }
