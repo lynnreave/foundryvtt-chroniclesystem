@@ -3,12 +3,16 @@
  *
  * "transformer": any change to the base test dice, bonus dice, or value of an attribute or roll.
  * "transformation": the sum of all changes from a single type of transformer.
- * "poolMods": changes to the test dice of a roll; dice pool modifier; test dice modifier.
- * [DEPRECATING] "penalties": negative changes to the test dice of a roll.
+ * "poolMods": (positive) changes to the test dice of a roll; dice pool modifier; test dice modifier.
+ * "penalties": negative changes to the test dice of a roll.
  * "bonuses": changes to the bonus dice of a roll.
  * "modifiers": flat changes to the outcome of a roll or some attribute value.
  *
+ * TODO: roll penalties in poolMods and either remove penalties or calculate dynamically?
  */
+import { CHARACTER_ATTR_CONSTANTS } from "../../constants.js";
+import { getData } from "../../common.js";
+
 export const transformerTypes = ["poolMods", "penalties", "bonuses", "modifiers"];
 
 function _warnToUpdateTempTransformers(character) {
@@ -36,7 +40,7 @@ export function updateTempTransformers(character) {
      * @param {object} character: a character Actor object.
      */
 
-    let data = character.getData();
+    let data = getData(character);
     for (let type of transformerTypes) {
         character[type] = data[type];
     }
@@ -75,8 +79,9 @@ export function removeTransformer(character, type, attr, sourceId, save = false)
 
     // remove any existing transformers for specified transformer and attr w/ sourceId
     if (character[type][attr]) {
-        let index = character[type][attr].indexOf((trans) => trans._id === sourceId);
-        character[type][attr].splice(index, 1);
+        // let index = character[type][attr].indexOf((trans) => trans._id === sourceId);
+        // character[type][attr].splice(index, 1);
+        character[type][attr] = character[type][attr].filter(item => item._id !== sourceId)
     }
 
     // save (if specified)
@@ -128,7 +133,7 @@ export function addTransformer(
 }
 
 export function getTransformation(
-    character, type, attr, includeDetail = false, includeModifierGlobal = false
+    character, type, attr, includeDetail = false, includeGlobals = false
 ) {
     /**
      * Get a Character Actor transformation.
@@ -137,7 +142,8 @@ export function getTransformation(
      * @param {string} type: the type of transformer.
      * @param {string} attr: the type of attribute to update ("all" for all available attributes).
      * @param {boolean} includeDetail: whether or not to include details from individual transformers.
-     * @param {boolean} includeModifierGlobal: whether or not to also include global transformers in the summation (or, transformers to attr "ALL").
+     * @param {boolean} includeGlobals: whether or not to also include global transformers in the summation (or, transformers to attr "ALL").
+     * @returns {object}: a data object including total and an array of possible docs.
      */
 
     // make sure any temp data is included
@@ -147,24 +153,38 @@ export function getTransformation(
     let total = 0;
     let detail = [];
 
-    // get total transformation for type to attr
-    if (character[type][attr]) {
-        character[type][attr].forEach((transformer) => {
-            total += transformer.mod;
-
-            // include details (if specified)
-            if (includeDetail) {
-                let tempItem = transformer._id;
-                // handle transformers from documents (embedded objects)
-                if (transformer.isDocument) {
-                    tempItem = character.getEmbeddedDocument("Item", transformer._id);
-                }
-                if (tempItem) {
-                    detail.push({ docName: tempItem.name, mod: transformer.mod })
-                }
-            }
-        });
+    // determines sources
+    let sources = [];
+    // include attr
+    if (character[type][attr]) { sources.push(character[type][attr]); }
+    // include global transformers (if specified)
+    if (includeGlobals && character[type][CHARACTER_ATTR_CONSTANTS.ALL]) {
+        sources.push(character[type][CHARACTER_ATTR_CONSTANTS.ALL]);
     }
+
+    // get total transformation for type to attr
+    // TODO: find a better way to do this without nested for loops or code duplication
+    sources.forEach(
+        (source) => {
+            source.forEach(
+                (transformer) => {
+                    total += transformer.mod;
+
+                    // include details (if specified)
+                    if (includeDetail) {
+                        let tempItem = transformer._id;
+                        // handle transformers from documents (embedded objects)
+                        if (transformer.isDocument) {
+                            tempItem = character.getEmbeddedDocument("Item", transformer._id);
+                        }
+                        if (tempItem) {
+                            detail.push({ docName: tempItem.name, mod: transformer.mod })
+                        }
+                    }
+                }
+            )
+        }
+    )
 
     // return
     return {total: total, detail: detail};

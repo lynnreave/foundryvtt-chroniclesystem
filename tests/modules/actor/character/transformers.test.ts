@@ -7,7 +7,8 @@ import {
     updateTempTransformers
 // @ts-ignore
 } from "@actor/character/transformers";
-import { TestCharacter } from "../../../mocks/character";
+// @ts-ignore
+import { TestCharacter } from "@mocks/character";
 
 
 const defaultTransformer = {_id: "source", mod: 1, isDocument: false};
@@ -115,6 +116,20 @@ describe("transformers.js", () => {
                 removeTransformer(character, type, "someAttr", testTransformer._id, false)
                 expect(character[type]["someAttr"]).toStrictEqual([])
                 expect(character.system[type]["someAttr"]).toStrictEqual([testTransformer])
+                // reset
+            }
+        });
+        test("multiple transformers => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let testTransformer = Object.assign({}, defaultTransformer);
+            let anotherTransformer = {_id: "source2", mod: 1, isDocument: false};
+            let someTransformer = {_id: "source3", mod: 1, isDocument: false};
+            for (let type of transformerTypes) {
+                // clean
+                // test
+                character[type]["someAttr"] = [testTransformer, anotherTransformer, someTransformer]
+                removeTransformer(character, type, "someAttr", testTransformer._id)
+                expect(character[type]["someAttr"]).toStrictEqual([anotherTransformer, someTransformer])
                 // reset
             }
         });
@@ -288,6 +303,50 @@ describe("transformers.js", () => {
                 // reset
                 character[type]["someAttr"] = null;
                 character.system[type]["someAttr"] = null;
+            }
+        });
+        test("include globals => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let testTransformer = Object.assign({}, defaultTransformer);
+            let anotherTransformer = Object.assign({}, defaultTransformer);
+            for (let type of transformerTypes) {
+                // clean
+                character[type]["someAttr"] = null;
+                character[type]["all"] = null;
+                character.system[type]["someAttr"] = null;
+                character.system[type]["all"] = null;
+                // test
+                character.system[type]["someAttr"] = [testTransformer];
+                character.system[type]["all"] = [anotherTransformer];
+                let output = getTransformation(character, type, "someAttr", false, true);
+                expect(output.total).toBe(testTransformer.mod + anotherTransformer.mod);
+                // reset
+                character[type]["someAttr"] = null;
+                character[type]["all"] = null;
+                character.system[type]["someAttr"] = null;
+                character.system[type]["all"] = null;
+            }
+        });
+        test("include globals - negative => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let testTransformer = Object.assign({}, defaultTransformer);
+            let anotherTransformer = Object.assign({}, defaultTransformer);
+            for (let type of transformerTypes) {
+                // clean
+                character[type]["someAttr"] = null;
+                character[type]["all"] = null;
+                character.system[type]["someAttr"] = null;
+                character.system[type]["all"] = null;
+                // test
+                character.system[type]["someAttr"] = [testTransformer];
+                character.system[type]["all"] = [anotherTransformer];
+                let output = getTransformation(character, type, "someAttr", false, false);
+                expect(output.total).toBe(testTransformer.mod);
+                // reset
+                character[type]["someAttr"] = null;
+                character[type]["all"] = null;
+                character.system[type]["someAttr"] = null;
+                character.system[type]["all"] = null;
             }
         });
     });

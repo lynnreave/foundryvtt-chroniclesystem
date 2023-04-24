@@ -1,10 +1,8 @@
-import {ChronicleSystem} from "../system/ChronicleSystem.js";
+import { getData } from "../common.js"
 
 export class CSItem extends Item {
 
-    getCSData() {
-        return this.system;
-    }
+    getCSData() { return getData(this); }
 
     prepareData() {
         super.prepareData();

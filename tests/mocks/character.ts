@@ -2,6 +2,10 @@ import {
     transformerTypes
 // @ts-ignore
 } from "@actor/character/transformers";
+import {
+    getData
+// @ts-ignore
+} from "@module/common";
 
 /**
  * A character Actor mock for use in testing.
@@ -19,7 +23,7 @@ export class TestCharacter {
             this.system[type] = {};
         }
     }
-    getData() { return this.system }
+    getData() { return getData(this); }
 
     update(data, context) {
         for (let prop in data) {

@@ -1,6 +1,9 @@
 import SystemUtils from "../../util/systemUtils.js";
 
-export class CSRoll {
+/**
+ * A roll object for the Chronicle System.
+ */
+export class RollChronicle {
     constructor(title, formula) {
         this.formula = formula;
         this.title = title;

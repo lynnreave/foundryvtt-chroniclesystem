@@ -1,7 +1,6 @@
 import {
     addTransformer,
     removeTransformer,
-    saveTransformers,
     updateTempTransformers
 } from "../transformers.js"
 import {
@@ -59,18 +58,18 @@ export function updateAttachedHeroesEffects(unit) {
             -3, false
         )
         addTransformer(
-            unit, "penalties", CHARACTER_ATTR_CONSTANTS.FIGHTING, KEY_CONSTANTS.HEROES,
-            -1, false
+            unit, "poolMods", CHARACTER_ATTR_CONSTANTS.FIGHTING, KEY_CONSTANTS.HEROES,
+            1, false
         )
         addTransformer(
-            unit, "penalties", CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP, KEY_CONSTANTS.HEROES,
-            -1, false
+            unit, "poolMods", CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP, KEY_CONSTANTS.HEROES,
+            1, false
         )
     // else, remove them
     } else {
         removeTransformer(unit, "modifiers", CHARACTER_ATTR_CONSTANTS.DISCIPLINE, KEY_CONSTANTS.HEROES)
-        removeTransformer(unit, "penalties", CHARACTER_ATTR_CONSTANTS.FIGHTING, KEY_CONSTANTS.HEROES)
-        removeTransformer(unit, "penalties", CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP, KEY_CONSTANTS.HEROES)
+        removeTransformer(unit, "poolMods", CHARACTER_ATTR_CONSTANTS.FIGHTING, KEY_CONSTANTS.HEROES)
+        removeTransformer(unit, "poolMods", CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP, KEY_CONSTANTS.HEROES)
     }
 }
 

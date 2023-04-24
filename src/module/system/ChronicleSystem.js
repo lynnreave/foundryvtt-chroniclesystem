@@ -1,7 +1,7 @@
-import {DiceRollFormula} from "../type/diceRollFormula.js";
+import {DiceRollFormula} from "../roll/dice-roll-formula.js";
 import {Disposition} from "../type/disposition.js";
 import LOGGER from "../../util/logger.js";
-import {CSRoll} from "../roll/cs-roll.js";
+import {RollChronicle} from "../roll/roll-chronicle.js";
 import {CSConstants} from "./csConstants.js";
 import SystemUtils from "../../util/systemUtils.js";
 import {UnitStatus} from "../type/unitStatus.js";
@@ -11,6 +11,7 @@ import {
     CHARACTER_ATTR_CONSTANTS,
     EQUIPPED_CONSTANTS, KEY_CONSTANTS
 } from "../constants.js";
+import { getAbilityTestFormula, getFormula } from "../roll/rolls.js";
 
 export const ChronicleSystem ={}
 
@@ -59,44 +60,14 @@ async function eventHandleRoll(event, actor) {
     await ChronicleSystem.handleRollAsync(rollType, actor, showModifierDialog);
 }
 
-function _getFormula(roll_definition, actor) {
-    let formula = new DiceRollFormula();
-
-    switch (roll_definition[0]){
-        case 'ability':
-            formula = ChronicleSystem.getActorAbilityFormula(actor, roll_definition[1]);
-            break;
-        case 'specialty':
-            formula = ChronicleSystem.getActorAbilityFormula(actor, roll_definition[2], roll_definition[1]);
-            break;
-        case 'weapon-test':
-            formula = DiceRollFormula.fromStr(roll_definition[2]);
-            break;
-        case 'persuasion':
-        case 'deception':
-        case 'formula':
-            formula = DiceRollFormula.fromStr(roll_definition[2]);
-            break;
-    }
-
-    // handle negative penalty
-    // TODO: don't overload penalty; change to TD modifier?
-    if (formula.dicePenalty < 0) {
-        formula.pool += Math.abs(formula.dicePenalty)
-        formula.dicePenalty = 0
-    }
-
-    return formula;
-}
-
 function handleRoll(rollType, actor) {
     const roll_definition = rollType.split(':');
     if (roll_definition.length < 2)
         return;
 
-    const formula = _getFormula(roll_definition, actor);
+    const formula = getFormula(roll_definition, actor);
 
-    let csRoll = new CSRoll(roll_definition[1], formula);
+    let csRoll = new RollChronicle(roll_definition[1], formula);
     return csRoll.doRoll(actor, false);
 }
 
@@ -128,7 +99,7 @@ async function handleRollAsync(rollType, actor, showModifierDialog = false) {
     const roll_definition = rollType.split(':');
     if (roll_definition.length < 2)
         return;
-    let formula = _getFormula(roll_definition, actor);
+    let formula = getFormula(roll_definition, actor);
 
     const revertModifierDialog = game.settings.get(CSConstants.Settings.SYSTEM_NAME, CSConstants.Settings.MODIFIER_DIALOG_AS_DEFAULT);
 
@@ -151,10 +122,9 @@ async function handleRollAsync(rollType, actor, showModifierDialog = false) {
         }
     }
 
-    let csRoll = new CSRoll(roll_definition[1], formula);
+    let csRoll = new RollChronicle(roll_definition[1], formula);
     return await csRoll.doRoll(actor, true);
 }
-
 
 function adjustFormulaByWeapon (actor, formula, weapon) {
     let weaponData = weapon.system;
@@ -184,56 +154,11 @@ function adjustFormulaByWeapon (actor, formula, weapon) {
     return formula;
 }
 
-function getActorTestFormula(actor, abilityName, specialtyName = null) {
-    console.assert(actor, "actor is invalid!");
-    console.assert(abilityName, "ability name is invalid!");
-    let ability;
-    let specialty;
-    if (specialtyName === null) {
-        [ability, specialty] = actor.getAbility(abilityName);
-    } else {
-        [ability, specialty] = actor.getAbilityBySpecialty(abilityName, specialtyName);
-        if (ability === undefined) {
-            [ability, specialty] = actor.getAbility(abilityName);
-        }
-    }
-    let formula = new DiceRollFormula();
-
-    let specValue = 0;
-    let specModifier = 0;
-    if (specialty !== undefined) {
-        specValue = specialty.rating ? specialty.rating : 0;
-        specModifier = specialty.modifier ? specialty.modifier : 0;
-    }
-    formula.reRoll = 0;
-    if (ability !== undefined) {
-        let penalties = actor.getTransformation("penalties", ability.name.toLowerCase(), false, true);
-        let bonuses = actor.getTransformation("bonuses", ability.name.toLowerCase(), false, true)
-        formula.pool = ability.getCSData().rating;
-        formula.dicePenalty = penalties.total;
-
-        let modifiers = actor.getTransformation("modifiers", ability.name.toLowerCase(),false, true);
-        formula.modifier = ability.getCSData().modifier + specModifier + modifiers.total;
-        formula.bonusDice = specValue + bonuses.total;
-    } else {
-        let penalties = actor.getTransformation("penalties", abilityName.toLowerCase(), false, true);
-        let bonuses = actor.getTransformation("bonuses", abilityName.toLowerCase(), false, true)
-        formula.pool = 2;
-        formula.dicePenalty = penalties.total;
-
-        let modifiers = actor.getTransformation("modifiers", abilityName.toLowerCase(),false, true);
-        formula.modifier = specModifier + modifiers.total;
-        formula.bonusDice = specValue + bonuses.total;
-    }
-
-    return formula;
-}
-
 ChronicleSystem.adjustFormulaByWeapon = adjustFormulaByWeapon;
 ChronicleSystem.eventHandleRoll = eventHandleRoll;
 ChronicleSystem.handleRoll = handleRoll;
 ChronicleSystem.handleRollAsync = handleRollAsync;
-ChronicleSystem.getActorAbilityFormula = getActorTestFormula;
+ChronicleSystem.getActorAbilityFormula = getAbilityTestFormula;
 
 ChronicleSystem.dispositions = [
     new Disposition("CS.sheets.character.dispositions.affectionate", 1, -2, 5),

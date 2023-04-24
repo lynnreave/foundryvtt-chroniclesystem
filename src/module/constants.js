@@ -1,4 +1,6 @@
-
+/**
+ * Used primarily for transformer attribute targets on Character objects.
+ */
 export const CHARACTER_ATTR_CONSTANTS = {
     ALL: "all",
     PENALTY: "penalty",
@@ -7,6 +9,7 @@ export const CHARACTER_ATTR_CONSTANTS = {
     AWARENESS: "awareness",
     CUNNING: "cunning",
     DECEPTION: "deception",
+    ENDURANCE: "endurance",
     FIGHTING: "fighting",
     MARKSMANSHIP: "marksmanship",
     PERSUASION: "persuasion",
@@ -21,6 +24,9 @@ export const CHARACTER_ATTR_CONSTANTS = {
     DISCIPLINE: "discipline"
 }
 
+/**
+ * Equipped statuses for owned Item objects.
+ */
 export const EQUIPPED_CONSTANTS = {
     IS_NOT_EQUIPPED: 0,
     WEARING: 1,
@@ -30,6 +36,9 @@ export const EQUIPPED_CONSTANTS = {
     COMMANDER: 5,
 };
 
+/**
+ * Used for sourceId values when adding transformers to Character objects.
+ */
 export const KEY_CONSTANTS = {
     AGILITY: "CS.constants.abilities.agility",
     ATHLETICS: "CS.constants.abilities.athletics",

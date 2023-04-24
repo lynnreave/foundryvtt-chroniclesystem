@@ -5,7 +5,7 @@ import {
 // @ts-ignore
 } from "@actor/character/unit/helpers";
 // @ts-ignore
-import { TestCharacter } from "../../../../mocks/character";
+import { TestCharacter } from "@mocks/character";
 import {
     CHARACTER_ATTR_CONSTANTS,
     EQUIPPED_CONSTANTS,
@@ -84,17 +84,17 @@ describe("unit.js", () => {
             expect(unit.system["modifiers"][CHARACTER_ATTR_CONSTANTS.DISCIPLINE]).toStrictEqual([
                 {_id: KEY_CONSTANTS.HEROES, mod: -3, isDocument: false}
             ])
-            expect(unit["penalties"][CHARACTER_ATTR_CONSTANTS.FIGHTING]).toStrictEqual([
-                {_id: KEY_CONSTANTS.HEROES, mod: -1, isDocument: false}
+            expect(unit["poolMods"][CHARACTER_ATTR_CONSTANTS.FIGHTING]).toStrictEqual([
+                {_id: KEY_CONSTANTS.HEROES, mod: 1, isDocument: false}
             ])
-            expect(unit.system["penalties"][CHARACTER_ATTR_CONSTANTS.FIGHTING]).toStrictEqual([
-                {_id: KEY_CONSTANTS.HEROES, mod: -1, isDocument: false}
+            expect(unit.system["poolMods"][CHARACTER_ATTR_CONSTANTS.FIGHTING]).toStrictEqual([
+                {_id: KEY_CONSTANTS.HEROES, mod: 1, isDocument: false}
             ])
-            expect(unit["penalties"][CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP]).toStrictEqual([
-                {_id: KEY_CONSTANTS.HEROES, mod: -1, isDocument: false}
+            expect(unit["poolMods"][CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP]).toStrictEqual([
+                {_id: KEY_CONSTANTS.HEROES, mod: 1, isDocument: false}
             ])
-            expect(unit.system["penalties"][CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP]).toStrictEqual([
-                {_id: KEY_CONSTANTS.HEROES, mod: -1, isDocument: false}
+            expect(unit.system["poolMods"][CHARACTER_ATTR_CONSTANTS.MARKSMANSHIP]).toStrictEqual([
+                {_id: KEY_CONSTANTS.HEROES, mod: 1, isDocument: false}
             ])
         });
         test("attached hero - negative", () => {
@@ -102,10 +102,10 @@ describe("unit.js", () => {
             updateAttachedHeroesEffects(unit);
             expect(unit["modifiers"]).toStrictEqual({})
             expect(unit.system["modifiers"]).toStrictEqual({})
-            expect(unit["penalties"]).toStrictEqual({})
-            expect(unit.system["penalties"]).toStrictEqual({})
-            expect(unit["penalties"]).toStrictEqual({})
-            expect(unit.system["penalties"]).toStrictEqual({})
+            expect(unit["poolMods"]).toStrictEqual({})
+            expect(unit.system["poolMods"]).toStrictEqual({})
+            expect(unit["poolMods"]).toStrictEqual({})
+            expect(unit.system["poolMods"]).toStrictEqual({})
         });
     });
 });

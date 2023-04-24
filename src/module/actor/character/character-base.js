@@ -1,11 +1,13 @@
 import SystemUtils from "../../../util/systemUtils.js";
-import LOGGER from "../../../util/logger.js";
 import { ActorChronicle } from "../actor-chronicle.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
 import { CSConstants } from "../../system/csConstants.js";
 import {
   addTransformer, getTransformation, removeTransformer, saveTransformers, updateTempTransformers
 } from "./transformers.js";
+import {
+  getAbilities, getAbility, getAbilityBySpecialty, getAbilityValue
+} from "./abilities.js";
 
 /**
  * The base Actor entity for Character Actor types.
@@ -36,57 +38,15 @@ export class CharacterBase extends ActorChronicle {
     return super.getRollData();
   }
 
-  getAbilities() {
-    let items = this.getEmbeddedCollection("Item");
-    return items.filter((item) => item.type === "ability");
-  }
+  getAbilities() { return getAbilities(this); }
 
-  getAbility(abilityName) {
-    let items = this.getEmbeddedCollection("Item");
-    const ability = items.find(
-      (item) =>
-        item.name.toLowerCase() === abilityName.toString().toLowerCase() &&
-        item.type === "ability"
-    );
-    return [ability, undefined];
-  }
+  getAbility(abilityName) { return getAbility(this, abilityName); }
 
   getAbilityBySpecialty(abilityName, specialtyName) {
-    let items = this.getEmbeddedCollection("Item");
-    let specialty = null;
-    const ability = items
-      .filter(
-        (item) =>
-          item.type === "ability" &&
-          item.name.toLowerCase() === abilityName.toString().toLowerCase()
-      )
-      .find(function (ability) {
-        let data = ability.getCSData();
-        if (data.specialties === undefined) return false;
-
-        // convert specialties list to array
-        let specialties = data.specialties;
-        let specialtiesArray = Object.keys(specialties).map(
-          (key) => specialties[key]
-        );
-
-        specialty = specialtiesArray.find(
-          (specialty) =>
-            specialty.name.toLowerCase() ===
-            specialtyName.toString().toLowerCase()
-        );
-        if (specialty !== null && specialty !== undefined) {
-          return true;
-        }
-      });
-
-    return [ability, specialty];
+    return getAbilityBySpecialty(this, abilityName, specialtyName);
   }
 
-  getAbilityValue(abilityName) {
-    const [ability] = this.getAbility(abilityName);
-    return ability !== undefined ? ability.getCSData().rating : 2;
-  }
+  getAbilityValue(abilityName) { return getAbilityValue(this, abilityName); }
 
   calculateMovementData() {
     let data = this.getData();

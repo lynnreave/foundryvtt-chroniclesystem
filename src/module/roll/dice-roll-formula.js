@@ -1,3 +1,6 @@
+/**
+ * An object to manage dice roll formula data.
+ */
 export class DiceRollFormula {
     #pool;
     #bonusDice;
@@ -17,63 +20,33 @@ export class DiceRollFormula {
         this.isUserChanged = false;
     }
 
-    get isUserChanged() {
-        return this.#isUserChanged;
-    }
+    get isUserChanged() { return this.#isUserChanged; }
 
-    set isUserChanged(value) {
-        this.#isUserChanged = value;
-    }
+    set isUserChanged(value) { this.#isUserChanged = value; }
 
-    get difficult() {
-        return this.#difficult;
-    }
+    get difficult() { return this.#difficult; }
 
-    set difficult(value) {
-        this.#difficult = value;
-    }
+    set difficult(value) { this.#difficult = value; }
 
-    get pool() {
-        return this.#pool;
-    }
+    get pool() { return this.#pool; }
 
-    set pool(value) {
-        this.#pool = parseInt(value);
-    }
+    set pool(value) { this.#pool = parseInt(value); }
 
-    get bonusDice() {
-        return this.#bonusDice;
-    }
+    get bonusDice() { return this.#bonusDice; }
 
-    set bonusDice(value) {
-        this.#bonusDice = parseInt(value);
-    }
+    set bonusDice(value) { this.#bonusDice = parseInt(value); }
 
-    get reRoll() {
-        return this.#reRoll;
-    }
+    get reRoll() { return this.#reRoll; }
 
-    set reRoll(value) {
-        this.#reRoll = parseInt(value);
-    }
+    set reRoll(value) { this.#reRoll = parseInt(value); }
 
-    get modifier() {
-        return this.#modifier;
-    }
+    get modifier() { return this.#modifier; }
 
-    set modifier(value) {
-        this.#modifier = parseInt(value);
-    }
+    set modifier(value) { this.#modifier = parseInt(value); }
 
-    get dicePenalty() {
-        return this.#dicePenalty;
-    }
+    get dicePenalty() { return this.#dicePenalty; }
 
-    set dicePenalty(value) {
-        this.#dicePenalty = parseInt(value);
-    }
-
-
+    set dicePenalty(value) { this.#dicePenalty = parseInt(value); }
 
     toStr() {
         return `${this.pool}|${this.bonusDice}|${this.modifier}|${this.dicePenalty}|${this.reRoll}`;

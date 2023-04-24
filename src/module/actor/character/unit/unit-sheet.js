@@ -213,15 +213,20 @@ export class UnitSheet extends CharacterSheetBase {
         this.actor.updateTempTransformers();
 
         // test dice modifier (only fighting)
-        // override the penalty workflow to get test dice modifiers to work (by getting opposite value)
-        // TODO: change getPenalty() to be getTestDiceMod() and add support for getBonusDiceMod()?
-        if (facing.testDiceModifier !== 0) {
-            let penalty = -(facing.testDiceModifier)
+        if (facing.testDiceModifier > 0) {
+            this.actor.addTransformer("poolMods",
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
+                facing.testDiceModifier, false
+            );
+        } else if (facing.testDiceModifier < 0) {
             this.actor.addTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
-                penalty, false
+                Math.abs(facing.testDiceModifier), false
             );
         } else {
+            this.actor.removeTransformer("poolMods",
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
+            );
             this.actor.removeTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
             );
@@ -240,6 +245,7 @@ export class UnitSheet extends CharacterSheetBase {
 
         this.actor.update({
             "system.currentFacing": rating,
+            "system.poolMods": this.actor.poolMods,
             "system.penalties": this.actor.penalties,
             "system.bonuses": this.actor.bonuses
         });
@@ -256,9 +262,7 @@ export class UnitSheet extends CharacterSheetBase {
 
         this.actor.updateTempTransformers();
 
-        // TODO: see _onUnitFacingChanged()
         // TODO: consolidate these with a loop, grabbing fields from Formation() object
-        // update modifiers/penalties/bonuses
         // discipline
         if (formation.disciplineModifier !== 0) {
             this.actor.addTransformer("modifiers",
@@ -310,13 +314,20 @@ export class UnitSheet extends CharacterSheetBase {
             );
         }
         // fighting
-        if (formation.testDiceModifier !== 0) {
-            let penalty = -(formation.testDiceModifier)
+        if (formation.testDiceModifier > 0) {
+            this.actor.addTransformer("poolMods",
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION,
+                formation.testDiceModifier, false
+            );
+        } else if (formation.testDiceModifier < 0) {
             this.actor.addTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION,
-                penalty, false
+                Math.abs(formation.testDiceModifier), false
             );
         } else {
+            this.actor.removeTransformer("poolMods",
+                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION
+            );
             this.actor.removeTransformer("penalties",
                 ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION
             );
@@ -325,8 +336,9 @@ export class UnitSheet extends CharacterSheetBase {
         // save
         this.actor.update({
             "system.currentFormation": rating,
-            "system.modifiers": this.actor.modifiers,
-            "system.penalties": this.actor.penalties
+            "system.poolMods": this.actor.poolMods,
+            "system.penalties": this.actor.penalties,
+            "system.modifiers": this.actor.modifiers
         });
     }
 
