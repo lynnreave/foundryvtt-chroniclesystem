@@ -10,7 +10,7 @@ import { TestCharacter } from "@mocks/character";
 const defaultAbility = {
     _id: "someId", name: "someName", type: "ability", system: {rating: 5, modifier: 0}
 };
-const defaultSpecialty = {name: 'someName', rating: 1, modifier: null};
+const defaultSpecialty = {name: 'someName', rating: 1, modifier: 1};
 const defaultTransformer = {_id: "source", mod: 1, isDocument: false};
 
 describe("rolls.js", () => {
@@ -63,7 +63,7 @@ describe("rolls.js", () => {
                 pool: abilityDoc.system.rating,
                 dicePenalty: 0,
                 bonusDice: specialty.rating,
-                modifier: 0
+                modifier: specialty.modifier
             }
             let formula: DiceRollFormula = getAbilityTestFormula(character, abilityDoc.name, specialty.name);
             let actual = {
@@ -238,7 +238,7 @@ describe("rolls.js", () => {
             let abilityName = abilityDoc.name
             let rollDef = [rollType, sourceName, abilityName];
             let formula: DiceRollFormula = getFormula(rollDef, character);
-            let expected = `${abilityDoc.system.rating}|${specialty.rating}|0|0|0`;
+            let expected = `${abilityDoc.system.rating}|${specialty.rating}|${specialty.modifier}|0|0`;
             formula.reRoll = 0;
             expect(formula.toStr()).toStrictEqual(expected);
         });
