@@ -1,3 +1,5 @@
+import { SETTINGS } from "../constants.js";
+
 export const CSConstants ={}
 
 CSConstants.HouseRoles = {
@@ -19,14 +21,7 @@ CSConstants.Templates = {
     }
 }
 
-CSConstants.Settings = {
-    SYSTEM_NAME: "chroniclesystem",
-    ASOIAF_DEFENSE_STYLE: "asoiafDefenseStyle",
-    TRACE_LOGS: "traceLogs",
-    DEBUG_LOGS: "debugLogs",
-    CURRENT_VERSION: "version",
-    MODIFIER_DIALOG_AS_DEFAULT: "isModifierDialogDefault"
-}
+CSConstants.Settings = SETTINGS;
 
 CSConstants.HouseResources = {
     DEFENSE: "CS.sheets.house.resources.defense",

@@ -1,8 +1,8 @@
-import LOGGER from "../../../util/logger.js";
-import SystemUtils from "../../../util/systemUtils.js";
-import { CharacterBase } from "./character-base.js";
-import { ChronicleSystem } from "../../system/ChronicleSystem.js";
-import { CSConstants } from "../../system/csConstants.js";
+import LOGGER from "../../../../util/logger.js";
+import SystemUtils from "../../../../util/systemUtils.js";
+import { CharacterBase } from "../character-base.js";
+import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
+import { CSConstants } from "../../../system/csConstants.js";
 
 /**
  * The Actor entity for handling characters.

@@ -1,13 +1,11 @@
-import SystemUtils from "../../../util/systemUtils.js";
 import { ActorChronicle } from "../actor-chronicle.js";
-import { ChronicleSystem } from "../../system/ChronicleSystem.js";
-import { CSConstants } from "../../system/csConstants.js";
 import {
   addTransformer, getTransformation, removeTransformer, saveTransformers, updateTempTransformers
 } from "./transformers.js";
 import {
   getAbilities, getAbility, getAbilityBySpecialty, getAbilityValue
 } from "./abilities.js";
+import { calculateCombatDefense, calculateMovementData } from "./calculations.js";
 
 /**
  * The base Actor entity for Character Actor types.
@@ -48,61 +46,9 @@ export class CharacterBase extends ActorChronicle {
 
   getAbilityValue(abilityName) { return getAbilityValue(this, abilityName); }
 
-  calculateMovementData() {
-    let data = this.getData();
-    data.movement.base = ChronicleSystem.defaultMovement;
-    let runFormula = ChronicleSystem.getActorAbilityFormula(
-      this,
-      SystemUtils.localize(ChronicleSystem.keyConstants.ATHLETICS),
-      SystemUtils.localize(ChronicleSystem.keyConstants.RUN)
-    );
-    data.movement.runBonus = Math.floor(runFormula.bonusDice / 2);
-    let bulkMod = this.getTransformation("modifiers",
-      SystemUtils.localize(ChronicleSystem.modifiersConstants.BULK)
-    );
-    data.movement.bulk = Math.floor(bulkMod.total / 2);
-    data.movement.modifier = this.getTransformation("modifiers",
-      ChronicleSystem.modifiersConstants.MOVEMENT,
-      false,
-      true
-    ).total;
-    data.movement.total = Math.max(
-      data.movement.base +
-        data.movement.runBonus -
-        data.movement.bulk +
-        data.movement.modifier,
-      1
-    );
-    data.movement.sprintTotal =
-      data.movement.total * data.movement.sprintMultiplier - data.movement.bulk;
-  }
+  calculateMovementData() { calculateMovementData(this); }
 
-  calcCombatDefense() {
-    let value =
-      this.getAbilityValue(
-        SystemUtils.localize(ChronicleSystem.keyConstants.AWARENESS)
-      ) +
-      this.getAbilityValue(
-        SystemUtils.localize(ChronicleSystem.keyConstants.AGILITY)
-      ) +
-      this.getAbilityValue(
-        SystemUtils.localize(ChronicleSystem.keyConstants.ATHLETICS)
-      );
-
-    if (
-      game.settings.get(
-        CSConstants.Settings.SYSTEM_NAME,
-        CSConstants.Settings.ASOIAF_DEFENSE_STYLE
-      )
-    ) {
-      let mod = this.getTransformation("modifiers",
-        ChronicleSystem.modifiersConstants.COMBAT_DEFENSE
-      );
-      value += mod.total;
-    }
-
-    return value;
-  }
+  calcCombatDefense() { return calculateCombatDefense(this); }
 
   getTransformation(
       type, attr, includeDetail = false, includeModifierGlobal = false

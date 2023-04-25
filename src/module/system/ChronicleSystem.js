@@ -8,7 +8,7 @@ import {UnitStatus} from "../type/unitStatus.js";
 import {UnitFacing} from "../type/unitFacing.js";
 import {Formation} from "../type/formation.js";
 import {
-    CHARACTER_ATTR_CONSTANTS,
+    CHARACTER_ATTR_CONSTANTS, DEFAULT_MOVEMENT,
     EQUIPPED_CONSTANTS, KEY_CONSTANTS
 } from "../constants.js";
 import { getAbilityTestFormula, getFormula } from "../roll/rolls.js";
@@ -262,7 +262,7 @@ ChronicleSystem.formations = [
 
 ChronicleSystem.equippedConstants = EQUIPPED_CONSTANTS;
 
-ChronicleSystem.defaultMovement = 4;
+ChronicleSystem.defaultMovement = DEFAULT_MOVEMENT;
 
 ChronicleSystem.modifiersConstants = CHARACTER_ATTR_CONSTANTS;
 

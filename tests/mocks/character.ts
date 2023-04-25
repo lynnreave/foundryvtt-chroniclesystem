@@ -11,10 +11,21 @@ import {
  * A character Actor mock for use in testing.
  */
 export class TestCharacter {
-    owned = {
+    owned: object = {
         abilities: []
     }
-    system = {}
+    system: object = {
+        // defaults from template.json actor.templates.common
+        movement: {
+            "base": 4,
+            "runBonus": 0,
+            "sprintMultiplier": 4,
+            "bulk": 0,
+            "modifier": 0,
+            "total": 0,
+            "sprintTotal": 0
+        }
+    }
 
     constructor() {
         // initialize with default attr
@@ -35,6 +46,7 @@ export class TestCharacter {
     getEmbeddedDocument(type: string, id: string) {
         let embeddedItem = null;
         for (let [itemType, items] of Object.entries(this.owned)) {
+            // @ts-ignore
             let tempItem = items.find((item) => item["_id"] === id);
             if (tempItem) {
                 embeddedItem = tempItem;

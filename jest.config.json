@@ -2,6 +2,7 @@
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [
         "<rootDir>/tests",
+        "<rootDir>/src/module/system/csConstants.js",
         "<rootDir>/src/util/logger.js",
         "<rootDir>/src/util/systemUtils.js"
     ],

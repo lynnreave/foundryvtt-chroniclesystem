@@ -1,9 +1,9 @@
-import LOGGER from "../../../util/logger.js";
-import SystemUtils from "../../../util/systemUtils.js";
-import { CharacterSheetBase } from "./character-sheet-base.js";
-import { ChronicleSystem } from "../../system/ChronicleSystem.js";
-import { CSConstants } from "../../system/csConstants.js";
-import { Technique } from "../../type/technique.js";
+import LOGGER from "../../../../util/logger.js";
+import SystemUtils from "../../../../util/systemUtils.js";
+import { CharacterSheetBase } from "../character-sheet-base.js";
+import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
+import { CSConstants } from "../../../system/csConstants.js";
+import { Technique } from "../../../type/technique.js";
 
 /**
  * The ActorSheet entity for handling characters.

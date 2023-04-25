@@ -3,7 +3,7 @@ import actorConstructor from "./actor/actor-constructor.js";
 import { CSAbilityItemSheet } from "./item/sheets/csAbilityItemSheet.js";
 import { CombatChronicle } from "./combat/combat-chronicle.js";
 import { CombatantChronicle } from "./combat/combatant-chronicle.js";
-import { CharacterSheet } from "./actor/character/character-sheet.js";
+import { CharacterSheet } from "./actor/character/character/character-sheet.js";
 import { CSEventItemSheet } from "./item/sheets/csEventItemSheet.js";
 import { CSHoldingItemSheet } from "./item/sheets/csHoldingItemSheet.js";
 import { HouseSheet } from "./actor/house/house-sheet.js";
