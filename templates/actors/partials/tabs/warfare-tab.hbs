@@ -1,11 +1,11 @@
 <div class="tab flexrow" data-group="primary" data-tab="warfare">
-    <section class="derived-statistics">
+    <section class="derived-statistics flex-7">
         <section class="command">
             <header class="header-field">
                 <span>Command</span>
             </header>
             <section class="flexrow">
-                <section class="commander">
+                <section class="commander flex-4">
                     <header class="subheader-field">
                         <span>Commander</span>
                     </header>
@@ -18,7 +18,7 @@
                         </li>
                     </ol>
                 </section>
-                <section class="status">
+                <section class="status flex-2">
                     <header class="subheader-field">
                         <span>Status</span>
                     </header>
@@ -30,7 +30,7 @@
                         {{/each}}
                     </div>
                 </section>
-                <section class="discipline">
+                <section class="discipline flex-4">
                     <header class="subheader-field">
                         <span>Discipline</span>
                     </header>
@@ -94,7 +94,7 @@
                 <span>Combat</span>
             </header>
             <section class="flexrow">
-                <section class="stats flex-2">
+                <section class="stats flex-1">
                     <header class="subheader-field">
                         <span>Defense</span>
                     </header>
@@ -251,25 +251,17 @@
                         <span>Facing</span>
                     </header>
                     <li class="list-header flexrow">
-                        <div class="flex-8">Target</div>
-                        <div class="flex-1 center">TD</div>
-                        <div class="flex-1 center">BD</div>
+                        <div class="">Target</div>
                     </li>
                     <div class="disposition-list">
                         {{#each facings}}
                             <div class="disposition facing option flexrow {{showIfEquals this.rating ../character.currentFacing "selected"}}" data-id="{{this.rating}}">
-                                <label class="flex-8" data-id="{{this.rating}}">{{localize this.name}}</label>
-                                <label class="flex-1 center" data-id="{{this.rating}}">
-                                    {{showIfDifferent 0 this.testDiceModifier this.testDiceModifier : ""}}
-                                </label>
-                                <label class="flex-1 center" data-id="{{this.rating}}">
-                                    {{showIfDifferent 0 this.bonusDiceModifier this.bonusDiceModifier : ""}}
-                                </label>
+                                <label class="" data-id="{{this.rating}}">{{localize this.name}}</label>
                             </div>
                         {{/each}}
                     </div>
                 </section>
-                <section class="weapons flex-4">
+                <section class="weapons flex-5">
                     <header class="subheader-field">
                         <span>Current Equipped Weapons</span>
                     </header>
@@ -318,29 +310,54 @@
                         {{/each}}
                         </tbody>
                     </table>
-                    <header class="subheader-field">
-                        <span>Current Formation</span>
-                    </header>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="flex-6">Name</th>
-                                {{#each character.equippedFormation.conditionalModifiers}}
-                                    <th class="flex-2"></th>
-                                {{/each}}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="flex-6">{{localize character.equippedFormation.name}}</td>
-                                {{#each character.equippedFormation.conditionalModifiers}}
-                                    <td class="font-xsmall padding-3 flex-2">{{this}}</td>
-                                {{/each}}
-                            </tr>
-                        </tbody>
-                    </table>
+                    <section class="heroes">
+                        <header class="subheader-field">
+                            <span>Attached Heroes</span>
+                        </header>
+                        <ol  class="list equipment-list">
+                            <li class="list-header flexrow">
+                                <div class="">Name</div>
+                                <div class="item-controls"><i class="fas fa-cog"></i></div>
+                            </li>
+                            {{#each character.owned.heroes as |hero index|}}
+                                <li class="item heroes flexrow" data-item-id="{{_id}}">
+                                    <div class="actor-open field"><a>{{hero.name}}</a></div>
+                                    <div class="item-controls">
+                                        <a class="checkButton equipped {{showIfEquals "5" hero.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "5" hero.system.equipped 0 5}}" data-type="hero"><i class="fas fa-star"></i></a>
+                                        <a class="item-control owned-item-control" title="Delete" data-index="{{index}}" data-list="heroes" data-action="delete"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </li>
+                            {{/each}}
+                        </ol>
+                    </section>
                 </section>
             </section>
         </section>
+    </section>
+    <section class="formation flex-3">
+        <header class="header-field">
+            <span>Formation</span>
+        </header>
+        <li class="list-header flexrow">
+            <div class="flex-9">Name</div>
+            <div class="center flex-1">Difficulty</div>
+        </li>
+        <div class="disposition-list">
+            {{#each formations}}
+                <div class="disposition formation option {{showIfEquals this.rating ../character.currentFormation "selected"}}" data-id="{{this.rating}}">
+                    <li class="flexrow" data-id="{{this.rating}}">
+                        <label class="flex-9" data-id="{{this.rating}}">{{localize this.name}}</label>
+                        <label class="center flex-1" data-id="{{this.rating}}">
+                            {{showIfDifferent 0 this.difficulty this.difficulty : ""}}
+                        </label>
+                    </li>
+                    <li class="flexrow" data-id="{{this.rating}}">
+                        {{#each this.conditionalModifiers}}
+                            <label class="font-small padding-3" data-id="{{this.rating}}">{{this}}</label>
+                        {{/each}}
+                    </li>
+                </div>
+            {{/each}}
+        </div>
     </section>
 </div>

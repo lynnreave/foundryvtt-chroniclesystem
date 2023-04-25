@@ -20,8 +20,16 @@ export class UnitSheet extends CharacterSheetBase {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
+            width: 900,
             classes: ["chroniclesystem", "unit", "sheet", "actor"],
             template: "systems/chroniclesystem/templates/actors/units/unit-sheet.hbs",
+            tabs: [
+                {
+                    navSelector: ".tabs",
+                    contentSelector: ".sheet-body",
+                    initial: "warfare"
+                }
+            ],
         });
     }
 
