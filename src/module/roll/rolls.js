@@ -39,8 +39,8 @@ export function getAbilityTestFormula(actor, abilityName, specialtyName = null) 
     let formula = new DiceRollFormula();
 
     // get specialy bonuses (if they exist)
-    let specValue = specialty ? specialty.rating : 0;
-    let specModifier = specialty ? specialty.modifier : 0;
+    let specValue = (specialty && specialty.rating) ? specialty.rating : 0;
+    let specModifier = (specialty && specialty.modifier) ? specialty.modifier : 0;
 
     // set re-roll at base 0
     formula.reRoll = 0;

@@ -95,6 +95,30 @@ describe("rolls.js", () => {
             }
             expect(actual).toStrictEqual(expected);
         });
+        test("bonuses/modifiers & specialty w/o rating/modifier", () => {
+            let character: TestCharacter = new TestCharacter();
+            let abilityDoc = Object.assign({}, defaultAbility)
+            let specialty = {name: 'someName'};
+            abilityDoc.system["specialties"] = [specialty];
+            character.owned.abilities = [abilityDoc];
+            let transformer = Object.assign({}, defaultTransformer)
+            character.system["bonuses"][abilityDoc.name.toLowerCase()] = [transformer]
+            character.system["modifiers"][abilityDoc.name.toLowerCase()] = [transformer]
+            let expected = {
+                pool: abilityDoc.system.rating,
+                dicePenalty: 0,
+                bonusDice: transformer.mod,
+                modifier: transformer.mod
+            }
+            let formula: DiceRollFormula = getAbilityTestFormula(character, abilityDoc.name, specialty.name);
+            let actual = {
+                pool: formula.pool,
+                dicePenalty: formula.dicePenalty,
+                bonusDice: formula.bonusDice,
+                modifier: formula.modifier
+            }
+            expect(actual).toStrictEqual(expected);
+        });
         test("has pool modifier", () => {
             let character: TestCharacter = new TestCharacter();
             let abilityDoc = Object.assign({}, defaultAbility)
