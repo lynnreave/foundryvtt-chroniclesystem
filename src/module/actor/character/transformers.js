@@ -79,9 +79,33 @@ export function removeTransformer(character, type, attr, sourceId, save = false)
 
     // remove any existing transformers for specified transformer and attr w/ sourceId
     if (character[type][attr]) {
-        // let index = character[type][attr].indexOf((trans) => trans._id === sourceId);
-        // character[type][attr].splice(index, 1);
         character[type][attr] = character[type][attr].filter(item => item._id !== sourceId)
+    }
+
+    // save (if specified)
+    if (save) saveTransformers(character);
+}
+
+export function removeAllTransformersFromSource(character, sourceId, save = false) {
+    /**
+     * Remove all existing Character Actor transformers from a specific source.
+     *
+     * @param {object} character: a character Actor object.
+     * @param {string} sourceId: the id of the source of the transformation.
+     * @param {boolean} save: whether or not to save Actor transformers to temp data after operation.
+     */
+
+    _warnToUpdateTempTransformers(character);
+
+    // remove any existing transformers for w/ sourceId
+    // for each transformer type...
+    for (let type of transformerTypes) {
+        let transformersForType = character[type];
+        // search each character attribute target...
+        for (let [attr, transformers] of Object.entries(transformersForType)) {
+            // and remove any transformer from specified source
+            removeTransformer(character, type, attr, sourceId);
+        }
     }
 
     // save (if specified)

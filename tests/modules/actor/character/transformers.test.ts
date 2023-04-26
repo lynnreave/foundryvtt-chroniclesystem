@@ -2,6 +2,7 @@ import {
     addTransformer,
     getTransformation,
     removeTransformer,
+    removeAllTransformersFromSource,
     saveTransformers,
     transformerTypes,
     updateTempTransformers
@@ -131,6 +132,65 @@ describe("transformers.js", () => {
                 removeTransformer(character, type, "someAttr", testTransformer._id)
                 expect(character[type]["someAttr"]).toStrictEqual([anotherTransformer, someTransformer])
                 // reset
+            }
+        });
+    });
+    describe("remove all transformers from source", () => {
+        test("call => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let transformer1 = {_id: "1", mod: 1, isDocument: false};
+            let transformer2 = {_id: "2", mod: 2, isDocument: false};
+            let transformer3 = {_id: "3", mod: 3, isDocument: false};
+            for (let type of transformerTypes) {
+                character[type]["attr1"] = [transformer1]
+                character[type]["attr2"] = [transformer1, transformer2]
+                character[type]["attr3"] = [transformer1, transformer2, transformer3]
+            }
+            removeAllTransformersFromSource(character, transformer1._id)
+            for (let type of transformerTypes) {
+                expect(character[type]["attr1"]).toStrictEqual([])
+                expect(character[type]["attr2"]).toStrictEqual([transformer2])
+                expect(character[type]["attr3"]).toStrictEqual([transformer2, transformer3])
+            }
+        });
+        test("save => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let transformer1 = {_id: "1", mod: 1, isDocument: false};
+            let transformer2 = {_id: "2", mod: 2, isDocument: false};
+            let transformer3 = {_id: "3", mod: 3, isDocument: false};
+            for (let type of transformerTypes) {
+                character[type]["attr1"] = [transformer1]
+                character[type]["attr2"] = [transformer1, transformer2]
+                character[type]["attr3"] = [transformer1, transformer2, transformer3]
+            }
+            removeAllTransformersFromSource(character, transformer1._id, true)
+            for (let type of transformerTypes) {
+                expect(character[type]["attr1"]).toStrictEqual([])
+                expect(character.system[type]["attr1"]).toStrictEqual([])
+                expect(character[type]["attr2"]).toStrictEqual([transformer2])
+                expect(character.system[type]["attr2"]).toStrictEqual([transformer2])
+                expect(character[type]["attr3"]).toStrictEqual([transformer2, transformer3])
+                expect(character.system[type]["attr3"]).toStrictEqual([transformer2, transformer3])
+            }
+        });
+        test("save - negative => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let transformer1 = {_id: "1", mod: 1, isDocument: false};
+            let transformer2 = {_id: "2", mod: 2, isDocument: false};
+            let transformer3 = {_id: "3", mod: 3, isDocument: false};
+            for (let type of transformerTypes) {
+                character[type]["attr1"] = [transformer1]
+                character[type]["attr2"] = [transformer1, transformer2]
+                character[type]["attr3"] = [transformer1, transformer2, transformer3]
+            }
+            removeAllTransformersFromSource(character, transformer1._id, false)
+            for (let type of transformerTypes) {
+                expect(character[type]["attr1"]).toStrictEqual([])
+                expect(character.system[type]["attr1"]).toStrictEqual(undefined)
+                expect(character[type]["attr2"]).toStrictEqual([transformer2])
+                expect(character.system[type]["attr2"]).toStrictEqual(undefined)
+                expect(character[type]["attr3"]).toStrictEqual([transformer2, transformer3])
+                expect(character.system[type]["attr3"]).toStrictEqual(undefined)
             }
         });
     });

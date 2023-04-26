@@ -1,6 +1,11 @@
 import { ActorChronicle } from "../actor-chronicle.js";
 import {
-  addTransformer, getTransformation, removeTransformer, saveTransformers, updateTempTransformers
+  addTransformer,
+  getTransformation,
+  removeAllTransformersFromSource,
+  removeTransformer,
+  saveTransformers,
+  updateTempTransformers
 } from "./transformers.js";
 import {
   getAbilities, getAbility, getAbilityBySpecialty, getAbilityValue
@@ -78,9 +83,10 @@ export class CharacterBase extends ActorChronicle {
     );
     this.updateTempTransformers();
     for (let i = 0; i < documents.length; i++) {
-      documents[i].onDiscardedFromActor(this, result[0]);
+      let documentToDelete = documents[i]
+      removeAllTransformersFromSource(this, documentToDelete._id)
+      documentToDelete.onDiscardedFromActor(this, result[0]);
     }
-    // this.saveModifiers();
     this.saveTransformers();
   }
 
