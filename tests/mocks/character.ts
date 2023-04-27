@@ -11,10 +11,12 @@ import {
  * A character Actor mock for use in testing.
  */
 export class TestCharacter {
+    currentDisposition: number = 4;
     owned: object = {
         abilities: []
-    }
+    };
     system: object = {
+        currentDisposition: 4,
         // defaults from template.json actor.templates.common
         movement: {
             "base": 4,
@@ -25,7 +27,7 @@ export class TestCharacter {
             "total": 0,
             "sprintTotal": 0
         }
-    }
+    };
 
     constructor() {
         // initialize with default attr

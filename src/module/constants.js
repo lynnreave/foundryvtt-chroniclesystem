@@ -84,6 +84,7 @@ export const KEY_CONSTANTS = {
   FACING: "CS.constants.others.facing",
   FORMATION: "CS.constants.others.formation",
   HEROES: "CS.constants.others.heroes",
+  DISPOSITION: "CS.constants.others.disposition"
 };
 
 /**

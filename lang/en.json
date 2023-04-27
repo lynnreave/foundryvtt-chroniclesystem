@@ -279,7 +279,8 @@
         "discipline": "Discipline",
         "facing": "Facing",
         "formation": "Formation",
-        "heroes": "Heroes"
+        "heroes": "Heroes",
+        "disposition": "Disposition"
       }
     }
   }

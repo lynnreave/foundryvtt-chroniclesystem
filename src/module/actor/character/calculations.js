@@ -1,7 +1,8 @@
 import {
   CHARACTER_ATTR_CONSTANTS,
   DEFAULT_MOVEMENT,
-  KEY_CONSTANTS, SETTINGS
+  KEY_CONSTANTS,
+  SETTINGS
 } from "../../constants.js";
 import { getAbilityTestFormula } from "../../roll/rolls.js";
 import { getAbilityValue } from "./abilities.js";

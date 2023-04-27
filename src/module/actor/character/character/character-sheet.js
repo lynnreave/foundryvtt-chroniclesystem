@@ -4,6 +4,8 @@ import { CharacterSheetBase } from "../character-sheet-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import { CSConstants } from "../../../system/csConstants.js";
 import { Technique } from "../../../type/technique.js";
+import { updateCharacterDisposition } from "./helpers.js";
+import { CHARACTER_DISPOSITIONS } from "../../../selections.js";
 
 /**
  * The ActorSheet entity for handling characters.
@@ -51,7 +53,7 @@ export class CharacterSheet extends CharacterSheetBase {
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
 
-    data.dispositions = ChronicleSystem.dispositions;
+    data.dispositions = CHARACTER_DISPOSITIONS;
 
     data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
 
@@ -342,11 +344,7 @@ export class CharacterSheet extends CharacterSheetBase {
 
   async _onDispositionChanged(event, targets) {
     event.preventDefault();
-    if (!ChronicleSystem.dispositions.find((disposition) => disposition.rating === parseInt(event.target.dataset.id))) {
-      LOGGER.warn("the informed disposition does not exist.");
-      return;
-    }
-    this.actor.update({"data.currentDisposition": event.target.dataset.id});
+    updateCharacterDisposition(this.actor, event.target.dataset.id);
   }
 
   /* -------------------------------------------- */

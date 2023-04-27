@@ -23,6 +23,10 @@ class i18n {
         return "athletics";
       case KEY_CONSTANTS.AGILITY:
         return "agility";
+      case KEY_CONSTANTS.DECEPTION:
+        return "deception";
+      case KEY_CONSTANTS.PERSUASION:
+        return "persuasion";
       case KEY_CONSTANTS.RUN:
         return "run";
     }
