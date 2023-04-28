@@ -31,7 +31,6 @@ export class UnitSheet extends CharacterSheetBase {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            width: 900,
             classes: ["chroniclesystem", "unit", "sheet", "actor"],
             template: "systems/chroniclesystem/templates/actors/characters/unit-sheet.hbs",
             tabs: [
@@ -111,6 +110,9 @@ export class UnitSheet extends CharacterSheetBase {
         html.find(".square").on("click", this._onClickSquare.bind(this));
 
         html.find(".owned-item-control").on("click", this._onClickOwnedItemControl.bind(this));
+
+        html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
+        html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));
     }
 
     async _onClickOwnedItemControl(event) {

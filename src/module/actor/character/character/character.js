@@ -1,8 +1,7 @@
-import LOGGER from "../../../../util/logger.js";
 import SystemUtils from "../../../../util/systemUtils.js";
 import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
-import { CSConstants } from "../../../system/csConstants.js";
+import { getAllTransformers } from "../transformers.js";
 
 /**
  * The Actor entity for handling characters.
@@ -28,6 +27,8 @@ export class Character extends CharacterBase {
         data.derivedStats.frustration.total = data.derivedStats.frustration.value + parseInt(data.derivedStats.frustration.modifier);
         data.derivedStats.fatigue.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
         data.derivedStats.fatigue.total = data.derivedStats.fatigue.value + parseInt(data.derivedStats.fatigue.modifier);
+
+        data.effects = getAllTransformers(this);
     }
 
     getMaxInjuries() {

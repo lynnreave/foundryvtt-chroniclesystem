@@ -2,6 +2,7 @@ import SystemUtils from "../../../../util/systemUtils.js";
 import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import { getCommander } from "./helpers.js";
+import { getAllTransformers } from "../transformers.js";
 
 /**
  * The Actor entity for handling warfare units.
@@ -62,5 +63,7 @@ export class Unit extends CharacterBase {
         data.discipline.total = data.discipline.value + data.discipline.modifier;
         data.discipline.totalWithOrders = data.discipline.total
             + parseInt(data.discipline.ordersReceivedModifier);
+
+        data.effects = getAllTransformers(this);
     }
 }

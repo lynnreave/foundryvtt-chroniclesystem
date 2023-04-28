@@ -29,7 +29,7 @@ export class CharacterSheet extends CharacterSheetBase {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["chroniclesystem", "character", "sheet", "actor"],
-      template: "systems/chroniclesystem/templates/actors/characters/character-sheet.hbs",
+      template: "systems/chroniclesystem/templates/actors/characters/character-sheet.hbs"
     });
   }
 
@@ -93,6 +93,8 @@ export class CharacterSheet extends CharacterSheetBase {
 
     this._calculateIntrigueTechniques(data);
 
+    // data.effects = getAllTransformers(this.actor);
+
     data.currentInjuries = Object.values(character.injuries).length;
     data.currentWounds = Object.values(character.wounds).length;
     data.maxInjuries = this.actor.getMaxInjuries();
@@ -155,7 +157,8 @@ export class CharacterSheet extends CharacterSheetBase {
 
     html.find(".square").on("click", this._onClickSquare.bind(this));
 
-    // Add or Remove Attribute
+    html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
+    html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));
   }
 
   async setFrustrationValue(newValue) {

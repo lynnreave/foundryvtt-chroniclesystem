@@ -30,88 +30,6 @@ function _warnToUpdateTempTransformers(character) {
     }
 }
 
-export function updateTempTransformers(character) {
-    /**
-     * Update a Character Actor with all current (temporary) transformers.
-     * "Temporary" transformers exist in .system and need to be transposed to the Actor object
-     * to be acted upon. I believe this is to handle multiple client updates from various vectors
-     * but maintain a single source of truth.
-     *
-     * @param {object} character: a character Actor object.
-     */
-
-    let data = getData(character);
-    for (let type of transformerTypes) {
-        character[type] = data[type];
-    }
-}
-
-export function saveTransformers(character) {
-    /**
-     * Save existing Character Actor transformers to temporary transformers of a Character.
-     * This is the opposite of updateTempTransformers().
-     *
-     * @param {object} character: a character Actor object.
-     */
-
-    _warnToUpdateTempTransformers(character);
-
-    let data = {}
-    for (let type of transformerTypes) {
-        data[`system.${type}`] = character[type]
-    }
-    let context = { diff: false }
-    character.update(data, context)
-}
-
-export function removeTransformer(character, type, attr, sourceId, save = false) {
-    /**
-     * Remove an existing Character Actor transformer.
-     *
-     * @param {object} character: a character Actor object.
-     * @param {string} type: the type of transformer.
-     * @param {string} attr: the type of attribute to update ("all" for all available attributes).
-     * @param {string} sourceId: the id of the source of the transformation.
-     * @param {boolean} save: whether or not to save Actor transformers to temp data after operation.
-     */
-
-    _warnToUpdateTempTransformers(character);
-
-    // remove any existing transformers for specified transformer and attr w/ sourceId
-    if (character[type][attr]) {
-        character[type][attr] = character[type][attr].filter(item => item._id !== sourceId)
-    }
-
-    // save (if specified)
-    if (save) saveTransformers(character);
-}
-
-export function removeAllTransformersFromSource(character, sourceId, save = false) {
-    /**
-     * Remove all existing Character Actor transformers from a specific source.
-     *
-     * @param {object} character: a character Actor object.
-     * @param {string} sourceId: the id of the source of the transformation.
-     * @param {boolean} save: whether or not to save Actor transformers to temp data after operation.
-     */
-
-    _warnToUpdateTempTransformers(character);
-
-    // remove any existing transformers for w/ sourceId
-    // for each transformer type...
-    for (let type of transformerTypes) {
-        let transformersForType = character[type];
-        // search each character attribute target...
-        for (let [attr, transformers] of Object.entries(transformersForType)) {
-            // and remove any transformer from specified source
-            removeTransformer(character, type, attr, sourceId);
-        }
-    }
-
-    // save (if specified)
-    if (save) saveTransformers(character);
-}
-
 export function addTransformer(
     character, type, attr, sourceId, value, isDocument = true, save = false
 ) {
@@ -154,6 +72,54 @@ export function addTransformer(
 
     // save (if specified)
     if (save) saveTransformers(character);
+}
+
+export function getAllTransformers(character) {
+    /**
+     * Get all Character Actor transformers, organised by source.
+     * @param {object} character: a character Actor object.
+     */
+    // make sure any temp data is included
+    updateTempTransformers(character);
+    // get all transformers by unique source
+    // TODO: do this without nested for loops
+    let transformersBySource = {};
+    let sources = [];
+    let targetsBySource = {};
+    for (let type of transformerTypes) {
+        Object.entries(character[type]).forEach(
+            ([attr, attrTransformers]) => {
+                for (let transformer of attrTransformers) {
+                    // make sure entry for source exists, else add it
+                    if (!sources.includes(transformer._id)) {
+                        sources.push(transformer._id);
+                        // transformersBySource[transformer._id] = {
+                        //     id: transformer._id, name: "", isDocument: transformer.isDocument
+                        // };
+                        transformersBySource[transformer._id] = {name: ""}
+                        targetsBySource[transformer._id] = [];
+                        // handle doc-type source
+                        if (transformer.isDocument) {
+                            let tempItem = transformer._id;
+                            tempItem = character.getEmbeddedDocument("Item", transformer._id);
+                            if (tempItem) {
+                                transformersBySource[transformer._id].name = tempItem.name;
+                            }
+                        }
+                    }
+                    // make sure target for source exists, else add it
+                    if (!targetsBySource[transformer._id].includes(attr)) {
+                        targetsBySource[transformer._id].push(attr)
+                        transformersBySource[transformer._id][attr] = {}
+                    }
+                    // add modifier for type
+                    transformersBySource[transformer._id][attr][type] = transformer.mod;
+                }
+            }
+        );
+    }
+    // return
+    return transformersBySource;
 }
 
 export function getTransformation(
@@ -212,4 +178,86 @@ export function getTransformation(
 
     // return
     return {total: total, detail: detail};
+}
+
+export function removeAllTransformersFromSource(character, sourceId, save = false) {
+    /**
+     * Remove all existing Character Actor transformers from a specific source.
+     *
+     * @param {object} character: a character Actor object.
+     * @param {string} sourceId: the id of the source of the transformation.
+     * @param {boolean} save: whether or not to save Actor transformers to temp data after operation.
+     */
+
+    _warnToUpdateTempTransformers(character);
+
+    // remove any existing transformers for w/ sourceId
+    // for each transformer type...
+    for (let type of transformerTypes) {
+        let transformersForType = character[type];
+        // search each character attribute target...
+        for (let [attr, transformers] of Object.entries(transformersForType)) {
+            // and remove any transformer from specified source
+            removeTransformer(character, type, attr, sourceId);
+        }
+    }
+
+    // save (if specified)
+    if (save) saveTransformers(character);
+}
+
+export function removeTransformer(character, type, attr, sourceId, save = false) {
+    /**
+     * Remove an existing Character Actor transformer.
+     *
+     * @param {object} character: a character Actor object.
+     * @param {string} type: the type of transformer.
+     * @param {string} attr: the type of attribute to update ("all" for all available attributes).
+     * @param {string} sourceId: the id of the source of the transformation.
+     * @param {boolean} save: whether or not to save Actor transformers to temp data after operation.
+     */
+
+    _warnToUpdateTempTransformers(character);
+
+    // remove any existing transformers for specified transformer and attr w/ sourceId
+    if (character[type][attr]) {
+        character[type][attr] = character[type][attr].filter(item => item._id !== sourceId)
+    }
+
+    // save (if specified)
+    if (save) saveTransformers(character);
+}
+
+export function saveTransformers(character) {
+    /**
+     * Save existing Character Actor transformers to temporary transformers of a Character.
+     * This is the opposite of updateTempTransformers().
+     *
+     * @param {object} character: a character Actor object.
+     */
+
+    _warnToUpdateTempTransformers(character);
+
+    let data = {}
+    for (let type of transformerTypes) {
+        data[`system.${type}`] = character[type]
+    }
+    let context = { diff: false }
+    character.update(data, context)
+}
+
+export function updateTempTransformers(character) {
+    /**
+     * Update a Character Actor with all current (temporary) transformers.
+     * "Temporary" transformers exist in .system and need to be transposed to the Actor object
+     * to be acted upon. I believe this is to handle multiple client updates from various vectors
+     * but maintain a single source of truth.
+     *
+     * @param {object} character: a character Actor object.
+     */
+
+    let data = getData(character);
+    for (let type of transformerTypes) {
+        character[type] = data[type];
+    }
 }

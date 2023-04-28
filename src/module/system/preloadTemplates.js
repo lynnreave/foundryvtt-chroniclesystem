@@ -17,6 +17,7 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/chroniclesystem/templates/actors/partials/tabs/sorcery-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/equipments-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/relationships-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/effects-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/description-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/form-group.hbs',
 

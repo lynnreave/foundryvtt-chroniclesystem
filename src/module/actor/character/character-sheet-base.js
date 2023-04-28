@@ -1,5 +1,10 @@
-import LOGGER from "../../../util/logger.js";
 import { ActorSheetChronicle } from "../actor-sheet-chronicle.js";
+import {
+  removeAllTransformersFromSource,
+  removeTransformer,
+  saveTransformers,
+  transformerTypes
+} from "./transformers.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -11,7 +16,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      width: 700,
+      width: 900,
       height: 900,
       tabs: [
         {
@@ -30,6 +35,31 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     ev.preventDefault();
     let method = `set${ev.currentTarget.dataset.type}Value`;
     await this[method](ev.currentTarget.id);
+  }
+
+  async _onClickEffectClearAll(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const sourceId = a.dataset.source;
+    // remove all transformers from source
+    for (let type of transformerTypes) {
+      removeAllTransformersFromSource(this.actor, sourceId);
+    }
+    // save to data
+    saveTransformers(this.actor);
+  }
+
+  async _onClickEffectClear(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const sourceId = a.dataset.source;
+    const attr = a.dataset.target;
+    // remove transformers from source to target of all types
+    for (let type of transformerTypes) {
+      removeTransformer(this.actor, type, attr, sourceId);
+    }
+    // save to data
+    saveTransformers(this.actor);
   }
 
   /* -------------------------------------------- */
