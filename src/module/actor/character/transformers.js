@@ -3,8 +3,8 @@
  *
  * "transformer": any change to the base test dice, bonus dice, or value of an attribute or roll.
  * "transformation": the sum of all changes from a single type of transformer.
- * "poolMods": (positive) changes to the test dice of a roll; dice pool modifier; test dice modifier.
- * "penalties": negative changes to the test dice of a roll.
+ * "poolMods": changes to the test dice of a roll; dice pool modifier; test dice modifier.
+ * [DEPRECATING] "penalties": negative changes to the test dice of a roll (use negative poolMods instead).
  * "bonuses": changes to the bonus dice of a roll.
  * "modifiers": flat changes to the outcome of a roll or some attribute value.
  *

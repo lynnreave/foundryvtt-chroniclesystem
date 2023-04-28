@@ -53,7 +53,7 @@ export class Unit extends CharacterBase {
 
         // num of orders received / turn
         data.ordersReceived.value = 5;
-        data.ordersReceived.total = data.ordersReceived.value;
+        data.ordersReceived.total = data.ordersReceived.value + parseInt(data.ordersReceived.modifier);
 
         // discipline
         data.discipline.modifier = this.getTransformation("modifiers",

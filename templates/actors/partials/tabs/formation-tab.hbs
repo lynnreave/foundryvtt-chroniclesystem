@@ -14,12 +14,12 @@
             </li>
             <div class="disposition-list">
                 {{#each facings}}
-                    <div class="disposition facing option flexrow {{showIfEquals this.rating ../character.currentFacing "selected"}}" data-id="{{this.rating}}">
-                        <label class="flex-8" data-id="{{this.rating}}">{{localize this.name}}</label>
-                        <label class="flex-1 center" data-id="{{this.rating}}">
+                    <div class="disposition facing option flexrow {{showIfEquals @index ../character.currentFacing "selected"}}" data-id="{{@index}}">
+                        <label class="flex-8" data-id="{{@index}}">{{localize this.name}}</label>
+                        <label class="flex-1 center" data-id="{{@index}}">
                             {{showIfDifferent 0 this.testDiceModifier this.testDiceModifier : ""}}
                         </label>
-                        <label class="flex-1 center" data-id="{{this.rating}}">
+                        <label class="flex-1 center" data-id="{{@index}}">
                             {{showIfDifferent 0 this.bonusDiceModifier this.bonusDiceModifier : ""}}
                         </label>
                     </div>
@@ -40,30 +40,30 @@
             </li>
             <div class="disposition-list">
                 {{#each formations}}
-                    <div class="disposition formation option {{showIfEquals this.rating ../character.currentFormation "selected"}}" data-id="{{this.rating}}">
-                        <li class="flexrow" data-id="{{this.rating}}">
-                            <label class="flex-4" data-id="{{this.rating}}">{{localize this.name}}</label>
-                            <label class="flex-1 center" data-id="{{this.rating}}">
+                    <div class="disposition formation option {{showIfEquals @index ../character.currentFormation "selected"}}" data-id="{{@index}}">
+                        <li class="flexrow" data-id="{{@index}}">
+                            <label class="flex-4" data-id="{{@index}}">{{localize this.name}}</label>
+                            <label class="flex-1 center" data-id="{{@index}}">
                                 {{showIfDifferent 0 this.difficulty this.difficulty : ""}}
                             </label>
-                            <label class="flex-1 center" data-id="{{this.rating}}">
+                            <label class="flex-1 center" data-id="{{@index}}">
                                 {{showIfDifferent 0 this.disciplineModifier this.disciplineModifier : ""}}
                             </label>
-                            <label class="flex-2 center" data-id="{{this.rating}}">
+                            <label class="flex-2 center" data-id="{{@index}}">
                                 {{showIfDifferent 0 this.fightingDefenseModifier this.fightingDefenseModifier : ""}}
                                 /
                                 {{showIfDifferent 0 this.marksmanshipDefenseModifier this.marksmanshipDefenseModifier : ""}}
                             </label>
-                            <label class="flex-1 center" data-id="{{this.rating}}">
+                            <label class="flex-1 center" data-id="{{@index}}">
                                 {{showIfEquals -99 this.movementModifier "NO" : ""}}
                                 {{showIfContains "-4|-3|-2|-1|1|2|3|4" this.movementModifier this.movementModifier : ""}}
                             </label>
-                            <label class="flex-1 center" data-id="{{this.rating}}">
+                            <label class="flex-1 center" data-id="{{@index}}">
                                 {{showIfEquals -99 this.testDiceModifier "NO" : ""}}
                                 {{showIfContains "-4|-3|-2|-1|1|2|3|4" this.testDiceModifier this.testDiceModifier : ""}}
                             </label>
                         </li>
-                        <li class="flexrow" data-id="{{this.rating}}">
+                        <li class="flexrow" data-id="{{@index}}">
                             {{#each this.conditionalModifiers}}
                                 <label class="font-small padding-3" data-id="{{this.rating}}">{{this}}</label>
                             {{/each}}

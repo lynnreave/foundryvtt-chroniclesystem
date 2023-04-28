@@ -24,7 +24,7 @@
                     </header>
                     <div class="disposition-list">
                         {{#each statuses}}
-                            <div class="disposition status option capitalize {{showIfEquals this.rating ../character.currentStatus "selected"}}" data-id="{{this.rating}}">
+                            <div class="disposition status option capitalize {{showIfEquals @index ../character.currentStatus "selected"}}" data-id="{{@index}}">
                                 {{localize this.name}}
                             </div>
                         {{/each}}
@@ -255,8 +255,8 @@
                     </li>
                     <div class="disposition-list">
                         {{#each facings}}
-                            <div class="disposition facing option flexrow {{showIfEquals this.rating ../character.currentFacing "selected"}}" data-id="{{this.rating}}">
-                                <label class="" data-id="{{this.rating}}">{{localize this.name}}</label>
+                            <div class="disposition facing option flexrow {{showIfEquals @index ../character.currentFacing "selected"}}" data-id="{{@index}}">
+                                {{localize this.name}}
                             </div>
                         {{/each}}
                     </div>
@@ -344,16 +344,16 @@
         </li>
         <div class="disposition-list">
             {{#each formations}}
-                <div class="disposition formation option {{showIfEquals this.rating ../character.currentFormation "selected"}}" data-id="{{this.rating}}">
-                    <li class="flexrow" data-id="{{this.rating}}">
-                        <label class="flex-9" data-id="{{this.rating}}">{{localize this.name}}</label>
-                        <label class="center flex-1" data-id="{{this.rating}}">
+                <div class="disposition formation option {{showIfEquals @index ../character.currentFormation "selected"}}" data-id="{{@index}}">
+                    <li class="flexrow" data-id="{{@index}}">
+                        <label class="flex-9" data-id="{{@index}}">{{localize this.name}}</label>
+                        <label class="center flex-1" data-id="{{@index}}">
                             {{showIfDifferent 0 this.difficulty this.difficulty : ""}}
                         </label>
                     </li>
-                    <li class="flexrow" data-id="{{this.rating}}">
+                    <li class="flexrow" data-id="{{@index}}">
                         {{#each this.conditionalModifiers}}
-                            <label class="font-small padding-3" data-id="{{this.rating}}">{{this}}</label>
+                            <label class="font-small padding-3">{{this}}</label>
                         {{/each}}
                     </li>
                 </div>

@@ -4,7 +4,7 @@ import { CharacterSheetBase } from "../character-sheet-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import { CSConstants } from "../../../system/csConstants.js";
 import { Technique } from "../../../type/technique.js";
-import { updateCharacterDisposition } from "./helpers.js";
+import { updateDisposition } from "./helpers.js";
 import { CHARACTER_DISPOSITIONS } from "../../../selections.js";
 
 /**
@@ -344,7 +344,7 @@ export class CharacterSheet extends CharacterSheetBase {
 
   async _onDispositionChanged(event, targets) {
     event.preventDefault();
-    updateCharacterDisposition(this.actor, event.target.dataset.id);
+    updateDisposition(this.actor, event.target.dataset.id);
   }
 
   /* -------------------------------------------- */

@@ -110,10 +110,9 @@ export function getFormula(rollDef, actor) {
             break;
     }
 
-    // handle negative penalty
-    // TODO: don't overload penalty; change to TD modifier?
-    if (formula.dicePenalty < 0) {
-        formula.pool += Math.abs(formula.dicePenalty)
+    // handle negative pool (for conflating penalties with poolMods)
+    if (formula.pool <= 0) {
+        formula.pool = 1
         formula.dicePenalty = 0
     }
 

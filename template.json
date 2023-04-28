@@ -52,7 +52,7 @@
         },
         "wounds": [],
         "injuries": [],
-        "currentDisposition": 4,
+        "currentDisposition": 0,
         "modifiers": {},
         "penalties": {},
         "bonuses": {},
@@ -176,7 +176,7 @@
       "commander": "",
       "currentFacing": 0,
       "currentFormation": 0,
-      "currentStatus": 1,
+      "currentStatus": 0,
       "discipline": {
         "value": 0,
         "modifier": 0,

@@ -1,6 +1,5 @@
 export class Formation {
     #name;
-    #rating;
     #difficulty;
     #disciplineModifier;
     #fightingDefenseModifier;
@@ -11,7 +10,6 @@ export class Formation {
 
     constructor(
         name,
-        rating,
         difficulty,
         disciplineModifier,
         fightingDefenseModifier,
@@ -21,7 +19,6 @@ export class Formation {
         conditionalModifiers
     ) {
         this.#name = name;
-        this.#rating = rating;
         this.#difficulty = difficulty;
         this.#disciplineModifier = disciplineModifier;
         this.#fightingDefenseModifier = fightingDefenseModifier;
@@ -33,10 +30,6 @@ export class Formation {
 
     get name() {
         return this.#name;
-    }
-
-    get rating() {
-        return this.#rating;
     }
 
     get difficulty() {

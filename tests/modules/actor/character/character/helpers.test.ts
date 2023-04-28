@@ -1,7 +1,7 @@
 import { describe, test, expect } from "@jest/globals";
 import {
     // getCharacterDisposition,
-    updateCharacterDisposition
+    updateDisposition
 // @ts-ignore
 } from "@actor/character/character/helpers";
 // @ts-ignore
@@ -18,11 +18,11 @@ import { CHARACTER_DISPOSITIONS } from "@module/selections";
 global.game = new TestGame();
 
 describe("helpers.js", () => {
-    describe("updateCharacterDisposition", () => {
+    describe("update character disposition", () => {
         test("disposition exists => disposition", () => {
             let character: TestCharacter = new TestCharacter();
             CHARACTER_DISPOSITIONS.forEach(function (disposition, index) {
-                updateCharacterDisposition(character, index);
+                updateDisposition(character, index);
                 expect(character.system.currentDisposition).toStrictEqual(index);
                 expect(
                     getTransformation(character, "modifiers", "persuasion", false, true).total
@@ -34,8 +34,8 @@ describe("helpers.js", () => {
         });
         test("disposition exists - negative", () => {
             let character: TestCharacter = new TestCharacter();
-            updateCharacterDisposition(character, 10);
-            expect(character.system["currentDisposition"]).toStrictEqual(4);
+            updateDisposition(character, 10);
+            expect(character.system["currentDisposition"]).toStrictEqual(0);
         });
     });
 });

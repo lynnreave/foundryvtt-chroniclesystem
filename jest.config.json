@@ -4,8 +4,7 @@
         "<rootDir>/tests",
         "<rootDir>/src/module/system/csConstants.js",
         "<rootDir>/src/util/logger.js",
-        "<rootDir>/src/util/systemUtils.js",
-        "<rootDir>/src/module/type"
+        "<rootDir>/src/util/systemUtils.js"
     ],
     "testEnvironment": "node",
     "modulePaths": [
@@ -20,6 +19,7 @@
         "^@roll/(.*)$": "<rootDir>/src/module/roll/$1",
         "^@module/(.*)$": "<rootDir>/src/module/$1",
         "^@system/(.*)$": "<rootDir>/src/module/system/$1",
+        "^@type/(.*)$": "<rootDir>/src/module/type/$1",
         "^@util$": "<rootDir>/src/util",
         "^@mocks/(.*)$": "<rootDir>/tests/mocks/$1"
     },

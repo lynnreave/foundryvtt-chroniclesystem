@@ -1,7 +1,18 @@
-import LOGGER from "../../../../util/logger.js";
 import { CharacterSheetBase } from "../character-sheet-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
-import { getAttachedHeroes, updateAttachedHeroesEffects } from "./helpers.js";
+import {
+    updateAttachedHeroesEffects,
+    updateDisorganisation,
+    updateFacing,
+    updateFormation,
+    updateOrdersReceived,
+    updateStatus
+} from "./helpers.js";
+import {
+    UNIT_FACINGS,
+    UNIT_FORMATIONS,
+    UNIT_STATUSES
+} from "../../../selections.js";
 
 /**
  * The ActorSheet entity for handling warfare units.
@@ -22,7 +33,7 @@ export class UnitSheet extends CharacterSheetBase {
         return mergeObject(super.defaultOptions, {
             width: 900,
             classes: ["chroniclesystem", "unit", "sheet", "actor"],
-            template: "systems/chroniclesystem/templates/actors/units/unit-sheet.hbs",
+            template: "systems/chroniclesystem/templates/actors/characters/unit-sheet.hbs",
             tabs: [
                 {
                     navSelector: ".tabs",
@@ -50,9 +61,9 @@ export class UnitSheet extends CharacterSheetBase {
         character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
         character.owned.heroes = this._checkNull(data.itemsByType['hero']).sort((a, b) => a.name.localeCompare(b.name));
 
-        data.statuses = ChronicleSystem.unitStatuses;
-        data.facings = ChronicleSystem.unitFacings;
-        data.formations = ChronicleSystem.formations;
+        data.statuses = UNIT_STATUSES;
+        data.facings = UNIT_FACINGS;
+        data.formations = UNIT_FORMATIONS;
 
         data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
 
@@ -116,36 +127,11 @@ export class UnitSheet extends CharacterSheetBase {
     }
 
     async setDisorganisationValue(newValue) {
-        let value = Math.max(Math.min(parseInt(newValue), this.actor.getData().disorganisation.total), 0);
-        let mod = Math.max(Math.min(parseInt(newValue), this.actor.getData().disorganisation.modifier), 0);
-
-        this.actor.updateTempTransformers();
-
-        if (value > 0) {
-            this.actor.addTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION, value, false);
-            this.actor.addTransformer("modifiers", ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION, value*3, false)
-        } else {
-            this.actor.removeTransformer("penalties", ChronicleSystem.modifiersConstants.ALL, ChronicleSystem.keyConstants.DISORGANISATION);
-            this.actor.removeTransformer("modifiers", ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.DISORGANISATION)
-        }
-
-        this.actor.update({
-            "system.disorganisation.current": value,
-            "system.penalties": this.actor.penalties,
-            "system.modifiers": this.actor.modifiers
-        });
+        updateDisorganisation(this.actor, newValue);
     }
 
     async setOrdersReceivedValue(newValue) {
-        let value = Math.max(Math.min(parseInt(newValue), this.actor.getData().ordersReceived.total), 0);
-        let mod = Math.max(Math.min(parseInt(newValue), this.actor.getData().ordersReceived.modifier), 0);
-
-        if (value > 0) { mod += value*3 }
-
-        this.actor.update({
-            "system.ordersReceived.current": value,
-            "system.discipline.ordersReceivedModifier": mod,
-        });
+        updateOrdersReceived(this.actor, newValue);
     }
 
     async _onEquippedStateChanged(event) {
@@ -201,153 +187,17 @@ export class UnitSheet extends CharacterSheetBase {
 
     async _onUnitStatusChanged(event, targets) {
         event.preventDefault();
-        let rating = parseInt(event.target.dataset.id);
-        if (!ChronicleSystem.unitStatuses.find((status) => status.rating === rating)) {
-            LOGGER.warn("the informed unit status does not exist.");
-            return;
-        }
-        this.actor.update({"system.currentStatus": rating});
+        updateStatus(this.actor, event.target.dataset.id);
     }
 
     async _onUnitFacingChanged(event, targets) {
         event.preventDefault();
-        let rating = parseInt(event.target.dataset.id);
-        const facing = ChronicleSystem.unitFacings.find((item) => item.rating === rating);
-        if (!facing) {
-            LOGGER.warn(`the informed unit facing ${rating} does not exist.`);
-            return;
-        }
-
-        this.actor.updateTempTransformers();
-
-        // test dice modifier (only fighting)
-        if (facing.testDiceModifier > 0) {
-            this.actor.addTransformer("poolMods",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
-                facing.testDiceModifier, false
-            );
-        } else if (facing.testDiceModifier < 0) {
-            this.actor.addTransformer("penalties",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
-                Math.abs(facing.testDiceModifier), false
-            );
-        } else {
-            this.actor.removeTransformer("poolMods",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
-            );
-            this.actor.removeTransformer("penalties",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
-            );
-        }
-        // bonus dice modifier (only fighting)
-        if (facing.bonusDiceModifier > 0) {
-            this.actor.addTransformer("bonuses",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING,
-                facing.bonusDiceModifier, false
-            );
-        } else {
-            this.actor.removeTransformer("bonuses",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FACING
-            );
-        }
-
-        this.actor.update({
-            "system.currentFacing": rating,
-            "system.poolMods": this.actor.poolMods,
-            "system.penalties": this.actor.penalties,
-            "system.bonuses": this.actor.bonuses
-        });
+        updateFacing(this.actor, event.target.dataset.id);
     }
 
     async _onUnitFormationChanged(event, targets) {
         event.preventDefault();
-        let rating = parseInt(event.target.dataset.id);
-        const formation = ChronicleSystem.formations.find((item) => item.rating === rating);
-        if (!formation) {
-            LOGGER.warn(`the informed unit formation ${rating} does not exist.`);
-            return;
-        }
-
-        this.actor.updateTempTransformers();
-
-        // TODO: consolidate these with a loop, grabbing fields from Formation() object
-        // discipline
-        if (formation.disciplineModifier !== 0) {
-            this.actor.addTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.FORMATION,
-                formation.disciplineModifier, false
-            );
-        } else {
-            this.actor.removeTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.DISCIPLINE, ChronicleSystem.keyConstants.FORMATION
-            );
-        }
-        // fighting defense
-        if (formation.fightingDefenseModifier !== 0) {
-            this.actor.addTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
-                ChronicleSystem.keyConstants.FORMATION,
-                formation.fightingDefenseModifier, false
-            );
-        } else {
-            this.actor.removeTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_FIGHTING,
-                ChronicleSystem.keyConstants.FORMATION
-            );
-        }
-        // marksmanship defense
-        if (formation.marksmanshipDefenseModifier !== 0) {
-            this.actor.addTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
-                ChronicleSystem.keyConstants.FORMATION,
-                formation.marksmanshipDefenseModifier, false
-            );
-        } else {
-            this.actor.removeTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.COMBAT_DEFENSE_MARKSMANSHIP,
-                ChronicleSystem.keyConstants.FORMATION
-            );
-        }
-        // movement
-        if (formation.movementModifier !== 0) {
-            this.actor.addTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.MOVEMENT,
-                ChronicleSystem.keyConstants.FORMATION,
-                formation.movementModifier, false
-            );
-        } else {
-            this.actor.removeTransformer("modifiers",
-                ChronicleSystem.modifiersConstants.MOVEMENT,
-                ChronicleSystem.keyConstants.FORMATION
-            );
-        }
-        // fighting
-        if (formation.testDiceModifier > 0) {
-            this.actor.addTransformer("poolMods",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION,
-                formation.testDiceModifier, false
-            );
-        } else if (formation.testDiceModifier < 0) {
-            this.actor.addTransformer("penalties",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION,
-                Math.abs(formation.testDiceModifier), false
-            );
-        } else {
-            this.actor.removeTransformer("poolMods",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION
-            );
-            this.actor.removeTransformer("penalties",
-                ChronicleSystem.modifiersConstants.FIGHTING, ChronicleSystem.keyConstants.FORMATION
-            );
-        }
-
-        // save
-        this.actor.update({
-            "system.currentFormation": rating,
-            "system.poolMods": this.actor.poolMods,
-            "system.penalties": this.actor.penalties,
-            "system.modifiers": this.actor.modifiers
-        });
+        updateFormation(this.actor, event.target.dataset.id);
     }
 
     /* -------------------------------------------- */

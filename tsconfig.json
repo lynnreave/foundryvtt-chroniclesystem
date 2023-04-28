@@ -19,6 +19,7 @@
       "@item/*": ["src/module/item/*"],
       "@roll/*": ["src/module/roll/*"],
       "@system/*": ["src/module/system/*"],
+      "@type/*": ["src/module/type/*"],
       "@module/*": ["src/module/*"],
       "@scripts/*": ["src/scripts/*"],
       "@util/*": ["src/util/*"],

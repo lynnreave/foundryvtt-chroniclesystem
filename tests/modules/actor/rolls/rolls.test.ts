@@ -275,14 +275,14 @@ describe("rolls.js", () => {
             formula.reRoll = 0;
             expect(formula.toStr()).toStrictEqual(expected);
         });
-        test("pool bonus", () => {
+        test("pool < 1", () => {
             let character: TestCharacter = new TestCharacter();
             let rollType = "weapon-test";
             let sourceName = "someSource";
-            let formulaStr = "3|1|1|-2|0";
+            let formulaStr = "0|1|1|0|0";
             let rollDef = [rollType, sourceName, formulaStr];
             let formula: DiceRollFormula = getFormula(rollDef, character);
-            let expected = "5|1|1|0|0";
+            let expected = "1|1|1|0|0";
             formula.reRoll = 0;
             expect(formula.toStr()).toStrictEqual(expected);
         });
