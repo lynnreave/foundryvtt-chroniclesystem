@@ -1,7 +1,7 @@
-import {DiceRollFormula} from "../roll/dice-roll-formula.js";
+import { DiceRollFormula } from "../roll/dice-roll-formula.js";
 import LOGGER from "../../util/logger.js";
-import {RollChronicle} from "../roll/roll-chronicle.js";
-import {CSConstants} from "./csConstants.js";
+import { RollChronicle } from "../roll/roll-chronicle.js";
+import { CSConstants } from "./csConstants.js";
 import SystemUtils from "../../util/systemUtils.js";
 import {
     CHARACTER_ATTR_CONSTANTS,
@@ -75,7 +75,7 @@ function handleRoll(rollType, actor) {
     const formula = getFormula(roll_definition, actor);
 
     let csRoll = new RollChronicle(roll_definition[1], formula);
-    return csRoll.doRoll(actor, false);
+    return csRoll.doRoll(actor, false, roll_definition[0]);
 }
 
 async function _showModifierDialog(formula) {
@@ -130,7 +130,7 @@ async function handleRollAsync(rollType, actor, showModifierDialog = false) {
     }
 
     let csRoll = new RollChronicle(roll_definition[1], formula);
-    return await csRoll.doRoll(actor, true);
+    return await csRoll.doRoll(actor, true, roll_definition[0]);
 }
 
 function adjustFormulaByWeapon (actor, formula, weapon) {

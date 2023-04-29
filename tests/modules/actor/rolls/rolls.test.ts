@@ -1,19 +1,67 @@
 import {
-    getAbilityTestFormula, getFormula
+    getAbilityTestFormula,
+    getDegrees,
+    getFormula,
+    getTestDifficultyFromCurrentTarget
 // @ts-ignore
 } from "@roll/rolls";
 // @ts-ignore
 import { DiceRollFormula } from "@roll/dice-roll-formula";
 // @ts-ignore
 import { TestCharacter } from "@mocks/character";
+// @ts-ignore
+import { TestGame } from "@mocks/game";
+// @ts-ignore
+import { DEGREES_CONSTANTS } from "@module/constants";
 
 const defaultAbility = {
     _id: "someId", name: "someName", type: "ability", system: {rating: 5, modifier: 0}
 };
 const defaultSpecialty = {name: 'someName', rating: 1, modifier: 1};
 const defaultTransformer = {_id: "source", mod: 1, isDocument: false};
+const defaultDifficulty: number = 6;
 
 describe("rolls.js", () => {
+    describe("get degrees", () => {
+        test("2 degrees of failure", () => {
+            let output = getDegrees(defaultDifficulty, defaultDifficulty - 5);
+            expect(output.num).toStrictEqual(-2)
+            expect(output.label).toStrictEqual(DEGREES_CONSTANTS["-2"])
+        });
+        test("1 degree of failure", () => {
+            for (let i: number = -4; i <= -1; i++) {
+                let output = getDegrees(defaultDifficulty, defaultDifficulty + i);
+                expect(output.num).toStrictEqual(-1)
+                expect(output.label).toStrictEqual(DEGREES_CONSTANTS["-1"])
+            }
+        });
+        test("1 degree of success", () => {
+            for (let i: number = 0; i <= 4; i++) {
+                let output = getDegrees(defaultDifficulty, defaultDifficulty + i);
+                expect(output.num).toStrictEqual(1)
+                expect(output.label).toStrictEqual(DEGREES_CONSTANTS["1"])
+            }
+        });
+        test("2 degrees of success", () => {
+            for (let i: number = 5; i <= 9; i++) {
+                let output = getDegrees(defaultDifficulty, defaultDifficulty + i);
+                expect(output.num).toStrictEqual(2)
+                expect(output.label).toStrictEqual(DEGREES_CONSTANTS["2"])
+            }
+        });
+        test("3 degrees of success", () => {
+            for (let i: number = 10; i <= 14; i++) {
+                let output = getDegrees(defaultDifficulty, defaultDifficulty + i);
+                expect(output.num).toStrictEqual(3)
+                expect(output.label).toStrictEqual(DEGREES_CONSTANTS["3"])
+            }
+        });
+        test("4 degrees of success", () => {
+            let output = getDegrees(defaultDifficulty, defaultDifficulty + 15);
+            expect(output.num).toStrictEqual(4)
+            expect(output.label).toStrictEqual(DEGREES_CONSTANTS["4"])
+        });
+    });
     describe("get ability test formula", () => {
         test("ability exists", () => {
             let character: TestCharacter = new TestCharacter();
@@ -285,6 +333,106 @@ describe("rolls.js", () => {
             let expected = "1|1|1|0|0";
             formula.reRoll = 0;
             expect(formula.toStr()).toStrictEqual(expected);
+        });
+    });
+    describe("get test difficulty from actor target", () => {
+        test("no targets", () => {
+            let rollType = "weapon-test";
+            let game: TestGame = new TestGame();
+            game.user.targets = [];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(null);
+        });
+        test("weapon-test", () => {
+            let rollType = "weapon-test";
+            let character: TestCharacter = new TestCharacter();
+            character.system["derivedStats"] = {
+                combatDefense: {total: 9}
+            };
+            let token: object = {document: {_actor: character}};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(9);
+        });
+        test("persuasion", () => {
+            let rollType = "persuasion";
+            let character: TestCharacter = new TestCharacter();
+            character.system["derivedStats"] = {
+                intrigueDefense: {total: 12}
+            };
+            let token: object = {document: {_actor: character}};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(12);
+        });
+        test("deception", () => {
+            let rollType = "deception";
+            let character: TestCharacter = new TestCharacter();
+            character.system["derivedStats"] = {
+                intrigueDefense: {total: 6}
+            };
+            let token: object = {document: {_actor: character}};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(6);
+        });
+        test("unsupported roll type", () => {
+            let rollType = "someUnsupportedType";
+            let character: TestCharacter = new TestCharacter();
+            character.system["derivedStats"] = {
+                intrigueDefense: {total: 6},
+                combatDefense: {total: 9}
+            };
+            let token: object = {document: {_actor: character}};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(null);
+        });
+        test("no target document", () => {
+            let rollType = "weapon-test";
+            let token: object = {};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(null);
+        });
+        test("no target document actor", () => {
+            let rollType = "weapon-test";
+            let token: object = {document: {}};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(null);
+        });
+        test("weapon-test against unit", () => {
+            let rollType = "weapon-test";
+            let character: TestCharacter = new TestCharacter();
+            character.system["derivedStats"] = {
+                combatDefense: {total: 10}
+            };
+            character.system["discreteDefenses"] = {
+                vFighting: {total: 5},
+                vMarksmanship: {total: 15}
+            };
+            let token: object = {document: {_actor: character}};
+            let game: TestGame = new TestGame();
+            game.user.targets = [token];
+            global.game = game;
+            let output = getTestDifficultyFromCurrentTarget(rollType);
+            expect(output.difficulty).toStrictEqual(10);
+            expect(output.vFighting).toStrictEqual(5);
+            expect(output.vMarksmanship).toStrictEqual(15);
         });
     });
 });

@@ -93,9 +93,6 @@ export function getAllTransformers(character) {
                     // make sure entry for source exists, else add it
                     if (!sources.includes(transformer._id)) {
                         sources.push(transformer._id);
-                        // transformersBySource[transformer._id] = {
-                        //     id: transformer._id, name: "", isDocument: transformer.isDocument
-                        // };
                         transformersBySource[transformer._id] = {name: ""}
                         targetsBySource[transformer._id] = [];
                         // handle doc-type source

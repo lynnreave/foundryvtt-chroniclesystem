@@ -5,6 +5,7 @@ import {
 } from "../actor/character/abilities.js";
 import { getTransformation } from "../actor/character/transformers.js";
 import { getData } from "../common.js";
+import { DEGREES_CONSTANTS } from "../constants.js";
 
 export function getAbilityTestFormula(actor, abilityName, specialtyName = null) {
     /**
@@ -19,8 +20,7 @@ export function getAbilityTestFormula(actor, abilityName, specialtyName = null) 
     console.assert(actor, "actor is invalid!");
     console.assert(abilityName, "ability name is invalid!");
 
-    // some transformers require the name in lowercase to match CHARACTER_ATTR_CONSTANTS ?
-    // TODO: determine if this is really necessary vs. just using abilityName
+    // some transformers require the name in lowercase to match CHARACTER_ATTR_CONSTANTS
     let abilityNameLowerCase = abilityName.toLowerCase();
 
     // get ability (and specialty, if specified) from actor
@@ -76,6 +76,36 @@ export function getAbilityTestFormula(actor, abilityName, specialtyName = null) 
     return formula;
 }
 
+export function getDegrees(difficulty, testResult) {
+    /**
+     * Get the degrees (of success or failure) from a test result.
+     * @param {number} difficulty: the difficulty of the test.
+     * @param {number} testResult: the result of the test.
+     * @returns {object}: a data dict containing the number of degrees and string label.
+     */
+    // get difference between difficulty and result
+    let diff = testResult - difficulty;
+    // determine degrees of success or failure
+    let degrees = 0;
+    if (diff <= -5) {
+        degrees = -2;
+    } else if (diff <= -1) {
+        degrees = -1;
+    } else if (diff <= 4) {
+        degrees = 1;
+    } else if (diff <= 9) {
+        degrees = 2;
+    } else if (diff <= 14) {
+        degrees = 3;
+    } else if (diff >= 15) {
+        degrees = 4;
+    }
+    // get degrees label
+    let label = DEGREES_CONSTANTS[`${degrees}`];
+    // return
+    return {num: degrees, label: label}
+}
+
 export function getFormula(rollDef, actor) {
     /**
      * Get the dice formula for an actor by roll definition
@@ -117,4 +147,42 @@ export function getFormula(rollDef, actor) {
     }
 
     return formula;
+}
+
+export function getTestDifficultyFromCurrentTarget(rollType) {
+    /**
+     * Get test difficulty from the current target of an Actor.
+     * NOTE: this is assuming 1 target (the first in the list) since there are no AoE challenges known.
+     * @param {Actor} actor: the Actor object.
+     * @param {string} rollType: the type of test roll being made (e.g., "weapon-test").
+     * @returns {object}: a data object container the test difficulty info.
+     */
+    let result = {
+        difficulty: null, vFighting: null, vMarksmanship: null
+    };
+    // get current target
+    let targets = Array.from(game.user.targets);
+    if (targets.length < 1) { return result; }
+    let currentTarget = targets[0]
+    // get target actor data
+    if (!currentTarget.document) { return result; }
+    if (!currentTarget.document["_actor"]) { return result; }
+    let targetActor = currentTarget.document["_actor"]
+    let targetData = getData(targetActor);
+    // get difficulty by roll type
+    switch (rollType) {
+        case "weapon-test":
+            result.difficulty = targetData["derivedStats"]["combatDefense"].total;
+            if (targetData["discreteDefenses"]) {
+                result.vFighting = targetData["discreteDefenses"]["vFighting"].total;
+                result.vMarksmanship = targetData["discreteDefenses"]["vMarksmanship"].total;
+            }
+            break;
+        case "persuasion":
+        case "deception":
+            result.difficulty = targetData["derivedStats"]["intrigueDefense"].total;
+            break;
+    }
+    // return
+    return result;
 }

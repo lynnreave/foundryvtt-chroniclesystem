@@ -38,4 +38,7 @@ class i18n {
  */
 export class TestGame {
   i18n = i18n;
+  user = {
+    targets: []
+  };
 }

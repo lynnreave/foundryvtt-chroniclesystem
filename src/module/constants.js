@@ -26,6 +26,19 @@ export const CHARACTER_ATTR_CONSTANTS = {
 };
 
 /**
+ * Degrees of success/failure to string.
+ * @type {object}
+ */
+export const DEGREES_CONSTANTS = {
+  "-2": "CS.degrees.criticalFailure",
+  "-1": "CS.degrees.marginalFailure",
+  "1": "CS.degrees.marginalSuccess",
+  "2": "CS.degrees.greatSuccess",
+  "3": "CS.degrees.incredibleSuccess",
+  "4": "CS.degrees.astonishingSuccess"
+};
+
+/**
  * Equipped statuses for owned Item objects.
  * @type {object}
  */

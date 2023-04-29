@@ -3,6 +3,14 @@
     "notifications": {
       "dicePoolInvalid": "you cannot roll this test because your dice pool results in less than 1 die being kept."
     },
+    "degrees": {
+      "criticalFailure": "Critical failure",
+      "marginalFailure": "Marginal failure",
+      "marginalSuccess": "Marginal success",
+      "greatSuccess": "Great success",
+      "incredibleSuccess": "Incredible success",
+      "astonishingSuccess": "Astonishing success"
+    },
     "dialogs": {
       "characterRole": {
         "title": "Select the role of {actorName} in the house.",
@@ -42,13 +50,17 @@
     },
     "messages": {
       "nobodyHasBeenChosen": "Nobody has been chosen",
-      "actorDoesntExists": "Actor doesn't exists",
+      "actorDoesntExists": "Actor doesn't exist",
       "notStewardLinked": "No actor has been linked to the house like steward"
     },
     "chatMessages": {
       "initiativeRolls": "{name} rolls for {type} initiative!",
-      "simpleRoll": "{name} make a {test} roll!",
-      "customRoll": "{name} make a custom {test} roll!"
+      "simpleRoll": "{name} make(s) a {test} roll! {degreesMsg}",
+      "simpleRollAgainst": "{name} make(s) a {test} roll against {target}! {degreesMsg}",
+      "customRoll": "{name} make(s) a custom {test} roll! {degreesMsg}",
+      "customRollAgainst": "{name} make(s) a custom {test} roll against {target}! {degreesMsg}",
+      "degreesOfSuccess": "degree(s) of success",
+      "degreesOfFailure": "degree(s) of failure"
     },
     "settings": {
       "debugLogs": {
