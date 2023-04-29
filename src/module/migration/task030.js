@@ -1,4 +1,4 @@
-import {ChronicleSystem} from "../system/ChronicleSystem";
+import {ChronicleSystem} from "../system/ChronicleSystem.js";
 
 export async function task030() {
     const actors = Array.from(game.actors?.values() || []);
