@@ -17,7 +17,7 @@ export const CHARACTER_ATTR_CONSTANTS = {
   STATUS: "status",
 
   BULK: "bulk",
-  DAMAGE_TAKEN: "damage_taken",
+  DAMAGE_TAKEN: "damage_resistance",
   COMBAT_DEFENSE: "combat_defense",
   COMBAT_DEFENSE_FIGHTING: "combat_defense_fighting",
   COMBAT_DEFENSE_MARKSMANSHIP: "combat_defense_marksmanship",
