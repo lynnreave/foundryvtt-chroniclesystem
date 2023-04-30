@@ -51,6 +51,10 @@ export class TestCharacter {
             "modifier": 0,
             "current": 0,
             "total": 1
+        },
+        techniques: {},
+        owned: {
+            abilities: []
         }
     };
 

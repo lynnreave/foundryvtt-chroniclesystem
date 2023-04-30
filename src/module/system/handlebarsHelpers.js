@@ -115,6 +115,10 @@ export const registerCustomHelpers = function () {
     return positional.map(SystemUtils.normalizeTextValue).join("");
   });
 
+  Handlebars.registerHelper(
+      "add", function (arg1, arg2) { return arg1 + arg2; }
+  );
+
   Handlebars.registerHelper("formGroup", function (options) {
     return "systems/chroniclesystem/templates/actors/partials/form-group.hbs";
   });
@@ -153,6 +157,13 @@ export const registerCustomHelpers = function () {
     function (arg1, arg2, result, result2 = "", options) {
       return new Handlebars.SafeString(arg1 < arg2 ? result : result2);
     }
+  );
+
+  Handlebars.registerHelper(
+      "showIfGreater",
+      function (arg1, arg2, result, result2 = "", options) {
+        return new Handlebars.SafeString(arg1 > arg2 ? result : result2);
+      }
   );
 
   Handlebars.registerHelper("showAbs", function (arg1) {

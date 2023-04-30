@@ -31,7 +31,8 @@
     "styles/global.css",
     "styles/item-sheet.css",
     "styles/actor-sheet.css",
-    "styles/less/global.css"
+    "styles/less/global.css",
+    "styles/chat.css"
   ],
   "languages": [
     {

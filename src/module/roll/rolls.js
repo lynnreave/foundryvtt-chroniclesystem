@@ -7,6 +7,35 @@ import { getTransformation } from "../actor/character/transformers.js";
 import { getData } from "../common.js";
 import { DEGREES_CONSTANTS } from "../constants.js";
 
+/**
+ * The base template data object
+ * @type {object}
+ */
+const TEMPLATE_DATA = {
+    test: {
+        type: "Test",
+        tool: {
+            name: ""
+        }
+    },
+    source: {
+        name: null,
+        img: null
+    },
+    target: null,
+    formula: {
+        pool: 0,
+        bonusDice: 0,
+        modifier: 0
+    },
+    // Die.results (this.results)
+    dice: [],
+    roll: {
+        total: 0
+    },
+    difficulty: null
+};
+
 export function getAbilityTestFormula(actor, abilityName, specialtyName = null) {
     /**
      * Get the ability test formula for an Actor.
@@ -74,6 +103,57 @@ export function getAbilityTestFormula(actor, abilityName, specialtyName = null) 
 
     // return
     return formula;
+}
+
+export function getBaseInfluenceForTechnique(characterData, technique) {
+    /**
+     * Get the base influence damage for a character Actor by technique.
+     * @param {Actor} characterData: the data of the character Actor.
+     * @param {string} technique: the name of the technique used.
+     * @returns {number}: the base influence damage.
+     */
+    let influenceBaseDamage = 2;
+    // determine the source ability by technique
+    let influenceSource;
+    if (["bargain", "incite"].includes(technique))
+    {
+        influenceSource = "Cunning";
+    } else if (["charm", "seduce"].includes(technique)) {
+        influenceSource = "Persuasion";
+    } else if (["convince", "intimidate"].includes(technique)) {
+        influenceSource = "Will";
+    } else if (technique === "taunt") {
+        influenceSource = "Awareness";
+    }
+    // get the ability from character data
+    let ability;
+    if (influenceSource) {
+        ability = characterData.owned.abilities.find(
+            (ability) => ability.name === influenceSource
+        );
+    }
+    // get the base influence damage
+    if (ability) {
+        influenceBaseDamage = getData(ability).rating;
+    }
+    // return
+    return influenceBaseDamage;
+}
+
+export function getCurrentTarget(){
+    /**
+     * Get the current target of the select token.
+     * @returns {Actor}: an Actor object.
+     */
+    let targets = Array.from(game.user.targets);
+    let target;
+    if (targets.length > 0) {
+        let targetToken = targets[0];
+        if (targetToken.document && targetToken.document["_actor"]) {
+            target = targetToken.document["_actor"];
+        }
+    }
+    return target;
 }
 
 export function getDegrees(difficulty, testResult) {
@@ -149,26 +229,20 @@ export function getFormula(rollDef, actor) {
     return formula;
 }
 
-export function getTestDifficultyFromCurrentTarget(rollType) {
+export function getTestDifficultyFromCurrentTarget(rollType, target) {
     /**
      * Get test difficulty from the current target of an Actor.
      * NOTE: this is assuming 1 target (the first in the list) since there are no AoE challenges known.
-     * @param {Actor} actor: the Actor object.
      * @param {string} rollType: the type of test roll being made (e.g., "weapon-test").
+     * @param {Actor} target: an Actor object.
      * @returns {object}: a data object container the test difficulty info.
      */
     let result = {
         difficulty: null, vFighting: null, vMarksmanship: null
     };
-    // get current target
-    let targets = Array.from(game.user.targets);
-    if (targets.length < 1) { return result; }
-    let currentTarget = targets[0]
-    // get target actor data
-    if (!currentTarget.document) { return result; }
-    if (!currentTarget.document["_actor"]) { return result; }
-    let targetActor = currentTarget.document["_actor"]
-    let targetData = getData(targetActor);
+    // get target data
+    if (!target) { return result;}
+    let targetData = getData(target);
     // get difficulty by roll type
     switch (rollType) {
         case "weapon-test":
@@ -185,4 +259,77 @@ export function getTestDifficultyFromCurrentTarget(rollType) {
     }
     // return
     return result;
+}
+
+export function getRollTemplateData(actor, rollType, formula, roll, dieResults, toolName) {
+    /**
+     * Get roll template data for rendering to roll card.
+     * @param {Actor} actor: the Actor making the roll.
+     * @param {string} rollType: the type of test roll being made (e.g., "weapon-test").
+     * @param {DiceRollFormula} formula: the DiceRollFormula containing all roll formula data.
+     * @param {Roll} roll: an evaluated Roll object with the roll results.
+     * @param {Array} dieResults: the final results from a Die evaluate().
+     * @param {string} toolName: the name of the tool used to execute the test.
+     * @returns {object}: a template data object.
+     */
+    // base template data
+    let templateData = Object.assign({}, TEMPLATE_DATA);
+    // update w/ source data
+    templateData.source = actor;
+    let actorData = getData(actor);
+    // update w/ target data (if any)
+    templateData.target = getCurrentTarget();
+    // update w/ formula data
+    templateData.formula.pool = formula.pool;
+    templateData.formula.bonusDice = formula.bonusDice;
+    templateData.formula.modifier = formula.modifier;
+    // update w/ die results data
+    templateData.dice = dieResults;
+    // update w/ roll data
+    templateData.roll.total = roll.total;
+    // update w/ test data
+    let testName = "";
+    for (let word of rollType.split('-')) {
+        testName += word.charAt(0).toUpperCase();
+        testName += word.slice(1);
+        testName += " ";
+    }
+    templateData.test.type = testName.trim();
+    // update w/ tool name
+    templateData.test.tool.name = toolName;
+    // get tool
+    let tool;
+    let damageValue;
+    if (rollType === "weapon-test") {
+        tool = actorData.owned.weapons.find((weapon) => weapon.name === toolName)
+        if (tool) {
+            templateData.test.tool = tool;
+            damageValue = tool.damageValue;
+        }
+    } else if (["persuasion", "deception"].includes(rollType)) {
+        let influenceBaseDamage = getBaseInfluenceForTechnique(actorData, toolName);
+        if (influenceBaseDamage) {
+            damageValue = influenceBaseDamage;
+            toolName = toolName.charAt(0).toUpperCase() + toolName.slice(1);
+            templateData.test.tool = {name: toolName, damageValue: damageValue};
+        }
+    }
+    // update w/ difficulty data
+    let difficultyData = getTestDifficultyFromCurrentTarget(
+        rollType, templateData.target
+    );
+    if (difficultyData.difficulty) {
+        let degreesData = getDegrees(
+            difficultyData.difficulty, templateData.roll.total
+        );
+        templateData.difficulty = {
+            degrees: degreesData.num,
+            text: degreesData.label
+        };
+        if (damageValue) {
+            templateData.difficulty.damage = Math.max(degreesData.num * damageValue, 0);
+        }
+    }
+    // return
+    return templateData;
 }

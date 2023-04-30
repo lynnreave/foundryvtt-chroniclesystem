@@ -67,6 +67,7 @@ async function eventHandleRoll(event, actor) {
     await ChronicleSystem.handleRollAsync(rollType, actor, showModifierDialog);
 }
 
+// TODO: does this ever get used?
 function handleRoll(rollType, actor) {
     const roll_definition = rollType.split(':');
     if (roll_definition.length < 2)

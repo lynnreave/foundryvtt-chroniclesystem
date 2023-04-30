@@ -1,0 +1,82 @@
+.roll-card {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    float: left;
+    /*font-family: sans-serif;*/
+    background: #DCE2EF;
+}
+
+.roll-card .contest-header {
+    text-align: center;
+}
+
+.roll-card .item-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0.4;
+}
+
+.roll-card .item-icon {
+    max-height: 35px;
+    max-width: 35px;
+    border: none;
+}
+
+.roll-card .flavor-text {
+    margin: 1px;
+}
+
+.roll-card .contest-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0.2;
+}
+
+.roll-card .flavor-text {
+    text-align: center;
+    vertical-align: center;
+    font-size: 10px;
+}
+
+.roll-card-title {
+    font-weight: bold;
+    padding: 5px;
+}
+
+.roll-card-degrees .result {
+    font-weight: bold;
+}
+
+.roll-card-degrees .result-detail {
+    text-align: right;
+    font-size: 10px;
+}
+
+.roll-card-degrees .result-outcome {
+    font-weight: bold;
+    flex: 0 0 100%;
+    position: relative;
+    margin: 0;
+    line-height: 24px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid #999999;
+    border-radius: 3px;
+    box-shadow: 0 0 2px #FFF inset;
+    word-break: break-all;
+    font-size: 20px;
+}
+
+.success {
+    color: #18520b;
+    filter: sepia(0.5) hue-rotate(60deg);
+}
+
+.failure {
+    color: #aa0200;
+    filter: sepia(0.5) hue-rotate(-60deg);
+}

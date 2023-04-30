@@ -1,6 +1,7 @@
 import SystemUtils from "../../util/systemUtils.js";
 import {
     getDegrees,
+    getRollTemplateData,
     getTestDifficultyFromCurrentTarget
 } from "./rolls.js";
 
@@ -12,7 +13,6 @@ export class RollChronicle {
         this.formula = formula;
         this.title = title;
         this.entityData = undefined;
-        this.rollCard  = "systems/chroniclesystem/templates/chat/cs-stat-rollcard.html";
         this.results = [];
     }
 
@@ -40,69 +40,28 @@ export class RollChronicle {
         // build roll results
         let resultRoll = Roll.fromTerms([dieRoll, plus, bonus]);
 
-        // TODO: this is sloppy code; clean this up with something more professional
-        // get test difficulty from target (if specified)
-        let testDifficultyData = getTestDifficultyFromCurrentTarget(rollType);
-        let testDifficulty = testDifficultyData.difficulty;
-        // determine degrees of success/failure
-        let degreesMsg = "";
-        if (testDifficulty) {
-            let degreesData = getDegrees(testDifficulty, resultRoll.total);
-            let label = SystemUtils.localize(degreesData.label);
-            let m;
-            if (degreesData.num > 0) {
-                m = SystemUtils.localize("CS.chatMessages.degreesOfSuccess")
-            } else {
-                m = SystemUtils.localize("CS.chatMessages.degreesOfFailure")
-            }
-            degreesMsg = ` ${label}! ${degreesData.num} ${m}!`;
-            // handle discrete defenses (warfare unit target)
-            for (let defense of ["Fighting", "Marksmanship"]) {
-                let defenseDifficulty = testDifficultyData[`v${defense}`];
-                if (defenseDifficulty && (defenseDifficulty !== testDifficulty)) {
-                    let defenseDegreesData = getDegrees(defenseDifficulty, resultRoll.total);
-                    if (defenseDegreesData.num !== degreesData.num) {
-                        let defenseLabel = SystemUtils.localize(defenseDegreesData.label);
-                        let dm;
-                        if (degreesData.num > 0) {
-                            dm = SystemUtils.localize("CS.chatMessages.degreesOfSuccess")
-                        } else {
-                            dm = SystemUtils.localize("CS.chatMessages.degreesOfFailure")
-                        }
-                        degreesMsg += ` ${defenseLabel} if a ${defense.toUpperCase()} test!`;
-                        degreesMsg += ` ${defenseDegreesData.num} ${dm}!`;
-                    }
-                }
-            }
-        }
-        // get name of target (if one exists)
-        let targetName;
-        let targets = Array.from(game.user.targets);
-        if (targets.length > 0) {
-            let target = targets[0];
-            if (target.document && target.document["_actor"]) {
-                targetName = target.document["_actor"]["name"];
-            }
-        }
-
-        // build chat message for roll result
-        // TODO: model this more off pf2e w/ chat output
-        let simpleRoll = targetName ? "CS.chatMessages.simpleRollAgainst" : "CS.chatMessages.simpleRoll";
-        let customRoll = targetName ? "CS.chatMessages.customRollAgainst" : "CS.chatMessages.customRoll";
-        const messageId = this.formula.isUserChanged ? customRoll : simpleRoll;
-        let flavor =  SystemUtils.format(
-            messageId,
-            {
-                name: actor.name,
-                test: this.title,
-                degreesMsg: degreesMsg,
-                target: targetName
-            }
+        // render roll card template w/ data to chat
+        // TODO: confirm GM Rolls, Private Rolls, Blind Rolls work
+        let chatData = {
+            user: game.user.id,
+            // speaker: ChatMessage.getSpeaker({ actor: this.actor })
+        };
+        let template = "systems/chroniclesystem/templates/chat/roll-card.hbs"
+        let templateData = getRollTemplateData(
+            actor, rollType, this.formula, resultRoll, this.results, this.title
         );
-        resultRoll.toMessage({
-            speaker: ChatMessage.getSpeaker({ actor: actor }),
-            flavor: flavor
+        renderTemplate(template, templateData).then(content => {
+            chatData.content = content;
+            // TODO: support this?
+            // if (game.dice3d) {
+            //     game.dice3d.showForRoll(roll, game.user, true, chatData.whisper, chatData.blind).then(displayed => ChatMessage.create(chatData));
+            // }
+            // else {
+                chatData.sound = CONFIG.sounds.dice;
+                ChatMessage.create(chatData);
+            // }
         });
+
         // return
         return resultRoll;
     }

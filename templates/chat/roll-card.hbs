@@ -1,0 +1,77 @@
+<div class="roll-card">
+    <section class="roll-card-top">
+        <div class="contest-header row flexrow">
+            <div class="item-icon-container">
+                {{#if source.img}}
+                <img class="item-icon" src="{{source.img}}" alt="{{source.name}}" title="{{source.name}}"/>
+                {{/if}}
+                {{#if source.name}}
+                <span class="flavor-text">{{source.name}}</span>
+                {{/if}}
+            </div>
+            {{#if target}}
+            <div class="contest-icon-container">
+                <i class="fa fa-long-arrow-right fa-2xl"></i>
+            </div>
+            <div class="item-icon-container">
+                {{#if target.img}}
+                <img class="item-icon" src="{{target.img}}" alt="{{target.name}}" title="{{target.name}}"/>
+                {{/if}}
+                <span class="flavor-text">{{target.name}}</span>
+            </div>
+            {{/if}}
+        </div>
+        <br />
+        <div class="chat-title row flexrow">
+            <h2 class="roll-card-title text-capitalize">{{test.type}}{{#if test.tool}}: {{test.tool.name}}{{/if}}</h2>
+        </div>
+    </section>
+    <section class="roll-card-content">
+        <br />
+        <div class="dice-roll">
+            <div class="dice-result">
+                <div class="dice-formula">
+                    {{formula.pool}}d6
+                    {{showIfDifferent formula.bonusDice 0 " + " : ""}}{{showIfDifferent formula.bonusDice 0 formula.bonusDice : ""}}{{showIfDifferent formula.bonusDice 0 "d6" : ""}}
+                    {{showIfLess formula.modifier 0 " - " : ""}}{{showIfGreater formula.modifier 0 " + " : ""}}{{showIfDifferent formula.modifier 0 formula.modifier : ""}}
+                </div>
+                <div class="dice-tooltip">
+                    <section class="tooltip-part">
+                        <div class="dice">
+                            <header class="part-header flexrow">
+                                <span class="part-formula">{{add formula.pool formula.bonusDice}}d6</span>
+                                <span class="part-total">{{roll.total}}</span>
+                            </header>
+                            <ol class="dice-rolls">
+                                {{#each dice as |die index|}}
+                                <li class="roll die d6 {{showIfTrue die.discarded "discarded"}} {{showIfEquals die.result 1 "min"}} {{showIfEquals die.result 6 "max"}}">
+                                    {{die.result}}
+                                </li>
+                                {{/each}}
+                            </ol>
+                        </div>
+                    </section>
+                </div>
+                <h4 class="dice-total">{{roll.total}}</h4>
+            </div>
+        </div>
+        {{#if difficulty}}
+        <br />
+        <div class="roll-card-degrees">
+            <div class="result-detail">
+                {{showAbs difficulty.degrees}}
+                {{showIfContains "-1|1" difficulty.degrees (localize "CS.degrees.degree") : ""}}{{showIfContains "-2|2|3|4" difficulty.degrees (localize "CS.degrees.degrees") : ""}}
+            </div>
+            <h2 class="result success">
+                {{localize difficulty.text}}
+            </h2>
+            {{#if difficulty.damage}}
+            <div class="result-outcome">
+                {{difficulty.damage}} Damage
+            </div>
+            {{/if}}
+        </div>
+        {{/if}}
+    </section>
+    <section class="roll-card-bottom"></section>
+</div>
