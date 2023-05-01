@@ -1,9 +1,10 @@
 import { ActorSheetChronicle } from "../actor-sheet-chronicle.js";
 import {
+  getAllTransformers,
   removeAllTransformersFromSource,
   removeTransformer,
   saveTransformers,
-  transformerTypes
+  transformerTypes, updateTempTransformers
 } from "./transformers.js";
 
 /**
@@ -41,6 +42,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     event.preventDefault();
     const a = event.currentTarget;
     const sourceId = a.dataset.source;
+    updateTempTransformers(this.actor);
     // remove all transformers from source
     for (let type of transformerTypes) {
       removeAllTransformersFromSource(this.actor, sourceId);
@@ -54,6 +56,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     const a = event.currentTarget;
     const sourceId = a.dataset.source;
     const attr = a.dataset.target;
+    updateTempTransformers(this.actor);
     // remove transformers from source to target of all types
     for (let type of transformerTypes) {
       removeTransformer(this.actor, type, attr, sourceId);

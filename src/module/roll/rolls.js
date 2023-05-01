@@ -5,7 +5,7 @@ import {
 } from "../actor/character/abilities.js";
 import { getTransformation } from "../actor/character/transformers.js";
 import { getData } from "../common.js";
-import { DEGREES_CONSTANTS, EQUIPPED_CONSTANTS } from "../constants.js";
+import {CHARACTER_ATTR_CONSTANTS, DEGREES_CONSTANTS, EQUIPPED_CONSTANTS} from "../constants.js";
 import { CHARACTER_DISPOSITIONS } from "../selections.js";
 
 /**
@@ -310,16 +310,10 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             templateData.test.tool = tool;
             damageValue = tool.damageValue;
         }
-        // get resistance from equipped armor
-        let equippedArmor = target.getEmbeddedCollection('Item').find(
-            (item) => (
-                item.type === "armor"
-                && getData(item).equipped === EQUIPPED_CONSTANTS.WEARING
-            )
-        );
-        if (equippedArmor) {
-            resistance = getData(equippedArmor).rating;
-        }
+        // get resistance from target damage resistance
+        resistance = getTransformation(
+            target, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN
+        ).total;
     } else if (["persuasion", "deception"].includes(rollType)) {
         let influenceBaseDamage = getBaseInfluenceForTechnique(actorData, toolName);
         if (influenceBaseDamage) {
@@ -327,12 +321,10 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             toolName = toolName.charAt(0).toUpperCase() + toolName.slice(1);
             templateData.test.tool = {name: toolName, damageValue: damageValue};
         }
-        // get resistance from target disposition
-        let currentDisposition = targetData.currentDisposition;
-        if (currentDisposition) {
-            currentDisposition = CHARACTER_DISPOSITIONS[currentDisposition];
-            resistance = currentDisposition.rating;
-        }
+        // get resistance from target composure resistance
+        resistance = getTransformation(
+            target, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE
+        ).total;
     }
     // update w/ difficulty data
     let difficultyData = getTestDifficultyFromCurrentTarget(

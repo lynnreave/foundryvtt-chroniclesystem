@@ -14,8 +14,16 @@ import { DiceRollFormula } from "@roll/dice-roll-formula";
 import { TestCharacter } from "@mocks/character";
 // @ts-ignore
 import { TestGame } from "@mocks/game";
+import {
+    DEGREES_CONSTANTS,
+    CHARACTER_ATTR_CONSTANTS,
+    KEY_CONSTANTS
 // @ts-ignore
-import { DEGREES_CONSTANTS } from "@module/constants";
+} from "@module/constants";
+import {
+    addTransformer
+// @ts-ignore
+} from "@actor/character/transformers";
 
 const defaultAbility = {
     _id: "someId", name: "someName", type: "ability", system: {rating: 5, modifier: 0}
@@ -423,6 +431,11 @@ describe("rolls.js", () => {
             targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
             let armorDoc = Object.assign({}, defaultArmor)
             targetCharacter.owned.armors = [armorDoc];
+            addTransformer(
+                targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+                armorDoc._id, armorDoc.system.rating,
+                true, true
+            );
             let token: object = {document: {_actor: targetCharacter}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
@@ -465,6 +478,10 @@ describe("rolls.js", () => {
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {intrigueDefense: {total: 5}};
             targetCharacter.system.currentDisposition = "3";
+            addTransformer(
+                targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
+                KEY_CONSTANTS.DISPOSITION, 4, false, true
+            );
             let token: object = {document: {_actor: targetCharacter}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];

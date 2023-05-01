@@ -8,17 +8,21 @@ import {
 import { CHARACTER_ATTR_CONSTANTS, KEY_CONSTANTS } from "../../../constants.js";
 import { getData } from "../../../common.js";
 
-export function updateDisposition(character, dispositionId) {
-    /**
-     * Update the disposition of a character Actor.
-     * @param {Actor} character: a character Actor.
-     * @param {number} dispositionId: the index of the disposition in {CHARACTER_DISPOSITIONS}.
-     */
-    updateTempTransformers(character);
+export function refreshDisposition(character) {
     // get disposition
-    let disposition = CHARACTER_DISPOSITIONS[dispositionId];
-    if (!disposition) { return; }
+    let currentDisposition = getData(character).currentDisposition;
+    let disposition = CHARACTER_DISPOSITIONS[parseInt(currentDisposition)];
+    if (!disposition) { return false; }
     // update transformers
+    // composure resistance
+    addTransformer(
+        character,
+        "modifiers",
+        CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
+        KEY_CONSTANTS.DISPOSITION,
+        disposition.rating,
+        false
+    );
     // persuasion
     if (disposition.persuasionModifier !== 0) {
         addTransformer(
@@ -28,14 +32,14 @@ export function updateDisposition(character, dispositionId) {
             KEY_CONSTANTS.DISPOSITION,
             disposition.persuasionModifier,
             false
-        )
+        );
     } else {
         removeTransformer(
             character,
             "modifiers",
             CHARACTER_ATTR_CONSTANTS.PERSUASION,
             KEY_CONSTANTS.DISPOSITION
-        )
+        );
     }
     // deception
     if (disposition.deceptionModifier !== 0) {
@@ -46,18 +50,31 @@ export function updateDisposition(character, dispositionId) {
             KEY_CONSTANTS.DISPOSITION,
             disposition.deceptionModifier,
             false
-        )
+        );
     } else {
         removeTransformer(
             character,
             "modifiers",
             CHARACTER_ATTR_CONSTANTS.DECEPTION,
             KEY_CONSTANTS.DISPOSITION
-        )
+        );
     }
-    saveTransformers(character);
-    // update actor current disposition
+}
+
+export function updateDisposition(character, dispositionId) {
+    /**
+     * Update the disposition of a character Actor.
+     * TODO: update intrigue damage resistance.
+     * @param {Actor} character: a character Actor.
+     * @param {number} dispositionId: the index of the disposition in {CHARACTER_DISPOSITIONS}.
+     */
+    updateTempTransformers(character);
+    // update current disposition
     character.update({"system.currentDisposition": dispositionId});
+    // refresh transformers
+    refreshDisposition(character);
+    // save
+    saveTransformers(character);
 }
 
 export function updateWeaponDefendingState(character, weaponId, isDefending) {

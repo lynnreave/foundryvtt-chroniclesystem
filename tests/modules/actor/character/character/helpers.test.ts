@@ -10,12 +10,13 @@ import { TestCharacter } from "@mocks/character";
 import { TestGame } from "@mocks/game";
 import {
     addTransformer,
-    getTransformation,
-    saveTransformers
+    getTransformation
 // @ts-ignore
 } from "@actor/character/transformers";
 // @ts-ignore
 import { CHARACTER_DISPOSITIONS } from "@module/selections";
+// @ts-ignore
+import { CHARACTER_ATTR_CONSTANTS } from "@module/constants";
 
 global.game = new TestGame();
 const defaultWeapon = {
@@ -28,20 +29,48 @@ describe("helpers.js", () => {
         test("disposition exists => disposition", () => {
             let character: TestCharacter = new TestCharacter();
             CHARACTER_DISPOSITIONS.forEach(function (disposition, index) {
+                character.system.currentDisposition = index;
                 updateDisposition(character, index);
                 expect(character.system.currentDisposition).toStrictEqual(index);
                 expect(
-                    getTransformation(character, "modifiers", "persuasion", false, true).total
+                    getTransformation(
+                        character, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
+                        false, true
+                    ).total
+                ).toStrictEqual(disposition.rating);
+                expect(
+                    getTransformation(
+                        character, "modifiers", CHARACTER_ATTR_CONSTANTS.PERSUASION, false, true
+                    ).total
                 ).toStrictEqual(disposition.persuasionModifier);
                 expect(
-                    getTransformation(character, "modifiers", "deception", false, true).total
+                    getTransformation(
+                        character, "modifiers", CHARACTER_ATTR_CONSTANTS.DECEPTION, false, true
+                    ).total
                 ).toStrictEqual(disposition.deceptionModifier);
             });
         });
         test("disposition exists - negative", () => {
             let character: TestCharacter = new TestCharacter();
-            updateDisposition(character, 10);
-            expect(character.system["currentDisposition"]).toStrictEqual(0);
+            character.system.currentDisposition = 10;
+            updateDisposition(character, character.system.currentDisposition);
+            expect(character.system["currentDisposition"]).toStrictEqual(character.system.currentDisposition);
+            expect(
+                getTransformation(
+                    character, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
+                    false, true
+                ).total
+            ).toStrictEqual(0);
+            expect(
+                getTransformation(
+                    character, "modifiers", CHARACTER_ATTR_CONSTANTS.PERSUASION, false, true
+                ).total
+            ).toStrictEqual(0);
+            expect(
+                getTransformation(
+                    character, "modifiers", CHARACTER_ATTR_CONSTANTS.DECEPTION, false, true
+                ).total
+            ).toStrictEqual(0);
         });
     });
     describe("update weapon defending state", () => {

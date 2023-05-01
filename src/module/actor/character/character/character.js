@@ -1,7 +1,8 @@
 import SystemUtils from "../../../../util/systemUtils.js";
 import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
-import { getAllTransformers } from "../transformers.js";
+import {getAllTransformers } from "../transformers.js";
+import { refreshDisposition } from "./helpers.js";
 
 /**
  * The Actor entity for handling characters.
@@ -10,6 +11,14 @@ import { getAllTransformers } from "../transformers.js";
  * @category Actor
  */
 export class Character extends CharacterBase {
+
+    prepareData() {
+        super.prepareData();
+
+        // make sure disposition effects are always refreshed
+        refreshDisposition(this);
+        this.system.effects = getAllTransformers(this);
+    }
 
     calculateDerivedValues() {
         let data = this.getData();
