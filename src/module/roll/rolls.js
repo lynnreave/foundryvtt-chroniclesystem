@@ -5,7 +5,8 @@ import {
 } from "../actor/character/abilities.js";
 import { getTransformation } from "../actor/character/transformers.js";
 import { getData } from "../common.js";
-import { DEGREES_CONSTANTS } from "../constants.js";
+import { DEGREES_CONSTANTS, EQUIPPED_CONSTANTS } from "../constants.js";
+import { CHARACTER_DISPOSITIONS } from "../selections.js";
 
 /**
  * The base template data object
@@ -278,7 +279,9 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
     templateData.source = actor;
     let actorData = getData(actor);
     // update w/ target data (if any)
-    templateData.target = getCurrentTarget();
+    let target = getCurrentTarget();
+    templateData.target = target
+    let targetData = getData(templateData.target);
     // update w/ formula data
     templateData.formula.pool = formula.pool;
     templateData.formula.bonusDice = formula.bonusDice;
@@ -297,14 +300,25 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
     templateData.test.type = testName.trim();
     // update w/ tool name
     templateData.test.tool.name = toolName;
-    // get tool
+    // get tool, damage, and target resistance
     let tool;
     let damageValue;
+    let resistance;
     if (rollType === "weapon-test") {
         tool = actorData.owned.weapons.find((weapon) => weapon.name === toolName)
         if (tool) {
             templateData.test.tool = tool;
             damageValue = tool.damageValue;
+        }
+        // get resistance from equipped armor
+        let equippedArmor = target.getEmbeddedCollection('Item').find(
+            (item) => (
+                item.type === "armor"
+                && getData(item).equipped === EQUIPPED_CONSTANTS.WEARING
+            )
+        );
+        if (equippedArmor) {
+            resistance = getData(equippedArmor).rating;
         }
     } else if (["persuasion", "deception"].includes(rollType)) {
         let influenceBaseDamage = getBaseInfluenceForTechnique(actorData, toolName);
@@ -312,6 +326,12 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             damageValue = influenceBaseDamage;
             toolName = toolName.charAt(0).toUpperCase() + toolName.slice(1);
             templateData.test.tool = {name: toolName, damageValue: damageValue};
+        }
+        // get resistance from target disposition
+        let currentDisposition = targetData.currentDisposition;
+        if (currentDisposition) {
+            currentDisposition = CHARACTER_DISPOSITIONS[currentDisposition];
+            resistance = currentDisposition.rating;
         }
     }
     // update w/ difficulty data
@@ -327,7 +347,9 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             text: degreesData.label
         };
         if (damageValue) {
-            templateData.difficulty.damage = Math.max(degreesData.num * damageValue, 0);
+            let totalDamage = degreesData.num * damageValue;
+            if (resistance) { totalDamage -= resistance; }
+            templateData.difficulty.damage = Math.max(totalDamage, 0);
         }
     }
     // return

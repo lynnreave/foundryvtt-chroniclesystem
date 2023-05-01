@@ -23,6 +23,9 @@ const defaultAbility = {
 const defaultWeapon = {
     _id: "someId", name: "someName", type: "weapon", damageValue: 3
 };
+const defaultArmor = {
+    _id: "someId", name: "someName", type: "armor", system: {equipped: 1, rating: 5}
+};
 const defaultSpecialty = {name: 'someName', rating: 1, modifier: 1};
 const defaultTransformer = {_id: "source", mod: 1, isDocument: false};
 const defaultDifficulty: number = 6;
@@ -418,8 +421,10 @@ describe("rolls.js", () => {
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
+            let armorDoc = Object.assign({}, defaultArmor)
+            targetCharacter.owned.armors = [armorDoc];
             let token: object = {document: {_actor: targetCharacter}};
-            let game: TestGame = new TestGame();
+            let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
             let rollType: string = "weapon-test";
@@ -445,7 +450,7 @@ describe("rolls.js", () => {
             expect(output.test.tool.name).toStrictEqual(weaponDoc.name);
             expect(output.difficulty.degrees).toStrictEqual(3);
             expect(output.difficulty.text).toStrictEqual(DEGREES_CONSTANTS["3"]);
-            expect(output.difficulty.damage).toStrictEqual(9);
+            expect(output.difficulty.damage).toStrictEqual(9-armorDoc.system.rating);
         });
         test("intrigue test", () => {
             let character: TestCharacter = new TestCharacter();
@@ -459,8 +464,9 @@ describe("rolls.js", () => {
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {intrigueDefense: {total: 5}};
+            targetCharacter.system.currentDisposition = "3";
             let token: object = {document: {_actor: targetCharacter}};
-            let game: TestGame = new TestGame();
+            let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
             let toolName = "bargain";
@@ -479,7 +485,7 @@ describe("rolls.js", () => {
             expect(output.test.tool.name).toStrictEqual("Bargain");
             expect(output.difficulty.degrees).toStrictEqual(2);
             expect(output.difficulty.text).toStrictEqual(DEGREES_CONSTANTS["2"]);
-            expect(output.difficulty.damage).toStrictEqual(8);
+            expect(output.difficulty.damage).toStrictEqual(8-4);
         });
     });
     describe("get test difficulty from actor target", () => {
