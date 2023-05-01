@@ -9,6 +9,7 @@ import {
   updateWeaponDefendingState
 } from "./helpers.js";
 import { CHARACTER_DISPOSITIONS } from "../../../selections.js";
+import { refreshEmbeddedActorData } from "../helpers.js";
 
 /**
  * The ActorSheet entity for handling characters.
@@ -93,6 +94,10 @@ export class CharacterSheet extends CharacterSheetBase {
         }
       });
     });
+    // refresh embedded relationships
+    character.owned.relationships.forEach((relationship) => {
+      refreshEmbeddedActorData(relationship);
+    })
 
     this._calculateIntrigueTechniques(data);
 

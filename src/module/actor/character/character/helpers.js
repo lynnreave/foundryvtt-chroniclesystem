@@ -76,7 +76,7 @@ export function updateWeaponDefendingState(character, weaponId, isDefending) {
         let weaponData = getData(weapon);
         weaponData.isDefending = isDefending;
         weapon.data = weaponData;
-        let weaponDefense = parseInt((weaponData.defense))
+        let weaponDefense = parseInt((weaponData.defense));
         if (isDefending === true && weaponDefense !== 0) {
             addTransformer(
                 character, "modifiers",

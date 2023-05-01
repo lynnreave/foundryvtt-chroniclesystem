@@ -13,6 +13,7 @@ import {
     UNIT_FORMATIONS,
     UNIT_STATUSES
 } from "../../../selections.js";
+import { refreshEmbeddedActorData } from "../helpers.js";
 
 /**
  * The ActorSheet entity for handling warfare units.
@@ -83,6 +84,10 @@ export class UnitSheet extends CharacterSheetBase {
             weapon.formula = formula;
         });
         updateAttachedHeroesEffects(this.actor)
+        // refresh embedded heroes
+        character.owned.heroes.forEach((hero) => {
+            refreshEmbeddedActorData(hero);
+        })
 
         data.character = character;
         return data;
