@@ -332,6 +332,8 @@
                             <th>Weapon</th>
                             <th>Test</th>
                             <th>Damage</th>
+                            <th>Defense</th>
+                            <th class="item-controls"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -343,6 +345,14 @@
                                         <a>{{format-formula weapon.formula}}</a>
                                     </td>
                                     <td> {{weapon.damageValue}}</td>
+                                    <td>
+                                        {{showIfDifferent 0 weapon.system.defense weapon.system.defense : ""}}
+                                    </td>
+                                    {{#ifDifferent 0 weapon.system.defense}}
+                                    <td class="item-controls">
+                                        <a class="checkButton defending {{showIfTrue weapon.system.isDefending "activated" ""}}" data-item-id="{{_id}}" data-to-state="{{showIfTrue weapon.system.isDefending false true}}"><i class="fas fa-shield-alt"></i></a>
+                                    </td>
+                                    {{/ifDifferent}}
                                 </tr>
                             {{/ifDifferent}}
                         {{/each}}

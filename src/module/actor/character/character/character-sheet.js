@@ -4,7 +4,10 @@ import { CharacterSheetBase } from "../character-sheet-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import { CSConstants } from "../../../system/csConstants.js";
 import { Technique } from "../../../type/technique.js";
-import { updateDisposition } from "./helpers.js";
+import {
+  updateDisposition,
+  updateWeaponDefendingState
+} from "./helpers.js";
 import { CHARACTER_DISPOSITIONS } from "../../../selections.js";
 
 /**
@@ -93,8 +96,6 @@ export class CharacterSheet extends CharacterSheetBase {
 
     this._calculateIntrigueTechniques(data);
 
-    // data.effects = getAllTransformers(this.actor);
-
     data.currentInjuries = Object.values(character.injuries).length;
     data.currentWounds = Object.values(character.wounds).length;
     data.maxInjuries = this.actor.getMaxInjuries();
@@ -148,6 +149,7 @@ export class CharacterSheet extends CharacterSheetBase {
     html.find('.disposition.option').click(this._onDispositionChanged.bind(this));
 
     html.find('.equipped').click(this._onEquippedStateChanged.bind(this));
+    html.find('.defending').click(this._onDefendingStateChanged.bind(this));
 
     html.find('.injury-create').on("click", this._onClickInjuryCreate.bind(this));
     html.find(".injuries-list").on("click", ".injury-control", this._onclickInjuryControl.bind(this));
@@ -302,10 +304,18 @@ export class CharacterSheet extends CharacterSheetBase {
     }
   }
 
+  async _onDefendingStateChanged(event) {
+    // TODO: get this to not call getData() three times afterwards
+    event.preventDefault();
+    let eventData = event.currentTarget.dataset;
+    let weapon = await updateWeaponDefendingState(this.actor, eventData.itemId, eventData.toState);
+    await this.actor.updateEmbeddedDocuments('Item', [weapon]);
+  }
+
   async _onEquippedStateChanged(event) {
     event.preventDefault();
     const eventData = event.currentTarget.dataset;
-    let documment = this.actor.getEmbeddedDocument('Item', eventData.itemId);
+    let document = this.actor.getEmbeddedDocument('Item', eventData.itemId);
     let collection = [];
     let tempCollection = [];
 
@@ -313,19 +323,26 @@ export class CharacterSheet extends CharacterSheetBase {
     let isUnequipping = parseInt(eventData.hand) === 0;
 
     if (isUnequipping) {
-      documment.getCSData().equipped = 0;
+      document.getCSData().equipped = 0;
+      let documentData = document.getCSData()
+      if (documentData.isDefending) {
+        // this results in a second click being required
+        // TODO: fix this if possible
+        await updateWeaponDefendingState(this.actor, eventData.itemId, false);
+        await document.update({"system.isDefending": false})
+      }
     } else {
       if (isArmor) {
-        documment.getCSData().equipped = ChronicleSystem.equippedConstants.WEARING;
+        document.getCSData().equipped = ChronicleSystem.equippedConstants.WEARING;
         tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === ChronicleSystem.equippedConstants.WEARING);
       } else {
-        let twoHandedQuality = Object.values(documment.getCSData().qualities).filter((quality) => quality.name.toLowerCase() === "two-handed");
+        let twoHandedQuality = Object.values(document.getCSData().qualities).filter((quality) => quality.name.toLowerCase() === "two-handed");
         if (twoHandedQuality.length > 0) {
           tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === ChronicleSystem.equippedConstants.MAIN_HAND || item.getCSData().equipped === ChronicleSystem.equippedConstants.OFFHAND || item.getCSData().equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
-          documment.getCSData().equipped = ChronicleSystem.equippedConstants.BOTH_HANDS;
+          document.getCSData().equipped = ChronicleSystem.equippedConstants.BOTH_HANDS;
         } else {
           tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === parseInt(eventData.hand) || item.getCSData().equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
-          documment.getCSData().equipped = parseInt(eventData.hand);
+          document.getCSData().equipped = parseInt(eventData.hand);
         }
       }
     }
@@ -333,12 +350,12 @@ export class CharacterSheet extends CharacterSheetBase {
     this.actor.updateTempTransformers();
 
     tempCollection.forEach((item) => {
-      collection.push({_id: item._id, "data.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
+      collection.push({_id: item._id, "system.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
       item.onEquippedChanged(this.actor, false);
     });
 
-    collection.push({_id: documment._id, "data.equipped": documment.getCSData().equipped});
-    documment.onEquippedChanged(this.actor, documment.getCSData().equipped > 0);
+    collection.push({_id: document._id, "system.equipped": document.getCSData().equipped});
+    document.onEquippedChanged(this.actor, document.getCSData().equipped > 0);
 
     this.actor.saveTransformers();
 

@@ -49,6 +49,7 @@ export const EQUIPPED_CONSTANTS = {
   OFFHAND: 3,
   BOTH_HANDS: 4,
   COMMANDER: 5,
+  DEFENDING: 6,
 };
 
 /**

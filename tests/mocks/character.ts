@@ -98,4 +98,6 @@ export class TestCharacter {
         }
         return collection;
     }
+
+    updateEmbeddedDocuments(type: string, docs: []) {}
 }

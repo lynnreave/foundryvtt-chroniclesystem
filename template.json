@@ -213,7 +213,19 @@
     }
   },
   "Item": {
-    "types": ["armor", "weapon", "ability", "equipment", "benefit", "drawback", "event", "holding", "technique", "relationship", "hero"],
+    "types": [
+      "armor",
+      "weapon",
+      "ability",
+      "equipment",
+      "benefit",
+      "drawback",
+      "event",
+      "holding",
+      "technique",
+      "relationship",
+      "hero"
+    ],
     "templates": {
       "physicalItem": {
         "weight": 0
@@ -262,7 +274,9 @@
       "damage": "",
       "qualities": [],
       "reach": "",
-      "equipped": 0
+      "equipped": 0,
+      "defense": 0,
+      "isDefending": false
     },
     "ability": {
       "templates": [

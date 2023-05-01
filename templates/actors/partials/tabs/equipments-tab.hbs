@@ -59,7 +59,8 @@
             <li class="list-header flexrow">
                 <div class="weapon-label">Name</div>
                 <div class="weapon-testdice">Test</div>
-                <div class="weapon-damage">Dmg</div>
+                <div class="weapon-damage">DMG</div>
+                <div class="weapon-defense">DEF</div>
                 <div class="equipment-weight">Weight</div>
                 <div class="equipment-cost">Cost</div>
                 <div class="item-qualities"><div>Qualities</div></div>
@@ -72,6 +73,9 @@
                         <a>{{format-formula weapon.formula}}</a>
                     </div>
                     <div class="weapon-damage field"> {{weapon.damageValue}}</div>
+                    <div class="weapon-defense field">
+                        {{showIfDifferent 0 weapon.system.defense weapon.system.defense : ""}}
+                    </div>
                     <div class="equipment-weight field">{{weapon.system.weight}} lb</div>
                     <div class="equipment-cost field">{{weapon.system.cost}}</div>
                     <div class="item-qualities field">
