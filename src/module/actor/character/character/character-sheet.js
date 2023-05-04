@@ -36,7 +36,14 @@ export class CharacterSheet extends CharacterSheetBase {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["chroniclesystem", "character", "sheet", "actor"],
-      template: "systems/chroniclesystem/templates/actors/characters/character-sheet.hbs"
+      template: "systems/chroniclesystem/templates/actors/characters/character-sheet.hbs",
+      tabs: [
+        {
+          navSelector: ".tabs",
+          contentSelector: ".sheet-body",
+          initial: "combat-and-intrigue"
+        }
+      ],
     });
   }
 

@@ -201,54 +201,20 @@
                     <header class="subheader-field">
                         <span>Movement</span>
                     </header>
-                    <div class="form-group">
-                        <span class="form-fields">
-                            <input
-                                    name="system.movement.base"
-                                    type="text"
-                                    value="{{character.movement.base}}"
-                                    placeholder="Base"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>+</b>
-                            <input
-                                    name="system.derivedStats.movement.runBonus"
-                                    type="text"
-                                    value="{{character.movement.runBonus}}"
-                                    placeholder="Run Bonus"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>-</b>
-                            <input
-                                    name="system.movement.bulk"
-                                    type="text"
-                                    value="{{character.movement.bulk}}"
-                                    placeholder="Bulk"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>{{showIfLess character.movement.modifier 0 "-" : "+"}}</b>
-                            <input
-                                    name="system.movement.modifier"
-                                    type="text"
-                                    value="{{showAbs character.movement.modifier}}"
-                                    placeholder="Modifier"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>=</b>
-                            <input
-                                    name="system.derivedStats.movement.total"
-                                    type="text"
-                                    value="{{character.movement.total}}"
-                                    placeholder="Total"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                        </span>
-                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Base</th>
+                            <th>Sprint</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{character.movement.total}}</td>
+                            <td>{{character.movement.sprintTotal}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </section>
                 <section class="facing flex-4">
                     <header class="subheader-field">

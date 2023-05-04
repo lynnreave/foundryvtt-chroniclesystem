@@ -102,7 +102,7 @@
                 </section>
                 <section class="disposition">
                     <header class="subheader-field">
-                        <span>Current Disposition (Per/Dec/DR) </span>
+                        <span>Current Disposition</span>
                     </header>
                     <div class="disposition-list">
                         {{#each dispositions}}
@@ -232,53 +232,20 @@
                     <header class="subheader-field">
                         <span>Movement</span>
                     </header>
-                    <div class="form-group">
-                        <span class="form-fields">
-                            <input
-                                    name="system.movement.base"
-                                    type="text"
-                                    value="{{character.movement.base}}"
-                                    placeholder="Base"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>+</b>
-                            <input
-                                    name="system.derivedStats.movement.runBonus"
-                                    type="text"
-                                    value="{{character.movement.runBonus}}"
-                                    placeholder="Run Bonus"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>-</b>
-                            <input
-                                    name="system.movement.bulk"
-                                    type="text"
-                                    value="{{character.movement.bulk}}"
-                                    placeholder="Bulk"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>+</b>
-                            <input
-                                    name="system.movement.modifier"
-                                    type="text"
-                                    value="{{character.movement.modifier}}"
-                                    placeholder="Modifier"
-                                    data-dtype="Number"
-                            />
-                            <b>=</b>
-                            <input
-                                    name="system.derivedStats.movement.total"
-                                    type="text"
-                                    value="{{character.movement.total}}"
-                                    placeholder="Total"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                        </span>
-                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Base</th>
+                            <th>Sprint</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{character.movement.total}}</td>
+                            <td>{{character.movement.sprintTotal}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </section>
                 <section class="healthState">
                     <header class="subheader-field flexrow">
