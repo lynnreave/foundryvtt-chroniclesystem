@@ -20,7 +20,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       width: 900,
-      height: 900,
+      height: 1000,
       tabs: [
         {
           navSelector: ".tabs",

@@ -2,7 +2,7 @@
     <section class="flexrow">
         <section class="effects">
             <header class="header-field">
-                <span>System</span>
+                <span>Active</span>
             </header>
             <ol class="qualities-list">
                 {{#each character.transformers as |effects source|}}
@@ -72,7 +72,7 @@
         </section>
         <section class="effects">
             <header class="header-field">
-                <span>Applied</span>
+                <span>Owned</span>
             </header>
             <ol class="qualities-list">
                 {{#each character.owned.effects as |effect index|}}
@@ -92,7 +92,7 @@
                                         {{/ifDifferent}}
                                     </button>
                                     <button type="button" title="Edit" class="item item-edit">
-                                        <i class="fas fa-cog padding-3"></i>
+                                        <i class="fas fa-edit padding-3"></i>
                                     </button>
                                     <button type="button" title="Delete" class="owned-item-control" data-list="effects" data-index="{{index}}" data-action="delete">
                                         <i class="fas fa-trash padding-3"></i>

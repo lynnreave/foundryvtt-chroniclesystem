@@ -33,7 +33,7 @@
                 <div class="dice-formula">
                     {{formula.pool}}d6
                     {{showIfDifferent formula.bonusDice 0 " + " : ""}}{{showIfDifferent formula.bonusDice 0 formula.bonusDice : ""}}{{showIfDifferent formula.bonusDice 0 "d6" : ""}}
-                    {{showIfLess formula.modifier 0 " - " : ""}}{{showIfGreater formula.modifier 0 " + " : ""}}{{showIfDifferent formula.modifier 0 formula.modifier : ""}}
+                    {{showIfLess formula.modifier 0 " - " : ""}}{{showIfGreater formula.modifier 0 " + " : ""}}{{showIfDifferent formula.modifier 0 (showAbs formula.modifier) : ""}}
                 </div>
                 <div class="dice-tooltip">
                     <section class="tooltip-part">
