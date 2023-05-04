@@ -14,6 +14,7 @@ import {
     UNIT_STATUSES
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
+import { getData } from "../../../common.js";
 
 /**
  * The ActorSheet entity for handling warfare units.
@@ -50,47 +51,49 @@ export class UnitSheet extends CharacterSheetBase {
     /** @override */
     getData() {
         const data = super.getData();
-        data.dtypes = ["String", "Number", "Boolean"];
-        this.splitItemsByType(data);
+        // data.dtypes = ["String", "Number", "Boolean"];
+        // this.splitItemsByType(data);
 
-        let character = data.actor.getData();
-        this.isOwner = this.actor.isOwner;
+        let unit = data.character;
 
-        character.owned.equipments = this._checkNull(data.itemsByType['equipment']);
-        character.owned.weapons = this._checkNull(data.itemsByType['weapon']);
-        character.owned.armors = this._checkNull(data.itemsByType['armor']);
-        character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
-        character.owned.heroes = this._checkNull(data.itemsByType['hero']).sort((a, b) => a.name.localeCompare(b.name));
+        // let character = data.actor.getData();
+        // this.isOwner = this.actor.isOwner;
+
+        // character.owned.equipments = this._checkNull(data.itemsByType['equipment']);
+        // character.owned.weapons = this._checkNull(data.itemsByType['weapon']);
+        // character.owned.armors = this._checkNull(data.itemsByType['armor']);
+        // character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
+        unit.owned.heroes = this._checkNull(data.itemsByType['hero']).sort((a, b) => a.name.localeCompare(b.name));
 
         data.statuses = UNIT_STATUSES;
         data.facings = UNIT_FACINGS;
         data.formations = UNIT_FORMATIONS;
 
-        data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
+        // data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
 
-        character.owned.weapons.forEach((weapon) => {
-            let weaponData = weapon.system;
-            let info = weaponData.specialty.split(':');
-            if (info.length < 2)
-                return "";
-            let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
-            formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
-            let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
-            if (matches) {
-                if (matches.length === 4) {
-                    let ability = data.actor.getAbilityValue(matches[1]);
-                    weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
-                }
-            }
-            weapon.formula = formula;
-        });
+        // character.owned.weapons.forEach((weapon) => {
+        //     let weaponData = weapon.system;
+        //     let info = weaponData.specialty.split(':');
+        //     if (info.length < 2)
+        //         return "";
+        //     let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
+        //     formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
+        //     let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
+        //     if (matches) {
+        //         if (matches.length === 4) {
+        //             let ability = data.actor.getAbilityValue(matches[1]);
+        //             weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
+        //         }
+        //     }
+        //     weapon.formula = formula;
+        // });
         updateAttachedHeroesEffects(this.actor)
         // refresh embedded heroes
-        character.owned.heroes.forEach((hero) => {
+        unit.owned.heroes.forEach((hero) => {
             refreshEmbeddedActorData(hero);
         })
 
-        data.character = character;
+        data.character = unit;
         return data;
     }
 

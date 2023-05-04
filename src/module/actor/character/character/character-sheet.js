@@ -12,6 +12,7 @@ import {
   CHARACTER_DISPOSITIONS
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
+import { getData } from "../../../common.js";
 
 /**
  * The ActorSheet entity for handling characters.
@@ -45,45 +46,45 @@ export class CharacterSheet extends CharacterSheetBase {
   /** @override */
   getData() {
     const data = super.getData();
-    data.dtypes = ["String", "Number", "Boolean"];
-    this.splitItemsByType(data);
+    // data.dtypes = ["String", "Number", "Boolean"];
+    // this.splitItemsByType(data);
 
-    let character = data.actor.getData();
-    this.isOwner = this.actor.isOwner;
+    let character = data.character;
+    // this.isOwner = this.actor.isOwner;
 
-    character.owned.equipments = this._checkNull(data.itemsByType['equipment']);
-    character.owned.weapons = this._checkNull(data.itemsByType['weapon']);
-    character.owned.armors = this._checkNull(data.itemsByType['armor']);
+    // character.owned.equipments = this._checkNull(data.itemsByType['equipment']);
+    // character.owned.weapons = this._checkNull(data.itemsByType['weapon']);
+    // character.owned.armors = this._checkNull(data.itemsByType['armor']);
     character.owned.benefits = this._checkNull(data.itemsByType['benefit']);
     character.owned.drawbacks = this._checkNull(data.itemsByType['drawback']);
-    character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
+    // character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
-    character.owned.effects = this._checkNull(data.itemsByType['effect']).sort((a, b) => a.name.localeCompare(b.name));
+    // character.owned.effects = this._checkNull(data.itemsByType['effect']).sort((a, b) => a.name.localeCompare(b.name));
 
     data.dispositions = CHARACTER_DISPOSITIONS;
 
-    data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
+    // data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
 
     data.techniquesTypes = CSConstants.TechniqueType;
     data.techniquesCosts = CSConstants.TechniqueCost;
 
-    character.owned.weapons.forEach((weapon) => {
-      let weaponData = weapon.system;
-      let info = weaponData.specialty.split(':');
-      if (info.length < 2)
-        return "";
-      let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
-      formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
-      let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
-      if (matches) {
-        if (matches.length === 4) {
-          let ability = data.actor.getAbilityValue(matches[1]);
-          weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
-        }
-      }
-      weapon.formula = formula;
-    });
+    // character.owned.weapons.forEach((weapon) => {
+    //   let weaponData = weapon.system;
+    //   let info = weaponData.specialty.split(':');
+    //   if (info.length < 2)
+    //     return "";
+    //   let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
+    //   formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
+    //   let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
+    //   if (matches) {
+    //     if (matches.length === 4) {
+    //       let ability = data.actor.getAbilityValue(matches[1]);
+    //       weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
+    //     }
+    //   }
+    //   weapon.formula = formula;
+    // });
 
     character.owned.techniques.forEach((technique) => {
       let techniqueData = technique.system;

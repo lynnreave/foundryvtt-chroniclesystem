@@ -310,9 +310,11 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             damageValue = tool.damageValue;
         }
         // get resistance from target damage resistance
-        resistance = getTransformation(
-            target, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN
-        ).total;
+        if (target) {
+            resistance = getTransformation(
+                target, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN
+            ).total;
+        }
     } else if (["persuasion", "deception"].includes(rollType)) {
         let influenceBaseDamage = getBaseInfluenceForTechnique(actorData, toolName);
         if (influenceBaseDamage) {
@@ -321,9 +323,11 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             templateData.test.tool = {name: toolName, damageValue: damageValue};
         }
         // get resistance from target composure resistance
-        resistance = getTransformation(
-            target, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE
-        ).total;
+        if (target) {
+            resistance = getTransformation(
+                target, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE
+            ).total;
+        }
     }
     // update w/ difficulty data
     let difficultyData = getTestDifficultyFromCurrentTarget(

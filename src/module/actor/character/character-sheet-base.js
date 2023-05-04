@@ -8,6 +8,7 @@ import {
 } from "./transformers.js";
 import { getData } from "../../common.js";
 import { onEquippedChanged } from "../../item/effect/helpers.js";
+import { ChronicleSystem } from "../../system/ChronicleSystem.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -34,6 +35,47 @@ export class CharacterSheetBase extends ActorSheetChronicle {
 
   /* -------------------------------------------- */
 
+  override
+
+  getData(options) {
+    const data = super.getData();
+    data.dtypes = ["String", "Number", "Boolean"];
+    this.splitItemsByType(data);
+
+    let character = getData(data.actor);
+    this.isOwner = this.actor.isOwner;
+
+    character.owned.equipments = this._checkNull(data.itemsByType['equipment']);
+    character.owned.weapons = this._checkNull(data.itemsByType['weapon']);
+    character.owned.armors = this._checkNull(data.itemsByType['armor']);
+    character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
+    character.owned.effects = this._checkNull(data.itemsByType['effect']).sort((a, b) => a.name.localeCompare(b.name));
+
+    data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
+
+    character.owned.weapons.forEach((weapon) => {
+      let weaponData = weapon.system;
+      let info = weaponData.specialty.split(':');
+      if (info.length < 2)
+        return "";
+      let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
+      formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
+      let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
+      if (matches) {
+        if (matches.length === 4) {
+          let ability = data.actor.getAbilityValue(matches[1]);
+          weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
+        }
+      }
+      weapon.formula = formula;
+    });
+
+    data.character = character;
+    return data;
+  }
+
+  /* -------------------------------------------- */
+
   async _onClickOwnedItemControl(event) {
     event.preventDefault();
     const a = event.currentTarget;
@@ -43,7 +85,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     const itemId = this.actor.system.owned[list][itemIndex]._id
 
     if ( action === "delete" ) {
-      this.actor.deleteEmbeddedDocuments("Item", [itemId,])
+      await this.actor.deleteEmbeddedDocuments("Item", [itemId,])
     }
   }
 
