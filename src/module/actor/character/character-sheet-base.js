@@ -9,6 +9,7 @@ import {
 import { getData } from "../../common.js";
 import { onEquippedChanged } from "../../item/effect/helpers.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
+import { updateWeaponDefendingState } from "./character/helpers.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -76,6 +77,24 @@ export class CharacterSheetBase extends ActorSheetChronicle {
 
   /* -------------------------------------------- */
 
+  activateListeners(html) {
+    super.activateListeners(html);
+    // Everything below here is only needed if the sheet is editable
+    if (!this.options.editable) return;
+
+    html.find('.item .item-name').on('click', (ev) => {
+      $(ev.currentTarget).parents('.item').find('.description').slideToggle();
+    });
+    html.find('.item .toggle-active').click(this._onItemToggleActive.bind(this));
+    html.find('.equipped').click(this._onEquippedStateChanged.bind(this));
+    html.find(".square").on("click", this._onClickSquare.bind(this));
+    html.find(".owned-item-control").on("click", this._onClickOwnedItemControl.bind(this));
+    html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
+    html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));
+  }
+
+  /* -------------------------------------------- */
+
   async _onClickOwnedItemControl(event) {
     event.preventDefault();
     const a = event.currentTarget;
@@ -136,6 +155,63 @@ export class CharacterSheetBase extends ActorSheetChronicle {
       await document.update({"system.isActive": targetState});
       await onEquippedChanged(document, this.actor, targetState);
     }
+  }
+
+  async _onEquippedStateChanged(event) {
+    event.preventDefault();
+    const eventData = event.currentTarget.dataset;
+    let document = this.actor.getEmbeddedDocument('Item', eventData.itemId);
+    let collection = [];
+    let tempCollection = [];
+
+    let isArmor = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.WEARING;
+    let isCommander = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.COMMANDER;
+    let isUnequipping = parseInt(eventData.hand) === 0;
+
+    if (isUnequipping) {
+      document.getCSData().equipped = 0;
+      let documentData = document.getCSData()
+      if (documentData.isDefending) {
+        // this results in a second click being required
+        // TODO: fix this if possible
+        await updateWeaponDefendingState(this.actor, eventData.itemId, false);
+        await document.update({"system.isDefending": false})
+      }
+    } else {
+      if (isCommander) {
+        getData(document).equipped = ChronicleSystem.equippedConstants.COMMANDER;
+        let items = this.actor.getEmbeddedCollection('Item')
+        tempCollection = items.filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.COMMANDER);
+        getData(this.actor).commander = tempCollection[0];
+      }
+      else if (isArmor) {
+        getData(document).equipped = ChronicleSystem.equippedConstants.WEARING;
+        tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.WEARING);
+      } else {
+        let twoHandedQuality = Object.values(getData(document).qualities).filter((quality) => quality.name.toLowerCase() === "two-handed");
+        if (twoHandedQuality.length > 0) {
+          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.MAIN_HAND || getData(item).equipped === ChronicleSystem.equippedConstants.OFFHAND || getData(item).equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
+          getData(document).equipped = ChronicleSystem.equippedConstants.BOTH_HANDS;
+        } else {
+          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === parseInt(eventData.hand) || getData(item).equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
+          getData(document).equipped = parseInt(eventData.hand);
+        }
+      }
+    }
+
+    updateTempTransformers(this.actor);
+
+    tempCollection.forEach((item) => {
+      collection.push({_id: item._id, "system.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
+      item.onEquippedChanged(this.actor, false);
+    });
+
+    collection.push({_id: document._id, "system.equipped": getData(document).equipped});
+    document.onEquippedChanged(this.actor, getData(document).equipped > 0);
+
+    saveTransformers(this.actor);
+
+    this.actor.updateEmbeddedDocuments('Item', collection);
   }
 
   /* -------------------------------------------- */

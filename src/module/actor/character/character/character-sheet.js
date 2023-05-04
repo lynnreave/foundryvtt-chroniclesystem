@@ -46,45 +46,16 @@ export class CharacterSheet extends CharacterSheetBase {
   /** @override */
   getData() {
     const data = super.getData();
-    // data.dtypes = ["String", "Number", "Boolean"];
-    // this.splitItemsByType(data);
-
     let character = data.character;
-    // this.isOwner = this.actor.isOwner;
 
-    // character.owned.equipments = this._checkNull(data.itemsByType['equipment']);
-    // character.owned.weapons = this._checkNull(data.itemsByType['weapon']);
-    // character.owned.armors = this._checkNull(data.itemsByType['armor']);
     character.owned.benefits = this._checkNull(data.itemsByType['benefit']);
     character.owned.drawbacks = this._checkNull(data.itemsByType['drawback']);
-    // character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
-    // character.owned.effects = this._checkNull(data.itemsByType['effect']).sort((a, b) => a.name.localeCompare(b.name));
-
     data.dispositions = CHARACTER_DISPOSITIONS;
-
-    // data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
-
     data.techniquesTypes = CSConstants.TechniqueType;
     data.techniquesCosts = CSConstants.TechniqueCost;
 
-    // character.owned.weapons.forEach((weapon) => {
-    //   let weaponData = weapon.system;
-    //   let info = weaponData.specialty.split(':');
-    //   if (info.length < 2)
-    //     return "";
-    //   let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
-    //   formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
-    //   let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
-    //   if (matches) {
-    //     if (matches.length === 4) {
-    //       let ability = data.actor.getAbilityValue(matches[1]);
-    //       weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
-    //     }
-    //   }
-    //   weapon.formula = formula;
-    // });
 
     character.owned.techniques.forEach((technique) => {
       let techniqueData = technique.system;
@@ -99,12 +70,12 @@ export class CharacterSheet extends CharacterSheetBase {
         }
       });
     });
+    this._calculateIntrigueTechniques(data);
+
     // refresh embedded relationships
     character.owned.relationships.forEach((relationship) => {
       refreshEmbeddedActorData(relationship);
     })
-
-    this._calculateIntrigueTechniques(data);
 
     data.currentInjuries = Object.values(character.injuries).length;
     data.currentWounds = Object.values(character.wounds).length;
@@ -148,32 +119,15 @@ export class CharacterSheet extends CharacterSheetBase {
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
-
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
 
-    html.find('.item .item-name').on('click', (ev) => {
-      $(ev.currentTarget).parents('.item').find('.description').slideToggle();
-    });
-    html.find('.item .toggle-active').click(this._onItemToggleActive.bind(this));
-
     html.find('.disposition.option').click(this._onDispositionChanged.bind(this));
-
-    html.find('.equipped').click(this._onEquippedStateChanged.bind(this));
     html.find('.defending').click(this._onDefendingStateChanged.bind(this));
-
     html.find('.injury-create').on("click", this._onClickInjuryCreate.bind(this));
     html.find(".injuries-list").on("click", ".injury-control", this._onclickInjuryControl.bind(this));
-
     html.find('.wound-create').on("click", this._onClickWoundCreate.bind(this));
     html.find(".wounds-list").on("click", ".wound-control", this._onclickWoundControl.bind(this));
-
-    html.find(".square").on("click", this._onClickSquare.bind(this));
-
-    html.find(".owned-item-control").on("click", this._onClickOwnedItemControl.bind(this));
-
-    html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
-    html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));
   }
 
   async setFrustrationValue(newValue) {
@@ -323,56 +277,6 @@ export class CharacterSheet extends CharacterSheetBase {
     let eventData = event.currentTarget.dataset;
     let weapon = await updateWeaponDefendingState(this.actor, eventData.itemId, eventData.toState);
     await this.actor.updateEmbeddedDocuments('Item', [weapon]);
-  }
-
-  async _onEquippedStateChanged(event) {
-    event.preventDefault();
-    const eventData = event.currentTarget.dataset;
-    let document = this.actor.getEmbeddedDocument('Item', eventData.itemId);
-    let collection = [];
-    let tempCollection = [];
-
-    let isArmor = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.WEARING;
-    let isUnequipping = parseInt(eventData.hand) === 0;
-
-    if (isUnequipping) {
-      document.getCSData().equipped = 0;
-      let documentData = document.getCSData()
-      if (documentData.isDefending) {
-        // this results in a second click being required
-        // TODO: fix this if possible
-        await updateWeaponDefendingState(this.actor, eventData.itemId, false);
-        await document.update({"system.isDefending": false})
-      }
-    } else {
-      if (isArmor) {
-        document.getCSData().equipped = ChronicleSystem.equippedConstants.WEARING;
-        tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === ChronicleSystem.equippedConstants.WEARING);
-      } else {
-        let twoHandedQuality = Object.values(document.getCSData().qualities).filter((quality) => quality.name.toLowerCase() === "two-handed");
-        if (twoHandedQuality.length > 0) {
-          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === ChronicleSystem.equippedConstants.MAIN_HAND || item.getCSData().equipped === ChronicleSystem.equippedConstants.OFFHAND || item.getCSData().equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
-          document.getCSData().equipped = ChronicleSystem.equippedConstants.BOTH_HANDS;
-        } else {
-          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => item.getCSData().equipped === parseInt(eventData.hand) || item.getCSData().equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
-          document.getCSData().equipped = parseInt(eventData.hand);
-        }
-      }
-    }
-
-    this.actor.updateTempTransformers();
-
-    tempCollection.forEach((item) => {
-      collection.push({_id: item._id, "system.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
-      item.onEquippedChanged(this.actor, false);
-    });
-
-    collection.push({_id: document._id, "system.equipped": document.getCSData().equipped});
-    document.onEquippedChanged(this.actor, document.getCSData().equipped > 0);
-
-    this.actor.saveTransformers();
-
-    this.actor.updateEmbeddedDocuments('Item', collection);
   }
 
   async _onDispositionChanged(event, targets) {
