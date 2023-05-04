@@ -1,5 +1,5 @@
-import {CSItem} from "./csItem.js";
+import {ItemChronicle} from "./item-chronicle.js";
 
-export class CSTechniqueItem extends CSItem {
+export class CSTechniqueItem extends ItemChronicle {
 
 }

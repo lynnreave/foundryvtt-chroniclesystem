@@ -1,0 +1,66 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+"systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body">
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+        </section>
+        <section class="description">
+            <header class="header-field flexrow">
+                <div class="header-title">
+                    <span>{{localize "CS.sheets.generalLabels.effects"}}</span>
+                </div>
+                <div class="header-field-add">
+                    <a class="effect-transformation-create" data-type="skill"><i class="fa fa-plus"></i></a>
+                </div>
+            </header>
+            <ol class="qualities-list list resizable" data-base-size="150">
+                <li class="list-header flexrow">
+                    <div class="flex-4">Target</div>
+                    <div class="flex-2">Test Dice</div>
+                    <div class="flex-2">Bonus Dice</div>
+                    <div class="flex-2">Modifier</div>
+                </li>
+                {{#each item.system.transformations as |transformation index|}}
+                    <li class="weapon-quality item flexrow" data-item-id="{{index}}">
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input
+                                class="medium-field"
+                                type="text"
+                                name="system.transformations.{{index}}.target"
+                                value="{{transformation.target}}"
+                                placeholder="Attribute"
+                                data-dtype="String"
+                        />
+                        <!--suppress HtmlFormInputWithoutLabel -->
+                        <input
+                                class="small-field"
+                                type="text"
+                                name="system.transformations.{{index}}.poolMods"
+                                value="{{transformation.poolMods}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                        <input
+                                class="small-field"
+                                type="text"
+                                name="system.transformations.{{index}}.bonuses"
+                                value="{{transformation.bonuses}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                        <input
+                                class="small-field"
+                                type="text"
+                                name="system.transformations.{{index}}.modifiers"
+                                value="{{transformation.modifiers}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                        <a class="effect-transformations-control item-controls" data-id="{{index}}" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </li>
+                {{/each}}
+            </ol>
+        </section>
+    </main>
+</form>

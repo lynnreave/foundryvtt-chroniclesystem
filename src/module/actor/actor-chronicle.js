@@ -7,7 +7,6 @@ import { getData } from "../common.js"
  *
  * @category Actor
  */
-
 export class ActorChronicle extends Actor {
   getData() { return getData(this); }
 }

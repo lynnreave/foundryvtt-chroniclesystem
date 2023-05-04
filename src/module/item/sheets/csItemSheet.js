@@ -38,7 +38,7 @@ export class CSItemSheet extends ItemSheet {
         };
         let newQuality = Object.values(item.getCSData().qualities);
         newQuality.push(quality);
-        item.update({"data.qualities" : newQuality});
+        item.update({"system.qualities" : newQuality});
     }
 
     async _onClickItemQualityControl(event) {
@@ -52,7 +52,7 @@ export class CSItemSheet extends ItemSheet {
             const item = this.item;
             let qualities = Object.values(item.getCSData().qualities);
             qualities.splice(index,1);
-            item.update({"data.qualities" : qualities});
+            item.update({"system.qualities" : qualities});
         }
     }
 

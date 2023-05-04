@@ -87,7 +87,8 @@
           "abilities": [],
           "powers": [],
           "benefits": [],
-          "relationships": []
+          "relationships": [],
+          "effects": []
         },
         "currentStress": 0,
         "allies": "",
@@ -207,7 +208,8 @@
         "armors": [],
         "heroes": [],
         "equipments": [],
-        "weapons": []
+        "weapons": [],
+        "effects": []
       },
       "owner": ""
     }
@@ -224,7 +226,8 @@
       "holding",
       "technique",
       "relationship",
-      "hero"
+      "hero",
+      "effect"
     ],
     "templates": {
       "physicalItem": {
@@ -303,6 +306,13 @@
       "isAFlaw": false,
       "flawAttribute": "",
       "requirements": ""
+    },
+    "effect": {
+      "templates": [
+        "itemDescription"
+      ],
+      "isActive": true,
+      "transformations": []
     },
     "equipment": {
       "templates": [

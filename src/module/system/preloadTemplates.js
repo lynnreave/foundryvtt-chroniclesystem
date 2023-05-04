@@ -8,6 +8,8 @@ export const preloadHandlebarsTemplates = async function () {
 
         'systems/chroniclesystem/templates/items/relationship.hbs',
 
+        'systems/chroniclesystem/templates/items/effect.hbs',
+
         'systems/chroniclesystem/templates/items/tabs/technique-details-tab.hbs',
         'systems/chroniclesystem/templates/items/tabs/technique-works-tab.hbs',
 

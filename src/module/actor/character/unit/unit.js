@@ -64,6 +64,6 @@ export class Unit extends CharacterBase {
         data.discipline.totalWithOrders = data.discipline.total
             + parseInt(data.discipline.ordersReceivedModifier);
 
-        data.effects = getAllTransformers(this);
+        data.transformers = getAllTransformers(this);
     }
 }

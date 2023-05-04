@@ -8,7 +8,9 @@ import {
   updateDisposition,
   updateWeaponDefendingState
 } from "./helpers.js";
-import { CHARACTER_DISPOSITIONS } from "../../../selections.js";
+import {
+  CHARACTER_DISPOSITIONS
+} from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
 
 /**
@@ -26,7 +28,8 @@ export class CharacterSheet extends CharacterSheetBase {
       "benefit",
       "drawback",
       "technique",
-      "relationship"
+      "relationship",
+      "effect"
   ]
 
   /** @override */
@@ -56,6 +59,7 @@ export class CharacterSheet extends CharacterSheetBase {
     character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
+    character.owned.effects = this._checkNull(data.itemsByType['effect']).sort((a, b) => a.name.localeCompare(b.name));
 
     data.dispositions = CHARACTER_DISPOSITIONS;
 
@@ -150,6 +154,7 @@ export class CharacterSheet extends CharacterSheetBase {
     html.find('.item .item-name').on('click', (ev) => {
       $(ev.currentTarget).parents('.item').find('.description').slideToggle();
     });
+    html.find('.item .toggle-active').click(this._onItemToggleActive.bind(this));
 
     html.find('.disposition.option').click(this._onDispositionChanged.bind(this));
 
@@ -163,6 +168,8 @@ export class CharacterSheet extends CharacterSheetBase {
     html.find(".wounds-list").on("click", ".wound-control", this._onclickWoundControl.bind(this));
 
     html.find(".square").on("click", this._onClickSquare.bind(this));
+
+    html.find(".owned-item-control").on("click", this._onClickOwnedItemControl.bind(this));
 
     html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
     html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));

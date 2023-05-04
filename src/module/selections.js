@@ -3,6 +3,18 @@ import { UnitStatus } from "./type/unit-status.js";
 import { UnitFacing } from "./type/unit-facing.js";
 import { Formation } from "./type/formation.js";
 
+export const EFFECT_TARGETS =[
+    {name: "CS.constants.abilities.all", target: "all"},
+    {name: "CS.constants.abilities.bulk", target: "bulk"},
+    {name: "CS.constants.abilities.combat_defense", target: "combat_defense"},
+    {name: "CS.constants.abilities.combat_defense_fighting", target: "combat_defense_fighting"},
+    {name: "CS.constants.abilities.combat_defense_marksmanship", target: "combat_defense_marksmanship"},
+    {name: "CS.constants.abilities.composure_resistance", target: "composure_resistance"},
+    {name: "CS.constants.abilities.damage_resistance", target: "damage_resistance"},
+    {name: "CS.constants.abilities.discipline", target: "discipline"},
+    {name: "CS.constants.abilities.movement", target: "movement"},
+]
+
 /**
  * Available character Actor dispositions.
  * @type {Array}

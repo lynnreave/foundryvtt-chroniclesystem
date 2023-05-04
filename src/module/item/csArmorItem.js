@@ -1,8 +1,8 @@
-import {CSItem} from "./csItem.js";
+import {ItemChronicle} from "./item-chronicle.js";
 import {ChronicleSystem} from "../system/ChronicleSystem.js";
 import LOGGER from "../../util/logger.js";
 
-export class CSArmorItem extends CSItem {
+export class CSArmorItem extends ItemChronicle {
     onEquippedChanged(actor, isEquipped) {
         const data = this.getCSData();
         LOGGER.trace(`Armor ${data._id} ${isEquipped? "equipped" : "unequipped" } by the actor ${actor.name} | csArmorItem.js`);

@@ -1,7 +1,7 @@
-import {CSItem} from "./csItem.js";
+import {ItemChronicle} from "./item-chronicle.js";
 import LOGGER from "../../util/logger.js";
 
-export class CSHoldingItem extends CSItem {
+export class CSHoldingItem extends ItemChronicle {
     getTotalInvested() {
         LOGGER.trace(`Get Total Invested | CSHoldingItem | csHoldingItem.js`);
         let data = this.getCSData();

@@ -1,72 +1,143 @@
 <div class="tab" data-group="primary" data-tab="effects">
-    <section class="effects">
-        <header class="header-field">
-            <span>Effects</span>
-        </header>
-        <ol class="qualities-list">
-            {{#each character.effects as |effects source|}}
-                <li class="item quality" data-id="{{source}}">
-                    <div class="quality-label item-name">
-                        <label class="flex3">
-                            {{showIfDifferent effects.name "" effects.name : ""}}
-                            {{showIfEquals effects.name "" (localize source) : ""}}
-                        </label>
+    <section class="flexrow">
+        <section class="effects">
+            <header class="header-field">
+                <span>System</span>
+            </header>
+            <ol class="qualities-list">
+                {{#each character.transformers as |effects source|}}
+                    <li class="item quality" data-id="{{source}}">
+                        <div class="quality-label item-name">
+                            <label class="flex3">
+                                {{showIfDifferent effects.name "" effects.name : ""}}
+                                {{showIfEquals effects.name "" (localize source) : ""}}
+                            </label>
+                            {{#if ../owner}}
+                            <div class="item-controls">
+                                <button type="button" title="Clear" class="effect-clear-all" data-source="{{source}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            {{/if}}
+                        </div>
                         {{#if ../owner}}
-                        <div class="item-controls">
-                            <button type="button" title="Clear" class="effect-clear-all" data-source="{{source}}">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                        <div class="description">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Target</th>
+                                        <th>Test</th>
+                                        <th>Bonus</th>
+                                        <th>Modifiers</th>
+                                        <th>Penalties</th>
+                                        <th class=""><i class="fas fa-cog"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each effects as |effect target|}}
+                                        {{#ifDifferent target "name"}}
+                                        <tr>
+                                            <td class="capitalize">
+                                                {{#replaceAll "_" " "}}{{target}}{{/replaceAll}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier effect.poolMods) (modifier effect.poolMods) : ""}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier effect.bonuses) (modifier effect.bonuses) : ""}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier effect.modifiers) (modifier effect.modifiers) : ""}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier effect.penalties) (modifier effect.penalties) : ""}}
+                                            </td>
+                                            {{#if ../../owner}}
+                                            <td class="item-control">
+                                                <a class="effect-clear" title="Clear" data-source="{{source}}" data-target="{{target}}">
+                                                    <i class="fas fa-ban"></i>
+                                                </a>
+                                            </td>
+                                            {{/if}}
+                                        </tr>
+                                        {{/ifDifferent}}
+                                    {{/each}}
+                                </tbody>
+                            </table>
                         </div>
                         {{/if}}
-                    </div>
-                    {{#if ../owner}}
-                    <div class="description">
-                        <table>
-                            <thead>
+                    </li>
+                {{/each}}
+            </ol>
+        </section>
+        <section class="effects">
+            <header class="header-field">
+                <span>Applied</span>
+            </header>
+            <ol class="qualities-list">
+                {{#each character.owned.effects as |effect index|}}
+                    <li class="quality item" data-id="{{_id}}" data-item-id="{{_id}}">
+                        <div class="quality-label item-name">
+                            <label class="flex3">
+                                {{effect.name}}
+                            </label>
+                            {{#if ../owner}}
+                                <div class="item-controls flexrow">
+                                    <button type="button" title="Toggle" class="item toggle-active" data-item-id="{{_id}}">
+                                        {{#ifEquals true effect.system.isActive}}
+                                        <i class="fa fa-toggle-on padding-3"></i>
+                                        {{/ifEquals}}
+                                        {{#ifDifferent true effect.system.isActive}}
+                                            <i class="fa fa-toggle-off padding-3"></i>
+                                        {{/ifDifferent}}
+                                    </button>
+                                    <button type="button" title="Edit" class="item item-edit">
+                                        <i class="fas fa-cog padding-3"></i>
+                                    </button>
+                                    <button type="button" title="Delete" class="owned-item-control" data-list="effects" data-index="{{index}}" data-action="delete">
+                                        <i class="fas fa-trash padding-3"></i>
+                                    </button>
+                                </div>
+                            {{/if}}
+                        </div>
+                        <div class="description">
+                            <div>
+                                {{enrich effect.system.description}}
+                            </div>
+                            <table>
+                                <thead>
                                 <tr>
                                     <th>Target</th>
-                                    <th>Test Dice</th>
-                                    <th>Bonus Dice</th>
+                                    <th>Test</th>
+                                    <th>Bonus</th>
                                     <th>Modifiers</th>
-                                    <th>Penalties</th>
-                                    <th class=""><i class="fas fa-cog"></i></th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {{#each effects as |effect target|}}
+                                </thead>
+                                <tbody>
+                                {{#each effect.system.transformations as |transformation index|}}
                                     {{#ifDifferent target "name"}}
-                                    <tr>
-                                        <td class="capitalize">
-                                            {{#replaceAll "_" " "}}{{target}}{{/replaceAll}}
-                                        </td>
-                                        <td>
-                                            {{showIfDifferent " - NaN" (modifier effect.poolMods) (modifier effect.poolMods) : ""}}
-                                        </td>
-                                        <td>
-                                            {{showIfDifferent " - NaN" (modifier effect.bonuses) (modifier effect.bonuses) : ""}}
-                                        </td>
-                                        <td>
-                                            {{showIfDifferent " - NaN" (modifier effect.modifiers) (modifier effect.modifiers) : ""}}
-                                        </td>
-                                        <td>
-                                            {{showIfDifferent " - NaN" (modifier effect.penalties) (modifier effect.penalties) : ""}}
-                                        </td>
-                                        {{#if ../../owner}}
-                                        <td class="item-control">
-                                            <a class="effect-clear" title="Clear" data-source="{{source}}" data-target="{{target}}">
-                                                <i class="fas fa-ban"></i>
-                                            </a>
-                                        </td>
-                                        {{/if}}
-                                    </tr>
+                                        <tr class="item" data-item-id="{{effect._id}}">
+                                            <td class="capitalize">
+                                                {{#replaceAll "_" " "}}{{transformation.target}}{{/replaceAll}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier transformation.poolMods) (modifier transformation.poolMods) : ""}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier transformation.bonuses) (modifier transformation.bonuses) : ""}}
+                                            </td>
+                                            <td>
+                                                {{showIfDifferent " - NaN" (modifier transformation.modifiers) (modifier transformation.modifiers) : ""}}
+                                            </td>
+                                        </tr>
                                     {{/ifDifferent}}
                                 {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                    {{/if}}
-                </li>
-            {{/each}}
-        </ol>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                {{/each}}
+            </ol>
+        </section>
     </section>
 </div>

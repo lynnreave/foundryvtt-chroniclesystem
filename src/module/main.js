@@ -10,8 +10,9 @@ import { HouseSheet } from "./actor/house/house-sheet.js";
 import { CSItemSheet } from "./item/sheets/csItemSheet.js";
 import { CSRelationshipItemSheet } from "./item/sheets/csRelationshipItemSheet.js";
 import { CSTechniqueItemSheet } from "./item/sheets/cs-technique-item-sheet.js";
+import { EffectSheet } from "./item/effect/effect-sheet.js";
 import { UnitSheet } from "./actor/character/unit/unit-sheet.js";
-import itemConstructor from "./item/itemConstructor.js";
+import itemConstructor from "./item/item-constructor.js";
 import LOGGER from "../util/logger.js";
 import { migrateData } from "./migration/migration.js";
 import { preloadHandlebarsTemplates } from "./system/preloadTemplates.js";
@@ -96,6 +97,11 @@ Hooks.once("init", async function () {
   Items.registerSheet("chroniclesystem", CSRelationshipItemSheet, {
     label: SystemUtils.localize("CS.sheets.relationshipItemSheet"),
     types: ["relationship"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", EffectSheet, {
+    label: SystemUtils.localize("CS.sheets.effectItemSheet"),
+    types: ["effect"],
     makeDefault: true,
   });
 

@@ -1,11 +1,13 @@
 import { ActorSheetChronicle } from "../actor-sheet-chronicle.js";
 import {
-  getAllTransformers,
   removeAllTransformersFromSource,
   removeTransformer,
   saveTransformers,
-  transformerTypes, updateTempTransformers
+  transformerTypes,
+  updateTempTransformers
 } from "./transformers.js";
+import { getData } from "../../common.js";
+import { onEquippedChanged } from "../../item/effect/helpers.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -31,6 +33,19 @@ export class CharacterSheetBase extends ActorSheetChronicle {
   }
 
   /* -------------------------------------------- */
+
+  async _onClickOwnedItemControl(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const itemIndex = parseInt(a.dataset.index);
+    const list = a.dataset.list;
+    const action = a.dataset.action;
+    const itemId = this.actor.system.owned[list][itemIndex]._id
+
+    if ( action === "delete" ) {
+      this.actor.deleteEmbeddedDocuments("Item", [itemId,])
+    }
+  }
 
   async _onClickSquare(ev) {
     ev.preventDefault();
@@ -65,6 +80,22 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     saveTransformers(this.actor);
   }
 
+  async _onItemToggleActive(event) {
+    event.preventDefault();
+    const eventData = event.currentTarget.dataset;
+    const itemId = eventData.itemId;
+    // get the owned item document
+    let document = this.actor.getEmbeddedDocument('Item', itemId);
+    // get item data
+    let docData = getData(document);
+    let targetState = !docData.isActive
+    // toggle by type
+    if (document.type === "effect") {
+      await document.update({"system.isActive": targetState});
+      await onEquippedChanged(document, this.actor, targetState);
+    }
+  }
+
   /* -------------------------------------------- */
 
   async _onDrop(event) {
@@ -72,7 +103,6 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     let data;
     try {
       data = JSON.parse(event.dataTransfer.getData('text/plain'));
-
     }
     catch (err) {
       return;
@@ -83,5 +113,4 @@ export class CharacterSheetBase extends ActorSheetChronicle {
   isItemPermitted(type) {
     return this.itemTypesPermitted.includes(type);
   }
-
 }

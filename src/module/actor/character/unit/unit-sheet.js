@@ -26,7 +26,8 @@ export class UnitSheet extends CharacterSheetBase {
         "armor",
         "hero",
         "equipment",
-        "weapon"
+        "weapon",
+        "effect"
     ]
 
     /** @override */
@@ -105,6 +106,7 @@ export class UnitSheet extends CharacterSheetBase {
         html.find('.item .item-name').on('click', (ev) => {
             $(ev.currentTarget).parents('.item').find('.description').slideToggle();
         });
+        html.find('.item .toggle-active').click(this._onItemToggleActive.bind(this));
 
         html.find('.status.option').click(this._onUnitStatusChanged.bind(this));
         html.find('.facing.option').click(this._onUnitFacingChanged.bind(this));
@@ -118,19 +120,6 @@ export class UnitSheet extends CharacterSheetBase {
 
         html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
         html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));
-    }
-
-    async _onClickOwnedItemControl(event) {
-        event.preventDefault();
-        const a = event.currentTarget;
-        const itemIndex = parseInt(a.dataset.index);
-        const list = a.dataset.list;
-        const action = a.dataset.action;
-        const itemId = this.actor.system.owned[list][itemIndex]._id
-
-        if ( action === "delete" ) {
-            this.actor.deleteEmbeddedDocuments("Item", [itemId,])
-        }
     }
 
     async setDisorganisationValue(newValue) {

@@ -1,8 +1,8 @@
-import {CSItem} from "./csItem.js";
+import {ItemChronicle} from "./item-chronicle.js";
 import LOGGER from "../../util/logger.js";
 import {CSConstants} from "../system/csConstants.js";
 
-export class CSEventItem extends CSItem {
+export class CSEventItem extends ItemChronicle {
     generateModifiers(choices) {
         LOGGER.trace("generate historical event modifiers | CSEventItem.cs");
         let data = this.getCSData();

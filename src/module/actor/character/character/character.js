@@ -1,7 +1,7 @@
 import SystemUtils from "../../../../util/systemUtils.js";
 import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
-import {getAllTransformers } from "../transformers.js";
+import { getAllTransformers } from "../transformers.js";
 import { refreshDisposition } from "./helpers.js";
 
 /**
@@ -37,7 +37,7 @@ export class Character extends CharacterBase {
         data.derivedStats.fatigue.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
         data.derivedStats.fatigue.total = data.derivedStats.fatigue.value + parseInt(data.derivedStats.fatigue.modifier);
 
-        data.effects = getAllTransformers(this);
+        data.transformers = getAllTransformers(this);
     }
 
     getMaxInjuries() {

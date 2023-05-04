@@ -90,13 +90,15 @@
       "abilityItemSheet": "Ability Sheet",
       "relationshipItemSheet": "Relationship Sheet",
       "heroItemSheet": "Hero Sheet",
+      "effectItemSheet": "Effect Sheet",
       "generalLabels": {
         "none": "None",
         "description": "Description",
         "details": "Details",
         "name": "Name",
         "total": "Total",
-        "others": "Others"
+        "others": "Others",
+        "effects": "Effects"
       },
       "house": {
         "character": {
@@ -256,6 +258,17 @@
       }
     },
     "constants": {
+      "targets": {
+        "all": "All",
+        "bulk": "Bulk",
+        "combat_defense": "Combat Defense",
+        "combat_defense_fighting": "Fighting Defense",
+        "combat_defense_marksmanship": "Marksmanship Defense",
+        "composure_resistance": "Composure DR",
+        "damage_resistance": "Health DR",
+        "discipline": "Discipline",
+        "movement": "Movement"
+      },
       "abilities": {
         "agility": "agility",
         "athletics": "athletics",
