@@ -2,7 +2,12 @@ import SystemUtils from "../../../../util/systemUtils.js";
 import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import { getCommander } from "./helpers.js";
-import { getAllTransformers } from "../transformers.js";
+import {
+    getAllTransformers,
+    getTransformation
+} from "../transformers.js";
+import { CHARACTER_ATTR_CONSTANTS } from "../../../constants.js";
+import { getData } from "../../../common.js";
 
 /**
  * The Actor entity for handling warfare units.
@@ -12,7 +17,7 @@ import { getAllTransformers } from "../transformers.js";
 export class Unit extends CharacterBase {
 
     calculateDerivedValues() {
-        let data = this.getData();
+        let data = getData(this);
 
         // commander
         data.commander = getCommander(this.getEmbeddedCollection("Item"));
@@ -64,6 +69,13 @@ export class Unit extends CharacterBase {
         data.discipline.totalWithOrders = data.discipline.total
             + parseInt(data.discipline.ordersReceivedModifier);
 
+        // get damage resistance
+        data.damageResistance = getTransformation(
+            this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+            false, true
+        ).total;
+
+        // get all active transformers
         data.transformers = getAllTransformers(this);
     }
 }

@@ -53,6 +53,10 @@
                         </span>
                     </div>
                     <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.composureResistance}}</div>
+                    <header class="subheader-field">
                         <span>Composure</span>
                     </header>
                     <div class="form-group">
@@ -103,7 +107,7 @@
                     <div class="disposition-list">
                         {{#each dispositions}}
                                 <div class="disposition option capitalize {{showIfEquals @index ../character.currentDisposition "selected"}}" data-id="{{@index}}">
-                                    {{localize this.name}} ({{this.persuasionModifier}}/{{this.deceptionModifier}}/{{this.rating}} )
+                                    {{localize this.name}}
                                 </div>
                         {{/each}}
                     </div>
@@ -173,6 +177,10 @@
                             />
                         </span>
                     </div>
+                    <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.damageResistance}}</div>
                     <header class="subheader-field">
                         <span>Health</span>
                     </header>

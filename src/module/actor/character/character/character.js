@@ -1,8 +1,13 @@
 import SystemUtils from "../../../../util/systemUtils.js";
 import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
-import { getAllTransformers } from "../transformers.js";
+import {
+    getAllTransformers,
+    getTransformation
+} from "../transformers.js";
 import { refreshDisposition } from "./helpers.js";
+import { CHARACTER_ATTR_CONSTANTS } from "../../../constants.js";
+import { getData } from "../../../common.js";
 
 /**
  * The Actor entity for handling characters.
@@ -21,13 +26,13 @@ export class Character extends CharacterBase {
     }
 
     calculateDerivedValues() {
-        let data = this.getData();
+        let data = getData(this);
+
         data.derivedStats.intrigueDefense.value = this.calcIntrigueDefense();
         data.derivedStats.intrigueDefense.total = data.derivedStats.intrigueDefense.value + parseInt(data.derivedStats.intrigueDefense.modifier);
         data.derivedStats.composure.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.WILL)) * 3;
         data.derivedStats.composure.total = data.derivedStats.composure.value + parseInt(data.derivedStats.composure.modifier);
         data.derivedStats.combatDefense.value = this.calcCombatDefense();
-
 
         data.derivedStats.combatDefense.total = data.derivedStats.combatDefense.value + parseInt(data.derivedStats.combatDefense.modifier);
         data.derivedStats.health.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE)) * 3;
@@ -37,6 +42,19 @@ export class Character extends CharacterBase {
         data.derivedStats.fatigue.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
         data.derivedStats.fatigue.total = data.derivedStats.fatigue.value + parseInt(data.derivedStats.fatigue.modifier);
 
+        // get composure damage resistance
+        data.composureResistance = getTransformation(
+            this, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
+            false, true
+        ).total;
+
+        // get damage resistance
+        data.damageResistance = getTransformation(
+            this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+            false, true
+        ).total;
+
+        // get all active transformers
         data.transformers = getAllTransformers(this);
     }
 

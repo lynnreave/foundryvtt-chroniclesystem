@@ -14,7 +14,6 @@ import {
     UNIT_STATUSES
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
-import { getData } from "../../../common.js";
 
 /**
  * The ActorSheet entity for handling warfare units.

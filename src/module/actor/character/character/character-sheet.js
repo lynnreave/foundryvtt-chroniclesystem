@@ -12,7 +12,6 @@ import {
   CHARACTER_DISPOSITIONS
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
-import { getData } from "../../../common.js";
 
 /**
  * The ActorSheet entity for handling characters.
