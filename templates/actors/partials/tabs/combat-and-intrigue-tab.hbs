@@ -313,23 +313,25 @@
                         </thead>
                         <tbody>
                         {{#each character.owned.weapons as |weapon index|}}
-                            {{#ifDifferent weapon.system.equipped ../notEquipped}}
-                                <tr>
-                                    <td>{{weapon.name}} {{showIfEquals weapon.system.equipped 3 "(Off-hand)" : ""}}</td>
-                                    <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
-                                        <a>{{format-formula weapon.formula}}</a>
-                                    </td>
-                                    <td> {{weapon.damageValue}}</td>
-                                    <td>
-                                        {{showIfDifferent 0 weapon.system.defense weapon.system.defense : ""}}
-                                    </td>
+                            <tr class="item weapon" data-item-id="{{_id}}">
+                                <td class="weapon-label item-edit field"><a>{{weapon.name}} {{showIfEquals weapon.system.equipped 3 "(Off-hand)" : ""}}</a></td>
+                                <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
+                                    <a>{{format-formula weapon.formula}}</a>
+                                </td>
+                                <td> {{weapon.damageValue}}</td>
+                                <td>
+                                    {{showIfDifferent 0 weapon.system.defense weapon.system.defense : ""}}
+                                </td>
+                                <td class="item-controls flexrow">
+                                    {{#ifDifferent weapon.system.equipped ../notEquipped}}
                                     {{#ifDifferent 0 weapon.system.defense}}
-                                    <td class="item-controls">
-                                        <a class="checkButton defending {{showIfTrue weapon.system.isDefending "activated" ""}}" data-item-id="{{_id}}" data-to-state="{{showIfTrue weapon.system.isDefending false true}}"><i class="fas fa-shield-alt"></i></a>
-                                    </td>
+                                    <a class="checkButton defending {{showIfTrue weapon.system.isDefending "activated" ""}}" data-item-id="{{_id}}" data-to-state="{{showIfTrue weapon.system.isDefending false true}}"><i class="fas fa-shield-alt"></i></a>
                                     {{/ifDifferent}}
-                                </tr>
-                            {{/ifDifferent}}
+                                    {{/ifDifferent}}
+                                    <a class="checkButton equipped {{showIfContains "2|4" weapon.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfContains "2|4" weapon.system.equipped 0 2}}" data-type="weapon"><i class="fa fa-hand-paper"></i></a>
+                                    <a class="checkButton equipped off-hand {{showIfContains "3|4" weapon.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfContains "3|4" weapon.system.equipped 0 3}}" data-type="weapon"><i class="fa fa-hand-paper"></i></a>
+                                </td>
+                            </tr>
                         {{/each}}
                         </tbody>
                     </table>
@@ -342,17 +344,19 @@
                             <th>Armor</th>
                             <th>Rating</th>
                             <th>Penalty</th>
+                            <th class="item-controls"></th>
                         </tr>
                         </thead>
                         <tbody>
                         {{#each character.owned.armors as |armor index|}}
-                            {{#ifDifferent armor.system.equipped ../notEquipped}}
-                                <tr>
-                                    <td>{{armor.name}}</td>
-                                    <td>{{armor.system.rating}}</td>
-                                    <td>{{armor.system.penalty}}</td>
-                                </tr>
-                            {{/ifDifferent}}
+                            <tr class="item armor" data-item-id="{{_id}}">
+                                <td class="armor-label item-edit field"><a>{{armor.name}}</a></td>
+                                <td>{{armor.system.rating}}</td>
+                                <td>{{armor.system.penalty}}</td>
+                                <td class="item-controls flexrow">
+                                    <a class="checkButton equipped {{showIfEquals "1" armor.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "1" armor.system.equipped 0 1}}" data-type="armor"><i class="fas fa-shield-alt"></i></a>
+                                </td>
+                            </tr>
                         {{/each}}
                         </tbody>
                     </table>
