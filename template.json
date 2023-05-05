@@ -279,7 +279,8 @@
       "reach": "",
       "equipped": 0,
       "defense": 0,
-      "isDefending": false
+      "isDefending": false,
+      "isPowerful": false
     },
     "ability": {
       "templates": [

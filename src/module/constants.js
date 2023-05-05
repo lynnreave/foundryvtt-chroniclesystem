@@ -86,6 +86,7 @@ export const KEY_CONSTANTS = {
   SEDUCE: "CS.constants.specialties.seduce",
   TAUNT: "CS.constants.specialties.taunt",
   STEWARDSHIP: "CS.constants.specialties.stewardship",
+  STRENGTH: "CS.constants.specialties.strength",
 
   BULK: "CS.constants.qualities.bulk",
 

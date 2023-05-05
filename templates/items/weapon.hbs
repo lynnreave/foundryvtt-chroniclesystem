@@ -123,9 +123,23 @@
         </section>
         <section class="description">
             {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+
             <header class="header-field flexrow">
                 <div class="header-title">
                     <span>Qualities</span>
+                </div>
+            </header>
+            <div class="flexrow">
+                <div class="form-group flexrow">
+                    <span class="padding-3">Powerful</span>
+                    <input class="item-flag-toggle" type="checkbox" name="isPowerful" id="isPowerful" value="{{item.system.isPowerful}}" {{#if item.system.isPowerful}} checked {{/if}}/>
+                    <span class="padding-3">Adaptable</span>
+                    <input class="item-flag-toggle" type="checkbox" name="isAdaptable" id="isAdaptable" value="{{item.system.isAdaptable}}" {{showIfTrue item.system.isAdaptable checked : ""}}"/>
+                </div>
+            </div>
+            <header class="header-field flexrow">
+                <div class="header-title">
+                    <span>Custom Qualities</span>
                 </div>
                 <div class="header-field-add">
                     <a class="item-quality-create" data-type="skill"><i class="fa fa-plus"></i></a>

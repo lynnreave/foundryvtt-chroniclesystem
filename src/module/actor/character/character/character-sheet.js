@@ -62,7 +62,6 @@ export class CharacterSheet extends CharacterSheetBase {
     data.techniquesTypes = CSConstants.TechniqueType;
     data.techniquesCosts = CSConstants.TechniqueCost;
 
-
     character.owned.techniques.forEach((technique) => {
       let techniqueData = technique.system;
       let works = data.currentInjuries = Object.values(techniqueData.works);

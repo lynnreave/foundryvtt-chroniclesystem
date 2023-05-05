@@ -36,14 +36,12 @@ export class EffectSheet extends CSItemSheet {
         const a = event.currentTarget;
         const index = parseInt(a.dataset.id);
         const action = a.dataset.action;
-        console.log(index)
 
         // Remove existing specialty
         if (action === "delete") {
             const effect = this.item;
             let transformations = Array.from(Object.values(getData(effect).transformations));
             transformations.splice(index,1);
-            console.log(transformations)
             effect.update({"system.transformations" : transformations});
         }
     }

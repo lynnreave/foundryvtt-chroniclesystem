@@ -1,12 +1,12 @@
-import {ItemChronicle} from "./item-chronicle.js";
-import {ChronicleSystem} from "../system/ChronicleSystem.js";
-import LOGGER from "../../util/logger.js";
+import {ItemChronicle} from "../item-chronicle.js";
+import {ChronicleSystem} from "../../system/ChronicleSystem.js";
+import LOGGER from "../../../util/logger.js";
 
-export class CSWeaponItem extends ItemChronicle {
+export class Weapon extends ItemChronicle {
     onEquippedChanged(actor, isEquipped) {
         LOGGER.trace(`Weapon ${this._id} ${isEquipped? "equipped" : "unequipped" } by the actor ${actor.name} | csWeaponItem.js`);
         super.onEquippedChanged(actor, isEquipped);
-        //TODO: implement the onEquippedChanged from CSWeaponItem
+        //TODO: implement the onEquippedChanged from Weapon
     }
 
     onObtained(actor) {

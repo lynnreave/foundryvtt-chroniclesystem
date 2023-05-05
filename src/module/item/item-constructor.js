@@ -1,5 +1,5 @@
 import factory from "../../util/factory.js";
-import { CSWeaponItem } from "./csWeaponItem.js";
+import { Weapon } from "./weapon/weapon.js";
 import { ItemChronicle } from "./item-chronicle.js";
 import { CSAbilityItem } from "./csAbilityItem.js";
 import { CSArmorItem } from "./csArmorItem.js";
@@ -10,7 +10,7 @@ import { Effect } from "./effect/effect.js";
 
 // define available item types
 const itemTypes = {};
-itemTypes.weapon = CSWeaponItem;
+itemTypes.weapon = Weapon;
 itemTypes.armor = CSArmorItem;
 itemTypes.ability = CSAbilityItem;
 itemTypes.benefit = ItemChronicle;

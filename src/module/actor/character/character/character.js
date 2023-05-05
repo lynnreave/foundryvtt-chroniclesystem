@@ -22,7 +22,21 @@ export class Character extends CharacterBase {
 
         // make sure disposition effects are always refreshed
         refreshDisposition(this);
-        this.system.effects = getAllTransformers(this);
+
+        // get all active transformers
+        this.system.transformers = getAllTransformers(this);
+
+        // get composure damage resistance
+        this.system.composureResistance = getTransformation(
+            this, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
+            false, true
+        ).total;
+
+        // get damage resistance
+        this.system.damageResistance = getTransformation(
+            this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+            false, true
+        ).total;
     }
 
     calculateDerivedValues() {
@@ -41,21 +55,6 @@ export class Character extends CharacterBase {
         data.derivedStats.frustration.total = data.derivedStats.frustration.value + parseInt(data.derivedStats.frustration.modifier);
         data.derivedStats.fatigue.value = this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
         data.derivedStats.fatigue.total = data.derivedStats.fatigue.value + parseInt(data.derivedStats.fatigue.modifier);
-
-        // get composure damage resistance
-        data.composureResistance = getTransformation(
-            this, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
-            false, true
-        ).total;
-
-        // get damage resistance
-        data.damageResistance = getTransformation(
-            this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
-            false, true
-        ).total;
-
-        // get all active transformers
-        data.transformers = getAllTransformers(this);
     }
 
     getMaxInjuries() {

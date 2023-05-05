@@ -5,8 +5,10 @@ import {
 } from "../actor/character/abilities.js";
 import { getTransformation } from "../actor/character/transformers.js";
 import { getData } from "../common.js";
-import {CHARACTER_ATTR_CONSTANTS, DEGREES_CONSTANTS, EQUIPPED_CONSTANTS} from "../constants.js";
-import { CHARACTER_DISPOSITIONS } from "../selections.js";
+import {
+    CHARACTER_ATTR_CONSTANTS,
+    DEGREES_CONSTANTS
+} from "../constants.js";
 
 /**
  * The base template data object
@@ -36,6 +38,41 @@ const TEMPLATE_DATA = {
     },
     difficulty: null
 };
+
+export function adjustFormulaByWeapon (actor, formula, weapon) {
+    /**
+     * Adjust a weapon test formula by the weapon.
+     * @param {Actor} actor: the actor object wielding the weapon.
+     * @param {DiceRollFormula} formula: a formula object for the test.
+     * @param {Weapon} weapon: the weapon document object.
+     */
+    let weaponData = getData(weapon);
+
+    // update weapon formula with custom modifiers
+    if (weaponData.customPoolModifier) {
+        formula.pool += weaponData.customPoolModifier;
+    }
+    if (weaponData.customBonusDiceModifier) {
+        formula.bonusDice += weaponData.customBonusDiceModifier;
+    }
+    if (weaponData.customTestModifier) {
+        formula.modifier += weaponData.customTestModifier;
+    }
+
+    // handle training requirements
+    if (!weaponData.training)
+        return formula;
+    let poolModifier = formula.bonusDice - weaponData.training;
+    if (poolModifier <= 0) {
+        formula.pool += poolModifier;
+        formula.bonusDice = 0;
+    } else {
+        formula.bonusDice = poolModifier;
+    }
+
+    // return
+    return formula;
+}
 
 export function getAbilityTestFormula(actor, abilityName, specialtyName = null) {
     /**

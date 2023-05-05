@@ -1,4 +1,5 @@
 import {
+    adjustFormulaByWeapon,
     getAbilityTestFormula,
     getBaseInfluenceForTechnique,
     getCurrentTarget,
@@ -29,7 +30,7 @@ const defaultAbility = {
     _id: "someId", name: "someName", type: "ability", system: {rating: 5, modifier: 0}
 };
 const defaultWeapon = {
-    _id: "someId", name: "someName", type: "weapon", damageValue: 3
+    _id: "someId", name: "someName", type: "weapon", damageValue: 3, system: {}
 };
 const defaultArmor = {
     _id: "someId", name: "someName", type: "armor", system: {equipped: 1, rating: 5}
@@ -39,6 +40,49 @@ const defaultTransformer = {_id: "source", mod: 1, isDocument: false};
 const defaultDifficulty: number = 6;
 
 describe("rolls.js", () => {
+    describe("adjust formula by weapon", () => {
+        test("custom pool modifier", () => {
+            let character: TestCharacter = new TestCharacter();
+            let weaponDoc = {name: "someName", system: {customPoolModifier: 1}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+            expect(adjustedFormula.pool).toStrictEqual(6)
+        });
+        test("custom bonus dice modifier", () => {
+            let character: TestCharacter = new TestCharacter();
+            let weaponDoc = {name: "someName", system: {customBonusDiceModifier: 1}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+            expect(adjustedFormula.bonusDice).toStrictEqual(5)
+        });
+        test("custom bonus dice modifier", () => {
+            let character: TestCharacter = new TestCharacter();
+            let weaponDoc = {name: "someName", system: {customTestModifier: 1}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+            expect(adjustedFormula.modifier).toStrictEqual(4)
+        });
+        test("training", () => {
+            let character: TestCharacter = new TestCharacter();
+            let weaponDoc = {name: "someName", system: {training: 1}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+            expect(adjustedFormula.bonusDice).toStrictEqual(3)
+        });
+        test("training insufficient", () => {
+            let character: TestCharacter = new TestCharacter();
+            let weaponDoc = {name: "someName", system: {training: 5}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+            expect(adjustedFormula.pool).toStrictEqual(4)
+            expect(adjustedFormula.bonusDice).toStrictEqual(0)
+        });
+    });
     describe("get ability test formula", () => {
         test("ability exists", () => {
             let character: TestCharacter = new TestCharacter();

@@ -16,6 +16,19 @@ import { getData } from "../../../common.js";
  */
 export class Unit extends CharacterBase {
 
+    prepareData() {
+        super.prepareData();
+
+        // get all active transformers
+        this.system.transformers = getAllTransformers(this);
+
+        // get damage resistance
+        this.system.damageResistance = getTransformation(
+            this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+            false, true
+        ).total;
+    }
+
     calculateDerivedValues() {
         let data = getData(this);
 
@@ -68,14 +81,5 @@ export class Unit extends CharacterBase {
         data.discipline.total = data.discipline.value + data.discipline.modifier;
         data.discipline.totalWithOrders = data.discipline.total
             + parseInt(data.discipline.ordersReceivedModifier);
-
-        // get damage resistance
-        data.damageResistance = getTransformation(
-            this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
-            false, true
-        ).total;
-
-        // get all active transformers
-        data.transformers = getAllTransformers(this);
     }
 }

@@ -91,6 +91,7 @@
       "relationshipItemSheet": "Relationship Sheet",
       "heroItemSheet": "Hero Sheet",
       "effectItemSheet": "Effect Sheet",
+      "weaponItemSheet": "Weapon Sheet",
       "generalLabels": {
         "none": "None",
         "description": "Description",
@@ -291,6 +292,7 @@
         "run": "run",
         "seduce": "seduce",
         "stewardship": "stewardship",
+        "strength": "strength",
         "taunt": "taunt"
       },
       "qualities": {

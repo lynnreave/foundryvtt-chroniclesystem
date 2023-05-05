@@ -10,6 +10,7 @@ import {
     KEY_CONSTANTS
 } from "../constants.js";
 import {
+    adjustFormulaByWeapon,
     getAbilityTestFormula,
     getFormula
 } from "../roll/rolls.js";
@@ -132,34 +133,6 @@ async function handleRollAsync(rollType, actor, showModifierDialog = false) {
 
     let csRoll = new RollChronicle(roll_definition[1], formula);
     return await csRoll.doRoll(actor, true, roll_definition[0]);
-}
-
-function adjustFormulaByWeapon (actor, formula, weapon) {
-    let weaponData = weapon.system;
-
-    // update weapon formula with custom modifiers
-    if (weaponData.customPoolModifier) {
-        formula.pool += weaponData.customPoolModifier;
-    }
-    if (weaponData.customBonusDiceModifier) {
-        formula.bonusDice += weaponData.customBonusDiceModifier;
-    }
-    if (weaponData.customTestModifier) {
-        formula.modifier += weaponData.customTestModifier;
-    }
-
-    if (!weaponData.training)
-        return formula;
-    let poolModifier = formula.bonusDice - weaponData.training;
-
-    if (poolModifier <= 0) {
-        formula.pool += poolModifier;
-        formula.bonusDice = 0;
-    } else {
-        formula.bonusDice = poolModifier;
-    }
-
-    return formula;
 }
 
 ChronicleSystem.adjustFormulaByWeapon = adjustFormulaByWeapon;

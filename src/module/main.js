@@ -11,6 +11,7 @@ import { CSItemSheet } from "./item/sheets/csItemSheet.js";
 import { CSRelationshipItemSheet } from "./item/sheets/csRelationshipItemSheet.js";
 import { CSTechniqueItemSheet } from "./item/sheets/cs-technique-item-sheet.js";
 import { EffectSheet } from "./item/effect/effect-sheet.js";
+import { WeaponSheet } from "./item/weapon/weapon-sheet.js";
 import { UnitSheet } from "./actor/character/unit/unit-sheet.js";
 import itemConstructor from "./item/item-constructor.js";
 import LOGGER from "../util/logger.js";
@@ -71,7 +72,12 @@ Hooks.once("init", async function () {
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("chroniclesystem", CSItemSheet, {
     label: SystemUtils.localize("CS.sheets.itemSheet"),
-    types: ["armor", "weapon", "equipment", "benefit", "drawback"],
+    types: ["armor", "equipment", "benefit", "drawback"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", WeaponSheet, {
+    label: SystemUtils.localize("CS.sheets.weaponItemSheet"),
+    types: ["weapon"],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", CSAbilityItemSheet, {
