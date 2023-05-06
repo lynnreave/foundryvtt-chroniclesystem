@@ -29,6 +29,8 @@ class i18n {
         return "persuasion";
       case KEY_CONSTANTS.RUN:
         return "run";
+      case KEY_CONSTANTS.STRENGTH:
+        return "strength";
     }
   }
 }

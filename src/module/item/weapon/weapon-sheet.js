@@ -5,6 +5,15 @@ import { CSItemSheet } from "../sheets/csItemSheet.js";
  * @extends {CSItemSheet}
  */
 export class WeaponSheet extends CSItemSheet {
+
+    /** @override */
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            classes: ["worldbuilding","chroniclesystem", "sheet", "item", "weapon"],
+            width: 800,
+            height: 800,
+        });
+    }
     activateListeners(html) {
         super.activateListeners(html);
 

@@ -8,9 +8,15 @@ import {
   updateTempTransformers
 } from "./transformers.js";
 import {
-  getAbilities, getAbility, getAbilityBySpecialty, getAbilityValue
+  getAbilities,
+  getAbility,
+  getAbilityBySpecialty,
+  getAbilityValue
 } from "./abilities.js";
-import { calculateCombatDefense, calculateMovementData } from "./calculations.js";
+import {
+  calculateCombatDefense,
+  calculateMovementData
+} from "./calculations.js";
 
 /**
  * The base Actor entity for Character Actor types.

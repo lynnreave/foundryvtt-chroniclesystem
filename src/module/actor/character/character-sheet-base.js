@@ -10,9 +10,7 @@ import { getData } from "../../common.js";
 import { onEquippedChanged } from "../../item/effect/helpers.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
 import { updateWeaponDefendingState } from "./character/helpers.js";
-import { getAbilityBySpecialty } from "./abilities.js";
-import SystemUtils from "../../../util/systemUtils.js";
-import { KEY_CONSTANTS } from "../../constants.js";
+import { getWeaponTestDataForActor } from "./helpers.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -58,32 +56,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
 
     character.owned.weapons.forEach((weapon) => {
-      let weaponData = weapon.system;
-      let info = weaponData.specialty.split(':');
-      if (info.length < 2)
-        return "";
-      let formula = ChronicleSystem.getActorAbilityFormula(data.actor, info[0], info[1]);
-      formula = ChronicleSystem.adjustFormulaByWeapon(data.actor, formula, weapon);
-      let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
-      if (matches) {
-        if (matches.length === 4) {
-          let ability = data.actor.getAbilityValue(matches[1]);
-          weapon.damageValue = eval(`${ability}${matches[2]}${matches[3]}`);
-        }
-      }
-      // update for powerful
-      if (weaponData.isPowerful) {
-        let [athletics, strength] =  getAbilityBySpecialty(
-            data.actor,
-            SystemUtils.localize(KEY_CONSTANTS.ATHLETICS),
-            SystemUtils.localize(KEY_CONSTANTS.STRENGTH)
-        );
-        if (strength && strength.rating && strength.rating > 0) {
-          weapon.damageValue += strength.rating;
-        }
-      }
-      // update weapon formula
-      weapon.formula = formula;
+      getWeaponTestDataForActor(data.actor, weapon);
     });
 
     data.character = character;
