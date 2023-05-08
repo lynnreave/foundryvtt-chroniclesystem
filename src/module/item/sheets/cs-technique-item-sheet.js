@@ -1,7 +1,7 @@
-import {CSItemSheet} from "./csItemSheet.js";
+import {ItemSheetChronicle} from "../item-sheet-chronicle.js";
 import {CSConstants} from "../../system/csConstants.js";
 
-export class CSTechniqueItemSheet extends CSItemSheet {
+export class CSTechniqueItemSheet extends ItemSheetChronicle {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             classes: ["chroniclesystem", "technique", "sheet", "item"],

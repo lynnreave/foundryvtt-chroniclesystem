@@ -9,6 +9,10 @@ import {
     CHARACTER_ATTR_CONSTANTS,
     DEGREES_CONSTANTS
 } from "../constants.js";
+import {
+    CRITICAL_RESULTS,
+    FUMBLE_RESULTS
+} from "../selections.js";
 
 /**
  * The base template data object
@@ -267,6 +271,23 @@ export function getFormula(rollDef, actor) {
     return formula;
 }
 
+export function getNumOfRolled(num, dieResults) {
+    /**
+     * Get the number of specified dies rolled from a test.
+     * @param {Array} dieResults: the final results from a Die evaluate().
+     * @returns {number}: the number of specified dice rolled.
+     */
+    let numDice = 0;
+    // check if all active dice are 1s
+    dieResults.forEach((result) => {
+        if (result.active && result.result === num) {
+            numDice += 1;
+        }
+    });
+    // return
+    return numDice
+}
+
 export function getTestDifficultyFromCurrentTarget(rollType, target) {
     /**
      * Get test difficulty from the current target of an Actor.
@@ -371,6 +392,7 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
         rollType, templateData.target
     );
     if (difficultyData.difficulty) {
+        // update w/ degrees
         let degreesData = getDegrees(
             difficultyData.difficulty, templateData.roll.total
         );
@@ -378,12 +400,65 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
             degrees: degreesData.num,
             text: degreesData.label
         };
+        // update w/ calculated damage
         if (damageValue) {
             let totalDamage = degreesData.num * damageValue;
             if (resistance) { totalDamage -= resistance; }
             templateData.difficulty.damage = Math.max(totalDamage, 0);
         }
+        // update w/ critical or fumble
+        if (rollType === "weapon-test") {
+            if (isCritical(templateData.roll.total, difficultyData.difficulty)) {
+                // get number of 6s rolled
+                let numSixes = Math.min(Math.max(getNumOfRolled(6, dieResults) - 1, 0), 8);
+                templateData.difficulty.criticalData = {
+                    num: numSixes,
+                    result: CRITICAL_RESULTS[numSixes],
+                    results: CRITICAL_RESULTS
+                };
+                // handle solid hit
+                if (numSixes === 0) {
+                    templateData.difficulty.criticalData.damage = templateData.difficulty.damage + (2 * degreesData.num)
+                } else if (numSixes === 1) {
+                    templateData.difficulty.criticalData.damage = templateData.difficulty.damage + (4 * degreesData.num)
+                }
+            } else if (isFumble(templateData.dice)) {
+                let numOnes = Math.min(Math.max(getNumOfRolled(1, dieResults) - 1, 0), 8);
+                templateData.difficulty.fumbleData = {
+                    num: numOnes,
+                    result: FUMBLE_RESULTS[numOnes],
+                    results: FUMBLE_RESULTS
+                };
+            }
+        }
     }
     // return
     return templateData;
+}
+
+export function isCritical(result, difficulty) {
+    /**
+     * Determine if a (weapon) test result is a critical.
+     * @param {number} result: the result (total) of the test.
+     * @param {difficulty} difficulty: the difficulty of the test.
+     * @returns {boolean}: whether the test result is a critical.
+     */
+    return (result - difficulty) >= 10;
+}
+
+export function isFumble(dieResults) {
+    /**
+     * Determine if a (weapon) test result is a fumble.
+     * @param {Array} dieResults: the final results from a Die evaluate().
+     * @returns {boolean}: whether the test result is a fumble.
+     */
+    let isFumble = true;
+    // check if all active dice are 1s
+    dieResults.forEach((result) => {
+        if (result.active && result.result > 1) {
+            isFumble = false;
+        }
+    });
+    // return
+    return isFumble
 }

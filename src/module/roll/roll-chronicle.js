@@ -1,8 +1,6 @@
 import SystemUtils from "../../util/systemUtils.js";
 import {
-    getDegrees,
-    getRollTemplateData,
-    getTestDifficultyFromCurrentTarget
+    getRollTemplateData
 } from "./rolls.js";
 
 /**

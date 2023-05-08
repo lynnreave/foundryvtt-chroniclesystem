@@ -1,6 +1,6 @@
-import {CSItemSheet} from "./csItemSheet.js";
+import {ItemSheetChronicle} from "../item-sheet-chronicle.js";
 
-export class CSHoldingItemSheet extends CSItemSheet {
+export class CSHoldingItemSheet extends ItemSheetChronicle {
 
     getData() {
         const data = super.getData();

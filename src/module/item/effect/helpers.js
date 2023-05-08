@@ -24,7 +24,7 @@ export function onEquippedChanged(effect, actor, isEquipped) {
             // get correct target value
             let target;
             if (transformation.target) {
-                target = transformation.target.toLowerCase().replaceAll(" ", "_")
+                target = transformation.target.trim().toLowerCase().replaceAll(" ", "_")
             }
             if (target) {
                 for (let type of transformerTypes) {
@@ -44,7 +44,7 @@ export function onEquippedChanged(effect, actor, isEquipped) {
             // get correct target value
             let target;
             if (transformation.target) {
-                target = transformation.target.toLowerCase().replaceAll(" ", "_")
+                target = transformation.target.trim().toLowerCase().replaceAll(" ", "_")
             }
             if (target) {
                 for (let type of transformerTypes) {

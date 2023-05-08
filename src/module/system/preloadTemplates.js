@@ -6,14 +6,13 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/chroniclesystem/templates/items/partials/physical-item.hbs',
         'systems/chroniclesystem/templates/items/partials/equipment-item.hbs',
 
-        'systems/chroniclesystem/templates/items/relationship.hbs',
-
-        'systems/chroniclesystem/templates/items/effect.hbs',
-
         'systems/chroniclesystem/templates/items/tabs/technique-details-tab.hbs',
         'systems/chroniclesystem/templates/items/tabs/technique-works-tab.hbs',
 
         'systems/chroniclesystem/templates/actors/partials/tabs/abilities-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/actions-combat-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/actions-intrigue-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/orders-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/combat-and-intrigue-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/qualities-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/sorcery-tab.hbs',

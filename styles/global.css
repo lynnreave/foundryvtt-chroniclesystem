@@ -89,7 +89,7 @@
   max-height: 100%;
   flex-grow: 1;
   display: flex;
-  height: 200px;
+  height: 250px;
   width: 100%;
   position: relative;
   word-break: break-word;
@@ -226,8 +226,6 @@
   min-width: 560px;
   min-height: 420px;
 }
-
-
 
 .chroniclesystem.sheet .header-field.header-title {
   flex: 1.95;

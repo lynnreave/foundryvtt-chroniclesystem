@@ -10,18 +10,21 @@ import { Effect } from "./effect/effect.js";
 
 // define available item types
 const itemTypes = {};
-itemTypes.weapon = Weapon;
-itemTypes.armor = CSArmorItem;
 itemTypes.ability = CSAbilityItem;
+itemTypes.actionCombat = ItemChronicle;
+itemTypes.actionIntrigue = ItemChronicle;
+itemTypes.armor = CSArmorItem;
 itemTypes.benefit = ItemChronicle;
 itemTypes.drawback = ItemChronicle;
+itemTypes.effect = Effect;
 itemTypes.equipment = ItemChronicle;
 itemTypes.event = CSEventItem;
-itemTypes.holding = CSHoldingItem;
-itemTypes.technique = CSTechniqueItem;
-itemTypes.relationship = ItemChronicle;
 itemTypes.hero = ItemChronicle;
-itemTypes.effect = Effect;
+itemTypes.holding = CSHoldingItem;
+itemTypes.order = ItemChronicle;
+itemTypes.relationship = ItemChronicle;
+itemTypes.technique = CSTechniqueItem;
+itemTypes.weapon = Weapon;
 // add any new item types here as itemTypes.newType = newType;
 
 // the item constructor

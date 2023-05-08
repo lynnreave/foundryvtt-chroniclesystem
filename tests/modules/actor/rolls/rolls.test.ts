@@ -5,8 +5,11 @@ import {
     getCurrentTarget,
     getDegrees,
     getFormula,
+    getNumOfRolled,
     getRollTemplateData,
-    getTestDifficultyFromCurrentTarget
+    getTestDifficultyFromCurrentTarget,
+    isCritical,
+    isFumble
 // @ts-ignore
 } from "@roll/rolls";
 // @ts-ignore
@@ -462,6 +465,18 @@ describe("rolls.js", () => {
             expect(formula.toStr()).toStrictEqual(expected);
         });
     });
+    describe("get num sixes rolled", () => {
+        test("call", () => {
+            let dieResults = [
+                {result: 1, active: true},
+                {result: 6, active: true},
+                {result: 6, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            expect(getNumOfRolled(6, dieResults)).toStrictEqual(2);
+            expect(getNumOfRolled(1, dieResults)).toStrictEqual(1);
+        });
+    });
     describe("get roll template data", () => {
         test("weapon test", () => {
             let character: TestCharacter = new TestCharacter();
@@ -548,6 +563,77 @@ describe("rolls.js", () => {
             expect(output.difficulty.text).toStrictEqual(DEGREES_CONSTANTS["2"]);
             expect(output.difficulty.damage).toStrictEqual(8-4);
         });
+        test("critical 2 sixes", () => {
+            let character: TestCharacter = new TestCharacter();
+            character.name = "Some Name";
+            character.img = "/some/img/path";
+            let weaponDoc = Object.assign({}, defaultWeapon)
+            character.system.owned.weapons = [weaponDoc];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.name = "Other Name";
+            targetCharacter.img = "/other/img/path";
+            targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
+            let armorDoc = Object.assign({}, defaultArmor)
+            targetCharacter.owned.armors = [armorDoc];
+            addTransformer(
+                targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+                armorDoc._id, armorDoc.system.rating,
+                true, true
+            );
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollType: string = "weapon-test";
+            let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let roll = {total: 15};
+            formula.reRoll = 0;
+            let dieResults = [
+                {result: 6, active: true},
+                {result: 6, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            let output = getRollTemplateData(
+                character, rollType, formula, roll, dieResults, weaponDoc.name
+            );
+            expect(output.difficulty.criticalData.num).toStrictEqual(1);
+        });
+        test("fumble", () => {
+            let character: TestCharacter = new TestCharacter();
+            character.name = "Some Name";
+            character.img = "/some/img/path";
+            let weaponDoc = Object.assign({}, defaultWeapon)
+            character.system.owned.weapons = [weaponDoc];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.name = "Other Name";
+            targetCharacter.img = "/other/img/path";
+            targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
+            let armorDoc = Object.assign({}, defaultArmor)
+            targetCharacter.owned.armors = [armorDoc];
+            addTransformer(
+                targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+                armorDoc._id, armorDoc.system.rating,
+                true, true
+            );
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollType: string = "weapon-test";
+            let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let roll = {total: 0};
+            formula.reRoll = 0;
+            let dieResults = [
+                {result: 1, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            let output = getRollTemplateData(
+                character, rollType, formula, roll, dieResults, weaponDoc.name
+            );
+            expect(output.difficulty.fumbleData.num).toStrictEqual(0);
+        });
     });
     describe("get test difficulty from actor target", () => {
         test("no targets", () => {
@@ -609,6 +695,38 @@ describe("rolls.js", () => {
             expect(output.difficulty).toStrictEqual(10);
             expect(output.vFighting).toStrictEqual(5);
             expect(output.vMarksmanship).toStrictEqual(15);
+        });
+    });
+    describe("is critical", () => {
+        test("is critical", () => {
+            let result = 20;
+            let difficulty = 10;
+            expect(isCritical(result, difficulty)).toStrictEqual(true);
+        });
+        test("is not critical", () => {
+            let result = 19;
+            let difficulty = 10;
+            expect(isCritical(result, difficulty)).toStrictEqual(false);
+        });
+    });
+    describe("is fumble", () => {
+        test("is fumble", () => {
+            let dieResults = [
+                {result: 1, active: true},
+                {result: 1, active: true},
+                {result: 1, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            expect(isFumble(dieResults)).toStrictEqual(true);
+        });
+        test("is not fumble", () => {
+            let dieResults = [
+                {result: 1, active: true},
+                {result: 1, active: true},
+                {result: 5, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            expect(isFumble(dieResults)).toStrictEqual(false);
         });
     });
 });

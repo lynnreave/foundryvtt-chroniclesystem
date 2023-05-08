@@ -1,0 +1,54 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+"systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body flexrow">
+        <section class="details">
+            <header class="header-field">
+                <div class="header-title">
+                    <span>{{localize "CS.sheets.generalLabels.details"}}</span>
+                </div>
+            </header>
+            <table>
+                <tr>
+                    <td><header class="subheader-field"><span>
+                        {{localize "CS.sheets.generalLabels.general"}}
+                    </span></header></td>
+                    <td><header class="subheader-field"><span>&nbsp;</span></header></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="form-fields flex-4">
+                            <select name="system.type">
+                                {{selectOptions combatActionTypesChoices selected=item.system.type localize=true}}
+                            </select>
+                        </span>
+                        <label for="system.type" class="flex-4">
+                            {{localize "CS.sheets.actionItem.action"}}
+                        </label>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><header class="subheader-field"><span>
+                        {{localize "CS.sheets.generalLabels.warfare"}}
+                    </span></header></td>
+                    <td><header class="subheader-field"><span>&nbsp;</span></header></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.actionItem.isWarfare"}}</span></td>
+                    <td><input class="item-flag-toggle" type="checkbox" name="isWarfare" id="isWarfare" value="{{item.system.isWarfare}}" {{#if item.system.isWarfare}} checked {{/if}}/></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.actionItem.isWarfareTurnEnd"}}</span></td>
+                    <td><input class="item-flag-toggle" type="checkbox" name="isWarfareTurnEnd" id="isWarfareTurnEnd" value="{{item.system.isWarfareTurnEnd}}" {{#if item.system.isWarfareTurnEnd}} checked {{/if}}/></td>
+                </tr>
+            </table>
+        </section>
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+            <button class="item-send-to-chat header-field">
+                Send to Chat
+            </button>
+        </section>
+    </main>
+</form>

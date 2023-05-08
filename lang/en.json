@@ -83,6 +83,7 @@
       }
     },
     "sheets": {
+      "actionCombatSheet": "Combat Action",
       "characterSheet": "Character Sheet",
       "houseSheet": "House Sheet",
       "unitSheet": "Unit Sheet",
@@ -94,12 +95,20 @@
       "weaponItemSheet": "Weapon Sheet",
       "generalLabels": {
         "none": "None",
+        "combat": "Combat",
+        "delete": "Delete",
         "description": "Description",
         "details": "Details",
+        "edit": "Edit",
+        "effects": "Effects",
+        "general": "General",
+        "intrigue": "Intrigue",
         "name": "Name",
-        "total": "Total",
+        "other": "Other",
         "others": "Others",
-        "effects": "Effects"
+        "total": "Total",
+        "type": "Type",
+        "warfare": "Warfare"
       },
       "house": {
         "character": {
@@ -170,13 +179,15 @@
         },
         "tabs": {
           "abilities": "Abilities",
+          "actions-combat": "Combat Actions",
+          "actions-intrigue": "Intrigue Actions",
           "combat-intrigue": "Combat and Intrigue",
-          "qualities": "Qualities",
-          "sorcery": "Sorcery",
-          "equipments": "Equipments",
-          "relationships": "Relationships",
+          "description": "Description",
           "effects": "Effects",
-          "description": "Description"
+          "equipments": "Equipments",
+          "qualities": "Qualities",
+          "relationships": "Relationships",
+          "sorcery": "Sorcery"
         }
       },
       "unit": {
@@ -211,8 +222,15 @@
         },
         "tabs": {
           "formation": "Formation",
+          "orders": "Orders",
           "warfare": "Warfare"
         }
+      },
+      "actionItem": {
+        "isWarfare": "Warfare Action",
+        "isWarfareTurnEnd": "2nd Player Action",
+        "isWarfareTurnEnds": "2nd Player Actions",
+        "action": "Action"
       },
       "eventItem": {
         "playerChoice": "Is a player choice?",
@@ -259,27 +277,66 @@
       }
     },
     "constants": {
-      "targets": {
-        "all": "All",
-        "bulk": "Bulk",
-        "combat_defense": "Combat Defense",
-        "combat_defense_fighting": "Fighting Defense",
-        "combat_defense_marksmanship": "Marksmanship Defense",
-        "composure_resistance": "Composure DR",
-        "damage_resistance": "Health DR",
-        "discipline": "Discipline",
-        "movement": "Movement"
-      },
       "abilities": {
         "agility": "agility",
         "athletics": "athletics",
         "awareness": "awareness",
         "cunning": "cunning",
         "deception": "deception",
-        "persuasion": "persuasion",
         "endurance": "endurance",
+        "marksmanship": "marksmanship",
+        "persuasion": "persuasion",
         "status": "status",
+        "thievery": "thievery",
         "will": "will"
+      },
+      "combatActionTypes": {
+        "free": "Free",
+        "greater": "Greater",
+        "lesser": "Lesser",
+        "triggered": "Triggered",
+        "varies": "Varies"
+      },
+      "criticalResults": {
+        "critical": "Critical",
+        "solidHit": "Solid Hit",
+        "solidHitDesc": "You land a solid blow. Increase the base damage of your weapon for this attack by +2.",
+        "powerfulHit": "Powerful Hit",
+        "powerfulHitDesc": "Your attack leaves your opponent reeling. Increase the base damage of your weapon for this attack by +4.",
+        "bloodyWound": "Bloody Wound",
+        "bloodyWoundDesc": "Your attack leaves a bleeding wound. In addition to the damage dealt, your target gains 1 injury. This injury does not reduce damage. If your opponent cannot take another injury, they take a wound. If they cannot take a wound, they die.",
+        "cripplingWound": "Crippling Wound",
+        "cripplingWoundDesc": "You cripple your opponent with a dreadful wound. In addition to the damage dealt, your target gains 1 wound. This injury does not reduce damage. If your opponent cannot take another wound, they die.",
+        "killingBlow": "Killing Blow",
+        "killingBlowDesc": "Your attack kills your opponent instantly.",
+        "terribleBlow": "Terrible Blow",
+        "terribleBlowDesc": "Not only does your attack kill your opponent instantly, but you deal your base damage (unmodified by degree) to all opponents adjacent to the victim of the terrible blow.",
+        "impressiveDeath": "Impressive Death",
+        "impressiveDeathDesc": "Your killing attack is so impressive, all your allies gain +1B on all tests for the duration of the combat.",
+        "horribleDeath": "Horrible Death",
+        "horribleDeathDesc": "You kill your opponent with such force that you sicken all who witness the act. All characters (allies and enemies) that witnessed the attack must succeed on Challenging (9) Courage Will tests or take –1D on tests for one round. For the duration of the combat, you gain a +1B on all tests."
+      },
+      "fumbleResults": {
+        "fumble": "Fumble",
+        "injureSelf": "Injure Self",
+        "injureSelfDesc": "Poor handling of the weapon results in a nasty injury. You hit yourself and take weapon damage.",
+        "strikeAlly": "Strike Ally",
+        "strikeAllyDesc": "You strike an ally instead of the intended target. If there’s an adjacent ally, test Fighting, or if there’s an ally in range, test Marksmanship to hit your ally as normal.",
+        "drop": "Drop",
+        "dropDesc": "The weapon slips from your hand and lands 1d6 yards away in a random direction.",
+        "minorBreak": "Minor Break",
+        "minorBreakDesc": "The weapon becomes damaged from heavy use. Reduce its damage by 1. If castle-forged or better, treat this result as 3.",
+        "majorBreak": "Major Break",
+        "majorBreakDesc": "The weapon snaps or becomes badly damaged. The weapon is worthless and cannot be repaired. If castle-forged, treat as 4. If exotic steel, treat as 3.",
+        "slipperyGrip": "Slippery Grip",
+        "slipperyGripDesc": "Blood or sweat makes the weapon’s grip slippery. Take –1D on all attacks until the end of your next turn.",
+        "bloodInTheEyes": "Blood in the Eyes",
+        "bloodInTheEyesDesc": "Blood or sweat falls into your eyes, affecting your vision. Take –1D on all tests until the end of your next turn.",
+        "overbalanced": "Overbalanced",
+        "overbalancedDesc": "In your eagerness to hit your foe, you lose your balance and give your opponent an opening. Take a –5 penalty to Combat Defense until the start of your next turn."
+      },
+      "qualities": {
+        "bulk": "bulk"
       },
       "specialties": {
         "act": "act",
@@ -295,8 +352,16 @@
         "strength": "strength",
         "taunt": "taunt"
       },
-      "qualities": {
-        "bulk": "bulk"
+      "targets": {
+        "all": "All",
+        "bulk": "Bulk",
+        "combat_defense": "Combat Defense",
+        "combat_defense_fighting": "Fighting Defense",
+        "combat_defense_marksmanship": "Marksmanship Defense",
+        "composure_resistance": "Composure DR",
+        "damage_resistance": "Health DR",
+        "discipline": "Discipline",
+        "movement": "Movement"
       },
       "others": {
         "wounds": "Wounds",

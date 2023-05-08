@@ -1,0 +1,34 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+"systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body flexrow">
+        <section class="details">
+            <header class="header-field">
+                <div class="header-title">
+                    <span>{{localize "CS.sheets.generalLabels.details"}}</span>
+                </div>
+            </header>
+            <table>
+                <tr>
+                    <td><label for="system.difficulty">Difficulty</label></td>
+                    <td>
+                        <span class="form-fields">
+                            <input
+                                    id="system.difficulty"
+                                    class="small-field center"
+                                    name="system.difficulty"
+                                    type="text"
+                                    value="{{item.system.difficulty}}"
+                                    placeholder="0"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+        </section>
+    </main>
+</form>

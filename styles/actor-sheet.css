@@ -499,3 +499,13 @@
     margin: 3px;
     padding: 3px;
 }
+
+.chroniclesystem.sheet.actor .item-controls-column {
+    margin: 3px;
+    padding: 3px 15px;
+}
+
+.chroniclesystem.sheet.actor .item-control {
+    margin: 1px;
+    padding: 1px;
+}

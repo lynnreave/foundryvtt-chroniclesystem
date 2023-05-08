@@ -1,0 +1,24 @@
+<div class="tab flexrow" data-group="primary" data-tab="actions-intrigue">
+    <section class="intrigue">
+        <header class="header-field">
+            <span>{{localize "CS.sheets.generalLabels.intrigue"}}</span>
+        </header>
+        <ol class="list equipment-list">
+            <li class="list-header flexrow">
+                <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+            </li>
+            {{#each character.owned.actionsIntrigue as |action index|}}
+                <li  class="item flexrow" data-item-id="{{_id}}">
+                    <a class="item flexrow" data-item-id="{{_id}}">
+                        <div class="weapon-label field">{{action.name}}</div>
+                    </a>
+                    <div class="item-controls padding-3">
+                        <a class="item-control item-edit" title="{{localize "CS.sheets.generalLabels.edit"}}"><i class="fas fa-edit"></i></a>
+                        <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsIntrigue" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>
+            {{/each}}
+        </ol>
+    </section>
+</div>

@@ -3,18 +3,6 @@ import { UnitStatus } from "./type/unit-status.js";
 import { UnitFacing } from "./type/unit-facing.js";
 import { Formation } from "./type/formation.js";
 
-export const EFFECT_TARGETS =[
-    {name: "CS.constants.abilities.all", target: "all"},
-    {name: "CS.constants.abilities.bulk", target: "bulk"},
-    {name: "CS.constants.abilities.combat_defense", target: "combat_defense"},
-    {name: "CS.constants.abilities.combat_defense_fighting", target: "combat_defense_fighting"},
-    {name: "CS.constants.abilities.combat_defense_marksmanship", target: "combat_defense_marksmanship"},
-    {name: "CS.constants.abilities.composure_resistance", target: "composure_resistance"},
-    {name: "CS.constants.abilities.damage_resistance", target: "damage_resistance"},
-    {name: "CS.constants.abilities.discipline", target: "discipline"},
-    {name: "CS.constants.abilities.movement", target: "movement"},
-]
-
 /**
  * Available character Actor dispositions.
  * @type {Array}
@@ -28,6 +16,64 @@ export const CHARACTER_DISPOSITIONS = [
     new Disposition("CS.sheets.character.dispositions.unfriendly", 6, 2, -4),
     new Disposition("CS.sheets.character.dispositions.malicious", 7, 3, -6),
 ];
+
+/**
+ * Available combat action types.
+ * @type {Array}
+ */
+export const COMBAT_ACTION_TYPES = [
+    {name: "CS.constants.combatActionTypes.free"},
+    {name: "CS.constants.combatActionTypes.lesser"},
+    {name: "CS.constants.combatActionTypes.greater"},
+    {name: "CS.constants.combatActionTypes.varies"},
+    {name: "CS.constants.combatActionTypes.triggered"}
+]
+
+/**
+ * Critical results based on number of d6s rolled for a test.
+ * @type {Array}
+ */
+export const CRITICAL_RESULTS = [
+    {name: "CS.constants.criticalResults.solidHit", desc: "CS.constants.criticalResults.solidHitDesc"},
+    {name: "CS.constants.criticalResults.powerfulHit", desc: "CS.constants.criticalResults.powerfulHitDesc"},
+    {name: "CS.constants.criticalResults.bloodyWound", desc: "CS.constants.criticalResults.bloodyWoundDesc"},
+    {name: "CS.constants.criticalResults.cripplingWound", desc: "CS.constants.criticalResults.cripplingWoundDesc"},
+    {name: "CS.constants.criticalResults.killingBlow", desc: "CS.constants.criticalResults.killingBlowDesc"},
+    {name: "CS.constants.criticalResults.terribleBlow", desc: "CS.constants.criticalResults.terribleBlowDesc"},
+    {name: "CS.constants.criticalResults.impressiveDeath", desc: "CS.constants.criticalResults.impressiveDeathDesc"},
+    {name: "CS.constants.criticalResults.horribleDeath", desc: "CS.constants.criticalResults.horribleDeathDesc"}
+]
+
+/**
+ * Targets for transformers.
+ * @type {Array}
+ */
+export const EFFECT_TARGETS = [
+    {name: "CS.constants.abilities.all", target: "all"},
+    {name: "CS.constants.abilities.bulk", target: "bulk"},
+    {name: "CS.constants.abilities.combat_defense", target: "combat_defense"},
+    {name: "CS.constants.abilities.combat_defense_fighting", target: "combat_defense_fighting"},
+    {name: "CS.constants.abilities.combat_defense_marksmanship", target: "combat_defense_marksmanship"},
+    {name: "CS.constants.abilities.composure_resistance", target: "composure_resistance"},
+    {name: "CS.constants.abilities.damage_resistance", target: "damage_resistance"},
+    {name: "CS.constants.abilities.discipline", target: "discipline"},
+    {name: "CS.constants.abilities.movement", target: "movement"}
+]
+
+/**
+ * Fumble results based on number of d6s rolled for a test.
+ * @type {Array}
+ */
+export const FUMBLE_RESULTS = [
+    {name: "CS.constants.fumbleResults.injureSelf", desc: "CS.constants.fumbleResults.injureSelfDesc"},
+    {name: "CS.constants.fumbleResults.strikeAlly", desc: "CS.constants.fumbleResults.strikeAllyDesc"},
+    {name: "CS.constants.fumbleResults.drop", desc: "CS.constants.fumbleResults.dropDesc"},
+    {name: "CS.constants.fumbleResults.minorBreak", desc: "CS.constants.fumbleResults.minorBreakDesc"},
+    {name: "CS.constants.fumbleResults.majorBreak", desc: "CS.constants.fumbleResults.majorBreakDesc"},
+    {name: "CS.constants.fumbleResults.slipperyGrip", desc: "CS.constants.fumbleResults.slipperyGripDesc"},
+    {name: "CS.constants.fumbleResults.bloodInTheEyes", desc: "CS.constants.fumbleResults.bloodInTheEyesDesc"},
+    {name: "CS.constants.fumbleResults.overbalanced", desc: "CS.constants.fumbleResults.overbalancedDesc"}
+]
 
 /**
  * Available unit Actor statuses.

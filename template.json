@@ -79,16 +79,18 @@
         "distinguishingFeatures": "",
         "personalHistory": "",
         "owned": {
-          "equipments": [],
-          "weapons": [],
-          "armors": [],
-          "qualities": [],
-          "drawbacks": [],
           "abilities": [],
-          "powers": [],
+          "actionsCombat": [],
+          "actionsIntrigue": [],
+          "armors": [],
           "benefits": [],
+          "drawbacks": [],
+          "effects": [],
+          "equipments": [],
+          "powers": [],
+          "qualities": [],
           "relationships": [],
-          "effects": []
+          "weapons": []
         },
         "currentStress": 0,
         "allies": "",
@@ -206,28 +208,32 @@
       "owned": {
         "abilities": [],
         "armors": [],
-        "heroes": [],
+        "effects": [],
         "equipments": [],
-        "weapons": [],
-        "effects": []
+        "heroes": [],
+        "orders": [],
+        "weapons": []
       },
       "owner": ""
     }
   },
   "Item": {
     "types": [
-      "armor",
-      "weapon",
       "ability",
-      "equipment",
+      "actionCombat",
+      "actionIntrigue",
+      "armor",
       "benefit",
       "drawback",
+      "effect",
+      "equipment",
       "event",
-      "holding",
-      "technique",
-      "relationship",
       "hero",
-      "effect"
+      "holding",
+      "order",
+      "relationship",
+      "technique",
+      "weapon"
     ],
     "templates": {
       "physicalItem": {
@@ -289,6 +295,25 @@
       "rating": 2,
       "modifier": 0,
       "specialties": []
+    },
+    "actionCombat": {
+      "templates": [
+        "itemDescription"
+      ],
+      "type": 0,
+      "isWarfare": false,
+      "isWarfareTurnEnd": false
+    },
+    "actionIntrigue": {
+      "templates": [
+        "itemDescription"
+      ]
+    },
+    "order": {
+      "templates": [
+        "itemDescription"
+      ],
+      "difficulty": 0
     },
     "benefit": {
       "templates": [
@@ -367,8 +392,7 @@
       "templates": [
         "itemDescription"
       ],
-      "disposition": "Indifferent",
-      "targetId": ""
+      "disposition": "Indifferent"
     },
     "hero": {
       "equipped": 0,

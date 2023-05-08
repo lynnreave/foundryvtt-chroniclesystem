@@ -1,6 +1,6 @@
-import {CSItemSheet} from "./csItemSheet.js";
+import {ItemSheetChronicle} from "../item-sheet-chronicle.js";
 
-export class CSAbilityItemSheet extends CSItemSheet {
+export class CSAbilityItemSheet extends ItemSheetChronicle {
     activateListeners(html) {
         super.activateListeners(html);
 

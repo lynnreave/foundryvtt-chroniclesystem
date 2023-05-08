@@ -21,7 +21,7 @@ export class ActorSheetChronicle extends ActorSheet {
         });
 
         // Update Inventory Item
-        html.find('.item-edit').click(this._showEmbeddedItemSheet.bind(this));
+        html.find('.item-edit').on("click", this._showEmbeddedItemSheet.bind(this));
         html.find('.rollable').click(this._onClickRoll.bind(this));
 
         // open another sheet

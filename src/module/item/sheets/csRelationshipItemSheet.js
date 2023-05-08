@@ -1,6 +1,6 @@
-import {CSItemSheet} from "./csItemSheet.js";
+import { ItemSheetChronicle } from "../item-sheet-chronicle.js";
 
-export class CSRelationshipItemSheet extends CSItemSheet {
+export class CSRelationshipItemSheet extends ItemSheetChronicle {
 
     getData() {
         const data = super.getData();
@@ -14,9 +14,5 @@ export class CSRelationshipItemSheet extends CSItemSheet {
             Malicious: "CS.sheets.character.dispositions.malicious"
         }
         return data;
-    }
-
-    activateListeners(html) {
-        super.activateListeners(html);
     }
 }

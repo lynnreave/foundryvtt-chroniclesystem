@@ -7,7 +7,7 @@ import { CharacterSheet } from "./actor/character/character/character-sheet.js";
 import { CSEventItemSheet } from "./item/sheets/csEventItemSheet.js";
 import { CSHoldingItemSheet } from "./item/sheets/csHoldingItemSheet.js";
 import { HouseSheet } from "./actor/house/house-sheet.js";
-import { CSItemSheet } from "./item/sheets/csItemSheet.js";
+import { ItemSheetChronicle } from "./item/item-sheet-chronicle.js";
 import { CSRelationshipItemSheet } from "./item/sheets/csRelationshipItemSheet.js";
 import { CSTechniqueItemSheet } from "./item/sheets/cs-technique-item-sheet.js";
 import { EffectSheet } from "./item/effect/effect-sheet.js";
@@ -20,6 +20,7 @@ import { preloadHandlebarsTemplates } from "./system/preloadTemplates.js";
 import { registerCustomHelpers } from "./system/handlebarsHelpers.js";
 import registerSystemSettings from "./system/settings.js";
 import SystemUtils from "../util/systemUtils.js";
+import { ActionCombatSheet } from "./item/action/action-combat-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -70,19 +71,24 @@ Hooks.once("init", async function () {
   });
   // items
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("chroniclesystem", CSItemSheet, {
-    label: SystemUtils.localize("CS.sheets.itemSheet"),
-    types: ["armor", "equipment", "benefit", "drawback"],
-    makeDefault: true,
-  });
-  Items.registerSheet("chroniclesystem", WeaponSheet, {
-    label: SystemUtils.localize("CS.sheets.weaponItemSheet"),
-    types: ["weapon"],
-    makeDefault: true,
-  });
   Items.registerSheet("chroniclesystem", CSAbilityItemSheet, {
     label: SystemUtils.localize("CS.sheets.abilityItemSheet"),
     types: ["ability"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", ActionCombatSheet, {
+    label: SystemUtils.localize("CS.sheets.actionCombatSheet"),
+    types: ["actionCombat"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", ItemSheetChronicle, {
+    label: SystemUtils.localize("CS.sheets.itemSheet"),
+    types: ["actionIntrigue", "armor", "benefit", "drawback", "equipment", "order"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", EffectSheet, {
+    label: SystemUtils.localize("CS.sheets.effectItemSheet"),
+    types: ["effect"],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", CSEventItemSheet, {
@@ -95,19 +101,19 @@ Hooks.once("init", async function () {
     types: ["holding"],
     makeDefault: true,
   });
-  Items.registerSheet("chroniclesystem", CSTechniqueItemSheet, {
-    label: SystemUtils.localize("CS.sheets.techniqueItemSheet"),
-    types: ["technique"],
-    makeDefault: true,
-  });
   Items.registerSheet("chroniclesystem", CSRelationshipItemSheet, {
     label: SystemUtils.localize("CS.sheets.relationshipItemSheet"),
     types: ["relationship"],
     makeDefault: true,
   });
-  Items.registerSheet("chroniclesystem", EffectSheet, {
-    label: SystemUtils.localize("CS.sheets.effectItemSheet"),
-    types: ["effect"],
+  Items.registerSheet("chroniclesystem", CSTechniqueItemSheet, {
+    label: SystemUtils.localize("CS.sheets.techniqueItemSheet"),
+    types: ["technique"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", WeaponSheet, {
+    label: SystemUtils.localize("CS.sheets.weaponItemSheet"),
+    types: ["weapon"],
     makeDefault: true,
   });
 

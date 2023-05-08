@@ -190,4 +190,10 @@ export const registerCustomHelpers = function () {
       let string = options.fn(this);
       return string.replaceAll(find, replace);
   });
+
+  Handlebars.registerHelper(
+      "toUpperCase",
+      function (arg1) {
+        return String(arg1).toUpperCase();
+      });
 };

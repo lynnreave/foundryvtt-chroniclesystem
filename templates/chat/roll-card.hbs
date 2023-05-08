@@ -72,6 +72,31 @@
             {{/ifDifferent}}
         </div>
         {{/if}}
+        {{#if difficulty.criticalData}}
+        <br />
+        <div class="roll-card-degrees">
+            <h2 class="result success">
+                <b>{{localize "CS.constants.criticalResults.critical"}}</b>
+            </h2>
+            <b>{{localize difficulty.criticalData.result.name}}</b>
+            <p>{{localize difficulty.criticalData.result.desc}}</p>
+            {{#ifDifferent undefined difficulty.criticalData.damage}}
+            <div class="result-outcome">
+                {{difficulty.criticalData.damage}} Damage
+            </div>
+            {{/ifDifferent}}
+        </div>
+        {{/if}}
+        {{#if difficulty.fumbleData}}
+            <br />
+            <div class="roll-card-critfumle">
+                <h2 class="result failure">
+                    <b>{{localize "CS.constants.fumbleResults.fumble"}}</b>
+                </h2>
+                <b>{{localize difficulty.fumbleData.result.name}}</b>
+                <p>{{localize difficulty.fumbleData.result.desc}}</p>
+            </div>
+        {{/if}}
     </section>
     <section class="roll-card-bottom"></section>
 </div>

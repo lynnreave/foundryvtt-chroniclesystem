@@ -9,9 +9,11 @@ import {
   updateWeaponDefendingState
 } from "./helpers.js";
 import {
-  CHARACTER_DISPOSITIONS
+  CHARACTER_DISPOSITIONS,
+  COMBAT_ACTION_TYPES
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
+import { getData } from "../../../common.js";
 
 /**
  * The ActorSheet entity for handling characters.
@@ -22,14 +24,16 @@ import { refreshEmbeddedActorData } from "../helpers.js";
 export class CharacterSheet extends CharacterSheetBase {
   itemTypesPermitted = [
       "ability",
-      "weapon",
-      "armor",
-      "equipment",
+      "actionCombat",
+      "actionIntrigue",
       "benefit",
       "drawback",
-      "technique",
+      "armor",
+      "effect",
+      "equipment",
       "relationship",
-      "effect"
+      "technique",
+      "weapon",
   ]
 
   /** @override */
@@ -54,14 +58,44 @@ export class CharacterSheet extends CharacterSheetBase {
     const data = super.getData();
     let character = data.character;
 
+    // sort
     character.owned.benefits = this._checkNull(data.itemsByType['benefit']);
     character.owned.drawbacks = this._checkNull(data.itemsByType['drawback']);
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
+
+    // actions categorize & sort
+    // combat
+    let actions = this._checkNull(data.itemsByType['actionCombat']).sort((a, b) => getData(a).type.localeCompare(getData(b).type) || a.name.localeCompare(b.name));
+    character.owned.actionsCombat = [];
+    // character.owned.actionsCombatOther = [];
+    character.owned.actionsWarfare = [];
+    character.owned.actionsWarfareTurnEnd = [];
+    actions.forEach((action) => {
+      let actionData = getData(action);
+      actionData["typeName"] = COMBAT_ACTION_TYPES[actionData.type].name;
+      if (actionData.isWarfare && actionData.isWarfareTurnEnd) {
+        character.owned.actionsWarfareTurnEnd.push(action);
+      } else if (actionData.isWarfare) {
+        character.owned.actionsWarfare.push(action);
+      // } else if ([0, 4].includes(parseInt(actionData.type))) {
+      //   character.owned.actionsCombatOther.push(action);
+      } else {
+        character.owned.actionsCombat.push(action);
+      }
+    });
+    const half = Math.ceil(character.owned.actionsCombat.length / 2);
+    character.owned.actionsCombatOne = character.owned.actionsCombat.slice(0, half);
+    character.owned.actionsCombatTwo = character.owned.actionsCombat.slice(half);
+    // intrigue
+    character.owned.actionsIntrigue = this._checkNull(data.itemsByType['actionIntrigue']).sort((a, b) => a.name.localeCompare(b.name));
+
+    // selections & data
     data.dispositions = CHARACTER_DISPOSITIONS;
     data.techniquesTypes = CSConstants.TechniqueType;
     data.techniquesCosts = CSConstants.TechniqueCost;
 
+    // update owned techniques data
     character.owned.techniques.forEach((technique) => {
       let techniqueData = technique.system;
       let works = data.currentInjuries = Object.values(techniqueData.works);
@@ -77,11 +111,12 @@ export class CharacterSheet extends CharacterSheetBase {
     });
     this._calculateIntrigueTechniques(data);
 
-    // refresh embedded relationships
+    // refresh embedded actors data
     character.owned.relationships.forEach((relationship) => {
       refreshEmbeddedActorData(relationship);
     })
 
+    // return
     data.currentInjuries = Object.values(character.injuries).length;
     data.currentWounds = Object.values(character.wounds).length;
     data.maxInjuries = this.actor.getMaxInjuries();

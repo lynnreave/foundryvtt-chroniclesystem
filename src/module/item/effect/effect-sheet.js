@@ -1,12 +1,21 @@
-import { CSItemSheet } from "../sheets/csItemSheet.js";
+import { ItemSheetChronicle } from "../item-sheet-chronicle.js";
 import { transformerTypes } from "../../actor/character/transformers.js";
 import { getData } from "../../common.js";
 
 /**
  * The ItemSheet entity for handling effects.
- * @extends {CSItemSheet}
+ * @extends {ItemSheetChronicle}
  */
-export class EffectSheet extends CSItemSheet {
+export class EffectSheet extends ItemSheetChronicle {
+
+    /** @override */
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            classes: ["worldbuilding","chroniclesystem", "sheet", "item", "weapon"],
+            width: 650,
+            height: 750,
+        });
+    }
 
     activateListeners(html) {
         super.activateListeners(html);

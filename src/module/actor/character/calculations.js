@@ -31,6 +31,8 @@ export function calculateCombatDefense(character) {
     );
     value += mod.total;
   }
+  // minimum 1
+  value = Math.max(value, 1);
   // return
   return value;
 }
@@ -45,7 +47,8 @@ export function calculateMovementData(character) {
   let data = getData(character);
   // get movement base
   data.movement.base = DEFAULT_MOVEMENT;
-  // get run bonus
+  // get athletics and run bonus by alt use of getAbilityTestFormula()
+  // athletics = pool; run = bonusDice
   let runFormula = getAbilityTestFormula(
     character,
     SystemUtils.localize(KEY_CONSTANTS.ATHLETICS),
@@ -67,6 +70,10 @@ export function calculateMovementData(character) {
     false,
     true
   ).total;
+  // update modifier if athletics is only 1
+  if (runFormula.pool < 2 && runFormula.bonusDice < 1) {
+    data.movement.modifier -= 1;
+  }
   // get total (min 1)
   data.movement.total = Math.max(
     data.movement.base +

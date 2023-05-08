@@ -1,5 +1,4 @@
 import { CharacterSheetBase } from "../character-sheet-base.js";
-import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import {
     updateAttachedHeroesEffects,
     updateDisorganisation,
@@ -23,11 +22,13 @@ import { refreshEmbeddedActorData } from "../helpers.js";
 export class UnitSheet extends CharacterSheetBase {
     itemTypesPermitted = [
         "ability",
+        "actionCombat",
         "armor",
-        "hero",
+        "effect",
         "equipment",
-        "weapon",
-        "effect"
+        "hero",
+        "order",
+        "weapon"
     ]
 
     /** @override */
@@ -52,17 +53,24 @@ export class UnitSheet extends CharacterSheetBase {
         const data = super.getData();
         let unit = data.character;
 
+        // sort
         unit.owned.heroes = this._checkNull(data.itemsByType['hero']).sort((a, b) => a.name.localeCompare(b.name));
+
+        // orders categorize & sort
+        unit.owned.orders = this._checkNull(data.itemsByType['order']).sort((a, b) => a.name.localeCompare(b.name));
+
+        // selections & data
         data.statuses = UNIT_STATUSES;
         data.facings = UNIT_FACINGS;
         data.formations = UNIT_FORMATIONS;
-        updateAttachedHeroesEffects(this.actor)
 
-        // refresh embedded heroes
+        // update embedded actors data
+        updateAttachedHeroesEffects(this.actor);
         unit.owned.heroes.forEach((hero) => {
             refreshEmbeddedActorData(hero);
         })
 
+        // return
         data.character = unit;
         return data;
     }
@@ -137,7 +145,7 @@ export class UnitSheet extends CharacterSheetBase {
                 type: "hero",
                 name: targetActor.name,
                 img: targetActor.img,
-                system: {targetId: targetId}
+                system: {equipped: 0, targetId: targetId}
             }
             this.actor.createEmbeddedDocuments("Item", [heroDataObject])
                 .then(function (result) {

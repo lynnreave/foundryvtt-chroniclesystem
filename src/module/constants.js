@@ -2,7 +2,6 @@
  * Used primarily for transformer attribute targets on Character objects.
  * @type {object}
  */
-
 export const CHARACTER_ATTR_CONSTANTS = {
   ALL: "all",
   PENALTY: "penalty",
@@ -16,6 +15,7 @@ export const CHARACTER_ATTR_CONSTANTS = {
   MARKSMANSHIP: "marksmanship",
   PERSUASION: "persuasion",
   STATUS: "status",
+  THIEVERY: "thievery",
 
   BULK: "bulk",
   DAMAGE_TAKEN: "damage_resistance",
@@ -72,7 +72,9 @@ export const KEY_CONSTANTS = {
   DECEPTION: "CS.constants.abilities.deception",
   PERSUASION: "CS.constants.abilities.persuasion",
   ENDURANCE: "CS.constants.abilities.endurance",
+  MARKSMANSHIP: "CS.constants.abilities.marksmanship",
   STATUS: "CS.constants.abilities.status",
+  THIEVERY: "CS.constants.abilities.thievery",
   WILL: "CS.constants.abilities.will",
 
   RUN: "CS.constants.specialties.run",
