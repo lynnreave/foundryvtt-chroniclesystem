@@ -1,7 +1,51 @@
-<div class="tab flexrow" data-group="primary" data-tab="orders">
-    <section class="orders">
-        <header class="header-field">
-            <span>{{localize "CS.sheets.unit.tabs.orders"}}</span>
-        </header>
+<div class="tab" data-group="primary" data-tab="orders">
+    <header class="header-field">
+        <span>{{localize "CS.sheets.unit.tabs.orders"}}</span>
+    </header>
+    <section class="orders flexrow">
+        <ol class="list equipment-list">
+            <li class="list-header flexrow">
+                <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                <div class="equipment-cost padding-3">{{localize "CS.sheets.orderItem.difficulty"}}</div>
+                <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+            </li>
+            {{#each character.owned.ordersOne as |order index|}}
+                <li class="item flexrow" data-item-id="{{_id}}">
+                    <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                        <div class="weapon-label field">
+                            {{order.name}}
+                        </div>
+                        <div class="equipment-cost field">
+                            {{#ifDifferent 0 order.system.difficulty}}{{modifier order.system.difficulty}}{{/ifDifferent}}
+                        </div>
+                    </a>
+                    <div class="item-controls padding-3">
+                        <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="ordersOne" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>
+            {{/each}}
+        </ol>
+        <ol class="list equipment-list">
+            <li class="list-header flexrow">
+                <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                <div class="equipment-cost padding-3">{{localize "CS.sheets.orderItem.difficulty"}}</div>
+                <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+            </li>
+            {{#each character.owned.ordersTwo as |order index|}}
+                <li class="item flexrow" data-item-id="{{_id}}">
+                    <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                        <div class="weapon-label field">
+                            {{order.name}}
+                        </div>
+                        <div class="equipment-cost field">
+                            {{#ifDifferent 0 order.system.difficulty}}{{modifier order.system.difficulty}}{{/ifDifferent}}
+                        </div>
+                    </a>
+                    <div class="item-controls padding-3">
+                        <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="ordersTwo" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>
+            {{/each}}
+        </ol>
     </section>
 </div>

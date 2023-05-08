@@ -75,7 +75,8 @@ export class ItemSheetChronicle extends ItemSheet {
         let item = this.item;
         // build chat data
         let itemName = item.name;
-        let itemDesc = getData(item).description;
+        let itemData = getData(item);
+        let itemDesc = itemData.description;
         let itemType = event.currentTarget.dataset.itemType;
         let chatData = {
             speaker: {actor: this.actor},
@@ -85,6 +86,8 @@ export class ItemSheetChronicle extends ItemSheet {
         if (itemType && itemType === "action") {
             let actionItemType = SystemUtils.localize(COMBAT_ACTION_TYPES[getData(item).type].name)
             chatData.content = `<p><b>${actionItemType} ${SystemUtils.localize("CS.sheets.actionItem.action")}</b></p><h1>${itemName}</h1>${itemDesc}`
+        } else if (itemType && itemType === "order") {
+            chatData.content = `<p><b>${SystemUtils.localize("CS.sheets.orderItem.order")}</b></p><h1>${itemName}</h1>${itemDesc}<h2>${SystemUtils.localize("CS.sheets.orderItem.standingOrder")}</h2>${itemData.standingOrder}`
         }
         // send to chat
         await ChatMessage.create(chatData)

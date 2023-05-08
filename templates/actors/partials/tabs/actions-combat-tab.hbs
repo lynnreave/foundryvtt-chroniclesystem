@@ -11,7 +11,7 @@
             </li>
             {{#each character.owned.actionsCombatOne as |action index|}}
                 <li class="item flexrow" data-item-id="{{_id}}">
-                    <a class="item item-edit flexrow" data-item-id="{{_id}}" data-item-type="action">
+                    <a class="item item-edit flexrow" data-item-id="{{_id}}">
                         <div class="weapon-label field">
                             {{action.name}}
                         </div>
@@ -38,7 +38,7 @@
             </li>
             {{#each character.owned.actionsCombatTwo as |action index|}}
                 <li class="item flexrow" data-item-id="{{_id}}">
-                    <a class="item item-edit flexrow" data-item-id="{{_id}}" data-item-type="action">
+                    <a class="item item-edit flexrow" data-item-id="{{_id}}">
                         <div class="weapon-label field">
                             {{action.name}}
                         </div>
@@ -64,8 +64,8 @@
                 <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
             </li>
             {{#each character.owned.actionsWarfare as |action index|}}
-                <li  class="item item-edit flexrow" data-item-id="{{_id}}">
-                    <a class="item flexrow" data-item-id="{{_id}}">
+                <li  class="item flexrow" data-item-id="{{_id}}">
+                    <a class="item item-edit flexrow" data-item-id="{{_id}}">
                         <div class="weapon-label field">{{action.name}}</div>
                         <div class="equipment-cost field">
                             {{toUpperCase (localize action.system.typeName)}}
@@ -87,8 +87,8 @@
                 <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
             </li>
             {{#each character.owned.actionsWarfareTurnEnd as |action index|}}
-                <li class="item item-edit flexrow" data-item-id="{{_id}}">
-                    <a class="item flexrow" data-item-id="{{_id}}">
+                <li class="item flexrow" data-item-id="{{_id}}">
+                    <a class="item item-edit flexrow" data-item-id="{{_id}}">
                         <div class="weapon-label field">{{action.name}}</div>
                         <div class="equipment-cost field">
                             {{toUpperCase (localize action.system.typeName)}}

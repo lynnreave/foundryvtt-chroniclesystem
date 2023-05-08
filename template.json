@@ -309,12 +309,6 @@
         "itemDescription"
       ]
     },
-    "order": {
-      "templates": [
-        "itemDescription"
-      ],
-      "difficulty": 0
-    },
     "benefit": {
       "templates": [
         "itemDescription"
@@ -377,6 +371,19 @@
       "resource": "",
       "features": []
     },
+    "order": {
+      "templates": [
+        "itemDescription"
+      ],
+      "difficulty": 0,
+      "standingOrder": ""
+    },
+    "relationship": {
+      "templates": [
+        "itemDescription"
+      ],
+      "disposition": "Indifferent"
+    },
     "technique": {
       "type": "",
       "description": "",
@@ -387,16 +394,6 @@
       "arts": [],
       "scales": "",
       "works": []
-    },
-    "relationship": {
-      "templates": [
-        "itemDescription"
-      ],
-      "disposition": "Indifferent"
-    },
-    "hero": {
-      "equipped": 0,
-      "targetId": ""
     }
   }
 }

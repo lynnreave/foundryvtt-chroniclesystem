@@ -13,6 +13,7 @@ import {
     UNIT_STATUSES
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
+import { getData } from "../../../common.js";
 
 /**
  * The ActorSheet entity for handling warfare units.
@@ -57,7 +58,10 @@ export class UnitSheet extends CharacterSheetBase {
         unit.owned.heroes = this._checkNull(data.itemsByType['hero']).sort((a, b) => a.name.localeCompare(b.name));
 
         // orders categorize & sort
-        unit.owned.orders = this._checkNull(data.itemsByType['order']).sort((a, b) => a.name.localeCompare(b.name));
+        unit.owned.orders = this._checkNull(data.itemsByType['order']).sort((a, b) => getData(a).difficulty - getData(b).difficulty || a.name.localeCompare(b.name));
+        const half = Math.ceil(unit.owned.orders.length / 2);
+        unit.owned.ordersOne = unit.owned.orders.slice(0, half);
+        unit.owned.ordersTwo = unit.owned.orders.slice(half);
 
         // selections & data
         data.statuses = UNIT_STATUSES;
@@ -69,6 +73,10 @@ export class UnitSheet extends CharacterSheetBase {
         unit.owned.heroes.forEach((hero) => {
             refreshEmbeddedActorData(hero);
         })
+
+        // minimum 1 movement/4 sprint
+        data.character.movement.total = Math.max(data.character.movement.total, 1);
+        data.character.movement.sprintTotal = Math.max(data.character.movement.sprintTotal, 4);
 
         // return
         data.character = unit;

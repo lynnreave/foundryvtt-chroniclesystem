@@ -29,6 +29,15 @@
         </section>
         <section class="description">
             {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+            <header class="header-field">
+                <span>Standing Order</span>
+            </header>
+            <div class="form-group">
+                {{editor item.system.standingOrder target="system.standingOrder" button=true owner=owner editable=editable}}
+            </div>
+            <button class="item-send-to-chat header-field" data-item-type="order">
+                Send to Chat
+            </button>
         </section>
     </main>
 </form>

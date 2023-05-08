@@ -92,6 +92,7 @@
       "relationshipItemSheet": "Relationship Sheet",
       "heroItemSheet": "Hero Sheet",
       "effectItemSheet": "Effect Sheet",
+      "orderItemSheet": "Order Sheet",
       "weaponItemSheet": "Weapon Sheet",
       "generalLabels": {
         "none": "None",
@@ -245,6 +246,11 @@
         "featureCost": "Feature Cost",
         "resource": "Resource",
         "canAddFeatureAfter": "You can define specific features of the holding after adding it to a house."
+      },
+      "orderItem": {
+        "difficulty": "Difficulty",
+        "order": "Order",
+        "standingOrder": "Standing Order"
       },
       "techniqueItem": {
         "cost": "Cost",

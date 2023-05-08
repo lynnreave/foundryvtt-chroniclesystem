@@ -74,13 +74,13 @@ export function calculateMovementData(character) {
   if (runFormula.pool < 2 && runFormula.bonusDice < 1) {
     data.movement.modifier -= 1;
   }
-  // get total (min 1)
+  // get total (min 0) (greater action to move)
   data.movement.total = Math.max(
     data.movement.base +
       data.movement.runBonus -
       data.movement.bulk +
       data.movement.modifier,
-    1
+    0
   );
   // get sprint total
   data.movement.sprintTotal =

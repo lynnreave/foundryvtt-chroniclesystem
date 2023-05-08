@@ -338,7 +338,7 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
     let actorData = getData(actor);
     // update w/ target data (if any)
     let target = getCurrentTarget();
-    templateData.target = target
+    templateData.target = target;
     // update w/ formula data
     templateData.formula.pool = formula.pool;
     templateData.formula.bonusDice = formula.bonusDice;

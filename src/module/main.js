@@ -21,6 +21,7 @@ import { registerCustomHelpers } from "./system/handlebarsHelpers.js";
 import registerSystemSettings from "./system/settings.js";
 import SystemUtils from "../util/systemUtils.js";
 import { ActionCombatSheet } from "./item/action/action-combat-sheet.js";
+import { OrderSheet } from "./item/order/order-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -83,7 +84,7 @@ Hooks.once("init", async function () {
   });
   Items.registerSheet("chroniclesystem", ItemSheetChronicle, {
     label: SystemUtils.localize("CS.sheets.itemSheet"),
-    types: ["actionIntrigue", "armor", "benefit", "drawback", "equipment", "order"],
+    types: ["actionIntrigue", "armor", "benefit", "drawback", "equipment"],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", EffectSheet, {
@@ -99,6 +100,11 @@ Hooks.once("init", async function () {
   Items.registerSheet("chroniclesystem", CSHoldingItemSheet, {
     label: SystemUtils.localize("CS.sheets.holdingItemSheet"),
     types: ["holding"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", OrderSheet, {
+    label: SystemUtils.localize("CS.sheets.orderItemSheet"),
+    types: ["order"],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", CSRelationshipItemSheet, {

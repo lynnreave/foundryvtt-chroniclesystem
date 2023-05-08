@@ -68,7 +68,6 @@ export class CharacterSheet extends CharacterSheetBase {
     // combat
     let actions = this._checkNull(data.itemsByType['actionCombat']).sort((a, b) => getData(a).type.localeCompare(getData(b).type) || a.name.localeCompare(b.name));
     character.owned.actionsCombat = [];
-    // character.owned.actionsCombatOther = [];
     character.owned.actionsWarfare = [];
     character.owned.actionsWarfareTurnEnd = [];
     actions.forEach((action) => {
@@ -78,8 +77,6 @@ export class CharacterSheet extends CharacterSheetBase {
         character.owned.actionsWarfareTurnEnd.push(action);
       } else if (actionData.isWarfare) {
         character.owned.actionsWarfare.push(action);
-      // } else if ([0, 4].includes(parseInt(actionData.type))) {
-      //   character.owned.actionsCombatOther.push(action);
       } else {
         character.owned.actionsCombat.push(action);
       }
