@@ -8,7 +8,11 @@ import {
     getAbilityValue
 } from "./abilities.js";
 import SystemUtils from "../../../util/systemUtils.js";
-import { KEY_CONSTANTS } from "../../constants.js";
+import {
+    CHARACTER_ATTR_CONSTANTS,
+    KEY_CONSTANTS
+} from "../../constants.js";
+import { getTransformation } from "./transformers.js";
 
 export function getWeaponTestDataForActor(actor, weapon) {
     /**
@@ -33,6 +37,7 @@ export function getWeaponTestDataForActor(actor, weapon) {
     formula = adjustFormulaByWeapon(actor, formula, weapon);
 
     // get damage by ability
+    weapon.damageValue = 0
     let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
     if (matches) {
         if (matches.length === 4) {
@@ -54,6 +59,11 @@ export function getWeaponTestDataForActor(actor, weapon) {
             weapon.damageValue += strength.rating;
         }
     }
+
+    // get weapon damage modifiers
+    weapon.damageValue += getTransformation(
+        actor, "modifiers", CHARACTER_ATTR_CONSTANTS.BASE_WEAPON_DAMAGE
+    ).total
 
     // update weapon with test data
     weapon.formula = formula;

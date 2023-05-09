@@ -8,6 +8,14 @@ import {
 import { TestCharacter } from "@mocks/character";
 // @ts-ignore
 import { TestGame } from "@mocks/game";
+import {
+  addTransformer
+// @ts-ignore
+} from "@actor/character/transformers";
+import {
+  CHARACTER_ATTR_CONSTANTS
+// @ts-ignore
+} from "@module/constants";
 
 const defaultHeroItem = {
   _id: "someId", name: "someName", type: "hero", img: "/some/img/path/", system: {targetId: null}
@@ -80,6 +88,31 @@ describe("helpers.js", () => {
       expect(weaponDoc.damageValue).toStrictEqual(
           fightingDoc.system.rating+strengthSpecialty.rating
       );
+    });
+    test("base damage modifier", () => {
+      let character: TestCharacter = new TestCharacter();
+      let specialty = {name: 'Swords', rating: 1, modifier: 1};
+      let abilityDoc = {
+        _id: "someId", name: "Fighting", type: "ability", system: {
+          rating: 5, modifier: 0, specialties: [specialty]
+        }
+      }
+      character.owned.abilities = [abilityDoc];
+      let weaponDoc = {
+        name: "Sword", damageValue: null, formula: null, system: {
+          specialty: `${abilityDoc.name}:${specialty.name}`, damage: `@${abilityDoc.name}`
+        }
+      };
+      addTransformer(
+          character, "modifiers", CHARACTER_ATTR_CONSTANTS.BASE_WEAPON_DAMAGE,
+          "Charging", 2,
+          false, true
+      );
+      getWeaponTestDataForActor(character, weaponDoc);
+      expect(weaponDoc.formula.ToFormattedStr()).toStrictEqual(
+          `${abilityDoc.system.rating}d6 + ${specialty.rating}B + ${specialty.modifier}`
+      );
+      expect(weaponDoc.damageValue).toStrictEqual(abilityDoc.system.rating+2);
     });
   });
   describe("refresh embedded actor data", () => {

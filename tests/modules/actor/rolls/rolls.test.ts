@@ -634,6 +634,52 @@ describe("rolls.js", () => {
             );
             expect(output.difficulty.fumbleData.num).toStrictEqual(0);
         });
+        test("base damage bonus", () => {
+            let character: TestCharacter = new TestCharacter();
+            character.name = "Some Name";
+            character.img = "/some/img/path";
+            let weaponDoc = Object.assign({}, defaultWeapon)
+            character.system.owned.weapons = [weaponDoc];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.name = "Other Name";
+            targetCharacter.img = "/other/img/path";
+            targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
+            let armorDoc = Object.assign({}, defaultArmor)
+            targetCharacter.owned.armors = [armorDoc];
+            addTransformer(
+                targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+                armorDoc._id, armorDoc.system.rating,
+                true, true
+            );
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollType: string = "weapon-test";
+            let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let roll = {total: 15};
+            formula.reRoll = 0;
+            let dieResults = [
+                {result: 6, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            let output = getRollTemplateData(
+                character, rollType, formula, roll, dieResults, weaponDoc.name
+            );
+            expect(output.source).toStrictEqual(character);
+            expect(output.target).toStrictEqual(targetCharacter);
+            expect(output.formula.pool).toStrictEqual(formula.pool);
+            expect(output.formula.bonusDice).toStrictEqual(formula.bonusDice);
+            expect(output.formula.modifier).toStrictEqual(formula.modifier);
+            expect(output.roll.total).toStrictEqual(roll.total);
+            expect(output.dice).toStrictEqual(dieResults);
+            expect(output.test.type).toStrictEqual("Weapon Test");
+            expect(output.test.tool.name).toStrictEqual(weaponDoc.name);
+            expect(output.difficulty.degrees).toStrictEqual(3);
+            expect(output.difficulty.text).toStrictEqual(DEGREES_CONSTANTS["3"]);
+            expect(output.difficulty.damage).toStrictEqual(9-armorDoc.system.rating);
+        });
     });
     describe("get test difficulty from actor target", () => {
         test("no targets", () => {
