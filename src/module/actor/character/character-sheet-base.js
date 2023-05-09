@@ -37,8 +37,6 @@ export class CharacterSheetBase extends ActorSheetChronicle {
 
   /* -------------------------------------------- */
 
-  override
-
   getData(options) {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];

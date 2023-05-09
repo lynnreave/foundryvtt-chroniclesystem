@@ -176,6 +176,8 @@ export function getBaseInfluenceForTechnique(characterData, technique) {
     }
     // get the base influence damage
     if (ability) {
+        // shallow clone
+        ability = Object.assign({}, ability)
         influenceBaseDamage = getData(ability).rating;
     }
     // return
@@ -288,6 +290,118 @@ export function getNumOfRolled(num, dieResults) {
     return numDice
 }
 
+export function getRollTemplateData(actor, rollType, formula, roll, dieResults, toolName) {
+    /**
+     * Get roll template data for rendering to roll card.
+     * @param {Actor} actor: the Actor making the roll.
+     * @param {string} rollType: the type of test roll being made (e.g., "weapon-test").
+     * @param {DiceRollFormula} formula: the DiceRollFormula containing all roll formula data.
+     * @param {Roll} roll: an evaluated Roll object with the roll results.
+     * @param {Array} dieResults: the final results from a Die evaluate().
+     * @param {string} toolName: the name of the tool used to execute the test.
+     * @returns {object}: a template data object.
+     */
+    // base template data
+    let templateData = Object.assign({}, TEMPLATE_DATA);
+    // update w/ source data
+    templateData.source = actor;
+    let actorData = getData(templateData.source);
+    // update w/ target data (if any)
+    let target = getCurrentTarget();
+    templateData.target = target;
+    // update w/ formula data
+    templateData.formula.pool = formula.pool;
+    templateData.formula.bonusDice = formula.bonusDice;
+    templateData.formula.modifier = formula.modifier;
+    // update w/ die results data
+    templateData.dice = dieResults;
+    // update w/ roll data
+    templateData.roll.total = roll.total;
+    // update w/ test data
+    let testName = "";
+    for (let word of rollType.split('-')) {
+        testName += word.charAt(0).toUpperCase();
+        testName += word.slice(1);
+        testName += " ";
+    }
+    templateData.test.type = testName.trim();
+    // update w/ tool name
+    templateData.test.tool.name = toolName;
+    // get tool, damage, and target resistance
+    let tool;
+    let resistance;
+    if (rollType === "weapon-test") {
+        tool = actorData.owned.weapons.find((weapon) => weapon.name === toolName)
+        if (tool) {
+            // something was transposing incorrectly so that weapons overrode each other in .owned
+            templateData.test.tool = Object.assign({}, tool);
+        }
+        // get resistance from target damage resistance
+        if (target) {
+            resistance = getTransformation(
+                target, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN
+            ).total;
+        }
+    } else if (["persuasion", "deception"].includes(rollType)) {
+        let influenceBaseDamage = getBaseInfluenceForTechnique(actorData, toolName);
+        if (influenceBaseDamage) {
+            toolName = toolName.charAt(0).toUpperCase() + toolName.slice(1);
+            templateData.test.tool = {name: toolName, damageValue: influenceBaseDamage};
+        }
+        // get resistance from target composure resistance
+        if (target) {
+            resistance = getTransformation(
+                target, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE
+            ).total;
+        }
+    }
+    // update w/ difficulty data
+    let difficultyData = getTestDifficultyFromCurrentTarget(
+        rollType, templateData.target
+    );
+    if (difficultyData.difficulty) {
+        // update w/ degrees
+        let degreesData = getDegrees(
+            difficultyData.difficulty, templateData.roll.total
+        );
+        templateData.difficulty = {
+            degrees: degreesData.num,
+            text: degreesData.label
+        };
+        // update w/ calculated damage
+        templateData.difficulty.damage = getTestDamage(
+            rollType, templateData.test.tool.damageValue, degreesData.num, resistance, templateData.test.tool
+        )
+        // update w/ critical or fumble
+        if (rollType === "weapon-test") {
+            if (isCritical(templateData.roll.total, difficultyData.difficulty)) {
+                // get number of 6s rolled
+                let numSixes = Math.min(Math.max(getNumOfRolled(6, dieResults) - 1, 0), 8);
+                templateData.difficulty.criticalData = {
+                    num: numSixes,
+                    result: CRITICAL_RESULTS[numSixes],
+                    results: CRITICAL_RESULTS
+                };
+                // handle solid hit
+                if (numSixes === 0) {
+                    templateData.difficulty.criticalData.damage = templateData.difficulty.damage + (2 * degreesData.num)
+                } else if (numSixes === 1) {
+                    templateData.difficulty.criticalData.damage = templateData.difficulty.damage + (4 * degreesData.num)
+                }
+            } else if (isFumble(templateData.dice)) {
+                let numOnes = Math.min(Math.max(getNumOfRolled(1, dieResults) - 1, 0), 8);
+                templateData.difficulty.fumbleData = {
+                    num: numOnes,
+                    result: FUMBLE_RESULTS[numOnes],
+                    results: FUMBLE_RESULTS
+                };
+            }
+        }
+    }
+    // return
+    return templateData;
+}
+
 export function getTestDifficultyFromCurrentTarget(rollType, target) {
     /**
      * Get test difficulty from the current target of an Actor.
@@ -320,120 +434,42 @@ export function getTestDifficultyFromCurrentTarget(rollType, target) {
     return result;
 }
 
-export function getRollTemplateData(actor, rollType, formula, roll, dieResults, toolName) {
+export function getTestDamage(
+    testType, baseDamage, degrees, resistance = null, tool = null
+) {
     /**
-     * Get roll template data for rendering to roll card.
-     * @param {Actor} actor: the Actor making the roll.
-     * @param {string} rollType: the type of test roll being made (e.g., "weapon-test").
-     * @param {DiceRollFormula} formula: the DiceRollFormula containing all roll formula data.
-     * @param {Roll} roll: an evaluated Roll object with the roll results.
-     * @param {Array} dieResults: the final results from a Die evaluate().
-     * @param {string} toolName: the name of the tool used to execute the test.
-     * @returns {object}: a template data object.
+     * Get the calculated final damage from a test.
+     * @param {string} testType: the type of test roll.
+     * @param {number} baseDamage: the base damage of the tool for the test roll.
+     * @param {number} degrees: the degrees of success or failure (-2, -1, 1, 2, 3).
+     * @param {number} resistance: the amount of resistance the target has.
+     * @param {object} tool: the tool used for the test roll.
      */
-    // base template data
-    let templateData = Object.assign({}, TEMPLATE_DATA);
-    // update w/ source data
-    templateData.source = actor;
-    let actorData = getData(actor);
-    // update w/ target data (if any)
-    let target = getCurrentTarget();
-    templateData.target = target;
-    // update w/ formula data
-    templateData.formula.pool = formula.pool;
-    templateData.formula.bonusDice = formula.bonusDice;
-    templateData.formula.modifier = formula.modifier;
-    // update w/ die results data
-    templateData.dice = dieResults;
-    // update w/ roll data
-    templateData.roll.total = roll.total;
-    // update w/ test data
-    let testName = "";
-    for (let word of rollType.split('-')) {
-        testName += word.charAt(0).toUpperCase();
-        testName += word.slice(1);
-        testName += " ";
-    }
-    templateData.test.type = testName.trim();
-    // update w/ tool name
-    templateData.test.tool.name = toolName;
-    // get tool, damage, and target resistance
-    let tool;
-    let damageValue;
-    let resistance;
-    if (rollType === "weapon-test") {
-        tool = actorData.owned.weapons.find((weapon) => weapon.name === toolName)
-        if (tool) {
-            templateData.test.tool = tool;
-            damageValue = tool.damageValue;
-        }
-        // get resistance from target damage resistance
-        if (target) {
-            resistance = getTransformation(
-                target, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN
-            ).total;
-        }
-    } else if (["persuasion", "deception"].includes(rollType)) {
-        let influenceBaseDamage = getBaseInfluenceForTechnique(actorData, toolName);
-        if (influenceBaseDamage) {
-            damageValue = influenceBaseDamage;
-            toolName = toolName.charAt(0).toUpperCase() + toolName.slice(1);
-            templateData.test.tool = {name: toolName, damageValue: damageValue};
-        }
-        // get resistance from target composure resistance
-        if (target) {
-            resistance = getTransformation(
-                target, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE
-            ).total;
+
+    // handle invalid baseDamage
+    if (!baseDamage) { return 0; }
+
+    // multiple damage by degrees
+    let totalDamage = degrees * baseDamage;
+
+    // handle resistance
+    if (resistance) {
+        // subtract resistance from total damage
+        totalDamage -= resistance;
+
+        // handle piercing
+        if (testType === "weapon-test" && tool && tool.system && tool.system.piercing > 0) {
+            // damage from piercing cannot be greater than damage resisted
+            // but must also be at least the piercing value
+            totalDamage = Math.max(
+                totalDamage + Math.min(tool.system.piercing, resistance),
+                tool.system.piercing
+            );
         }
     }
-    // update w/ difficulty data
-    let difficultyData = getTestDifficultyFromCurrentTarget(
-        rollType, templateData.target
-    );
-    if (difficultyData.difficulty) {
-        // update w/ degrees
-        let degreesData = getDegrees(
-            difficultyData.difficulty, templateData.roll.total
-        );
-        templateData.difficulty = {
-            degrees: degreesData.num,
-            text: degreesData.label
-        };
-        // update w/ calculated damage
-        if (damageValue) {
-            let totalDamage = degreesData.num * damageValue;
-            if (resistance) { totalDamage -= resistance; }
-            templateData.difficulty.damage = Math.max(totalDamage, 0);
-        }
-        // update w/ critical or fumble
-        if (rollType === "weapon-test") {
-            if (isCritical(templateData.roll.total, difficultyData.difficulty)) {
-                // get number of 6s rolled
-                let numSixes = Math.min(Math.max(getNumOfRolled(6, dieResults) - 1, 0), 8);
-                templateData.difficulty.criticalData = {
-                    num: numSixes,
-                    result: CRITICAL_RESULTS[numSixes],
-                    results: CRITICAL_RESULTS
-                };
-                // handle solid hit
-                if (numSixes === 0) {
-                    templateData.difficulty.criticalData.damage = templateData.difficulty.damage + (2 * degreesData.num)
-                } else if (numSixes === 1) {
-                    templateData.difficulty.criticalData.damage = templateData.difficulty.damage + (4 * degreesData.num)
-                }
-            } else if (isFumble(templateData.dice)) {
-                let numOnes = Math.min(Math.max(getNumOfRolled(1, dieResults) - 1, 0), 8);
-                templateData.difficulty.fumbleData = {
-                    num: numOnes,
-                    result: FUMBLE_RESULTS[numOnes],
-                    results: FUMBLE_RESULTS
-                };
-            }
-        }
-    }
-    // return
-    return templateData;
+
+    // damage cannot be less than 0 (degrees of failure)
+    return Math.max(totalDamage, 0);
 }
 
 export function isCritical(result, difficulty) {

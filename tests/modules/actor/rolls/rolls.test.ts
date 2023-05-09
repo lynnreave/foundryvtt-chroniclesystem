@@ -7,6 +7,7 @@ import {
     getFormula,
     getNumOfRolled,
     getRollTemplateData,
+    getTestDamage,
     getTestDifficultyFromCurrentTarget,
     isCritical,
     isFumble
@@ -679,6 +680,56 @@ describe("rolls.js", () => {
             expect(output.difficulty.degrees).toStrictEqual(3);
             expect(output.difficulty.text).toStrictEqual(DEGREES_CONSTANTS["3"]);
             expect(output.difficulty.damage).toStrictEqual(9-armorDoc.system.rating);
+        });
+    });
+    describe("get test damage", () => {
+        test("call", () => {
+            let output = getTestDamage("weapon-test", 2, 2)
+            expect(output).toStrictEqual(4);
+        });
+        test("no base damage", () => {
+            let output = getTestDamage("weapon-test", undefined, 2)
+            expect(output).toStrictEqual(0);
+        });
+        test("has resistance", () => {
+            let output = getTestDamage("weapon-test", 5, 2, 3)
+            expect(output).toStrictEqual(7);
+        });
+        test("piercing < resistance", () => {
+            let resistance = 3;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {piercing: 2}
+            }
+            let output = getTestDamage("weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc)
+            expect(output).toStrictEqual(9);
+        });
+        test("piercing > resistance", () => {
+            let resistance = 3;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {piercing: 5}
+            }
+            let output = getTestDamage("weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc)
+            expect(output).toStrictEqual(10);
+        });
+        test("piercing: damage < resistance", () => {
+            let resistance = 10;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 3,
+                system: {piercing: 1}
+            }
+            let output = getTestDamage("weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc)
+            expect(output).toStrictEqual(1);
+        });
+        test("piercing: damage > resistance", () => {
+            let resistance = 5;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 3,
+                system: {piercing: 1}
+            }
+            let output = getTestDamage("weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc)
+            expect(output).toStrictEqual(2);
         });
     });
     describe("get test difficulty from actor target", () => {
