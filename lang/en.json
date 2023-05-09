@@ -280,6 +280,29 @@
           "alignment": "Alignment",
           "unleashing": "Unleashing"
         }
+      },
+      "weaponItem": {
+        "adaptable": "Adaptable",
+        "bulk": "Bulk",
+        "defending": "Defending",
+        "entangling": "Entangling",
+        "fast": "Fast",
+        "grabbing": "Grabbing",
+        "impaling": "Impaling",
+        "mounted": "Mounted",
+        "offHanded": "Off-Handed",
+        "offHandRating": "Off-Hand Rating",
+        "piercing": "Piercing",
+        "powerful": "Powerful",
+        "reloadLesser": "Reload (Lesser)",
+        "reloadGreater": "Reload (Greater)",
+        "setForChargeOnly": "Set For Charge Only",
+        "shattering": "Shattering",
+        "slow": "Slow",
+        "staggering": "Staggering",
+        "twoHanded": "Two-Handed",
+        "unwieldy": "Unwieldy",
+        "vicious": "Vicious"
       }
     },
     "constants": {

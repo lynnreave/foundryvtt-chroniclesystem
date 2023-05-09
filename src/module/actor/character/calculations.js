@@ -84,5 +84,5 @@ export function calculateMovementData(character) {
   );
   // get sprint total
   data.movement.sprintTotal =
-    data.movement.total * data.movement.sprintMultiplier - bulkMod.total;
+      data.movement.base * data.movement.sprintMultiplier - bulkMod.total;
 }

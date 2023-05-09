@@ -9,7 +9,7 @@
             <div class="form-group">
                 <label for="system.specialty">Specialty:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.specialty"
                           class="medium-field"
                           name="system.specialty"
@@ -17,27 +17,27 @@
                           value="{{item.system.specialty}}"
                           placeholder="Specialty"
                           data-dtype="String"
-                  />
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.reach">Reach:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.reach"
                           class="small-field"
                           name="system.reach"
                           type="text"
                           value="{{item.system.reach}}"
-                          placeholder="Reach"
+                          placeholder="0"
                           data-dtype="Number"
-                  />
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.training">Training:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.training"
                           class="small-field"
                           name="system.training"
@@ -45,13 +45,13 @@
                           value="{{item.system.training}}"
                           placeholder="Training"
                           data-dtype="Number"
-                  />
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.damage">Damage:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.damage"
                           class="medium-field"
                           name="system.damage"
@@ -59,63 +59,119 @@
                           value="{{item.system.damage}}"
                           placeholder="Damage"
                           data-dtype="String"
-                  />
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.defense">Defense:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.defense"
-                          class="medium-field"
+                          class="small-field"
                           name="system.defense"
                           type="text"
                           value="{{item.system.defense}}"
-                          placeholder="Defense"
-                          data-dtype="String"
-                  />
+                          placeholder="0"
+                          data-dtype="Number"
+                    />
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="system.bulk">{{localize "CS.sheets.weaponItem.bulk"}}:</label>
+                <span class="form-fields">
+                    <input
+                          id="system.bulk"
+                          class="small-field"
+                          name="system.bulk"
+                          type="text"
+                          value="{{item.system.bulk}}"
+                          placeholder="0"
+                          data-dtype="Number"
+                    />
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="system.offHandRating">{{localize "CS.sheets.weaponItem.offHandRating"}}:</label>
+                <span class="form-fields">
+                    <input
+                            id="system.offHandRating"
+                            class="small-field"
+                            name="system.offHandRating"
+                            type="text"
+                            value="{{item.system.offHandRating}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    />
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="system.piercing">{{localize "CS.sheets.weaponItem.piercing"}}:</label>
+                <span class="form-fields">
+                    <input
+                          id="system.piercing"
+                          class="small-field"
+                          name="system.piercing"
+                          type="text"
+                          value="{{item.system.piercing}}"
+                          placeholder="0"
+                          data-dtype="Number"
+                    />
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="system.shattering">{{localize "CS.sheets.weaponItem.shattering"}}:</label>
+                <span class="form-fields">
+                    <input
+                          id="system.shattering"
+                          class="small-field"
+                          name="system.shattering"
+                          type="text"
+                          value="{{item.system.shattering}}"
+                          placeholder="0"
+                          data-dtype="Number"
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.customPoolModifier">Custom Pool:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.customPoolModifier"
-                          class="medium-field"
+                          class="small-field"
                           name="system.customPoolModifier"
                           type="text"
                           value="{{item.system.customPoolModifier}}"
-                          placeholder="Test Dice Modifier"
+                          placeholder="0"
                           data-dtype="Number"
-                  />
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.customBonusDiceModifier">Custom Bonus Dice:</label>
                 <span class="form-fields">
-                  <input
+                    <input
                           id="system.customBonusDiceModifier"
-                          class="medium-field"
+                          class="small-field"
                           name="system.customBonusDiceModifier"
                           type="text"
                           value="{{item.system.customBonusDiceModifier}}"
-                          placeholder="Bonus Dice Modifier"
+                          placeholder="0"
                           data-dtype="Number"
-                  />
+                    />
                 </span>
             </div>
             <div class="form-group">
                 <label for="system.addModifier">Custom Modifier:</label>
                 <span class="form-fields">
-                  <input
-                          id="system.customTestModifier"
-                          class="medium-field"
-                          name="system.customTestModifier"
-                          type="text"
-                          value="{{item.system.customTestModifier}}"
-                          placeholder="Test Modifier"
-                          data-dtype="Number"
-                  />
+                    <input
+                            id="system.customTestModifier"
+                            class="small-field"
+                            name="system.customTestModifier"
+                            type="text"
+                            value="{{item.system.customTestModifier}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    />
                 </span>
             </div>
             {{> "systems/chroniclesystem/templates/items/partials/physical-item.hbs"}}
@@ -129,14 +185,60 @@
                     <span>Qualities</span>
                 </div>
             </header>
-            <div class="flexrow">
-                <div class="form-group flexrow">
-                    <span class="padding-3">Powerful</span>
-                    <input class="item-flag-toggle" type="checkbox" name="isPowerful" id="isPowerful" value="{{item.system.isPowerful}}" {{#if item.system.isPowerful}} checked {{/if}}/>
-                    <span class="padding-3">Adaptable</span>
-                    <input class="item-flag-toggle" type="checkbox" name="isAdaptable" id="isAdaptable" value="{{item.system.isAdaptable}}" {{showIfTrue item.system.isAdaptable checked : ""}}"/>
-                </div>
-            </div>
+            <table>
+            <tr>
+                <td><input class="item-flag-toggle" type="checkbox" name="isAdaptable" id="isAdaptable" value="{{item.system.isAdaptable}}" {{#if item.system.isAdaptable}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.adaptable"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isFast" id="isFast" value="{{item.system.isFast}}" {{#if item.system.isFast}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.fast"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isEntangling" id="isEntangling" value="{{item.system.isEntangling}}" {{#if item.system.isEntangling}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.entangling"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isGrabbing" id="isGrabbing" value="{{item.system.isGrabbing}}" {{#if item.system.isGrabbing}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.grabbing"}}</span></td>
+            </tr>
+            <tr>
+                <td><input class="item-flag-toggle" type="checkbox" name="isImpaling" id="isImpaling" value="{{item.system.isImpaling}}" {{#if item.system.isImpaling}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.impaling"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isMounted" id="isMounted" value="{{item.system.isMounted}}" {{#if item.system.isMounted}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.mounted"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isPowerful" id="isPowerful" value="{{item.system.isPowerful}}" {{#if item.system.isPowerful}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.powerful"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isReloadLesser" id="isReloadLesser" value="{{item.system.isReloadLesser}}" {{#if item.system.isReloadLesser}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.reloadLesser"}}</span></td>
+            </tr>
+            <tr>
+                <td><input class="item-flag-toggle" type="checkbox" name="isReloadGreater" id="isReloadGreater" value="{{item.system.isReloadGreater}}" {{#if item.system.isReloadGreater}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.reloadGreater"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isSetForChargeOnly" id="isSetForChargeOnly" value="{{item.system.isSetForChargeOnly}}" {{#if item.system.isSetForChargeOnly}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.setForChargeOnly"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isSlow" id="isSlow" value="{{item.system.isSlow}}" {{#if item.system.isSlow}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.slow"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isStaggering" id="isStaggering" value="{{item.system.isStaggering}}" {{#if item.system.isStaggering}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.staggering"}}</span></td>
+            </tr>
+            <tr>
+                <td><input class="item-flag-toggle" type="checkbox" name="isTwoHanded" id="isTwoHanded" value="{{item.system.isTwoHanded}}" {{#if item.system.isTwoHanded}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.twoHanded"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isUnwieldy" id="isUnwieldy" value="{{item.system.isUnwieldy}}" {{#if item.system.isUnwieldy}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.unwieldy"}}</span></td>
+
+                <td><input class="item-flag-toggle" type="checkbox" name="isVicious" id="isVicious" value="{{item.system.isVicious}}" {{#if item.system.isVicious}} checked {{/if}}/></td>
+                <td><span class="padding-3">{{localize "CS.sheets.weaponItem.vicious"}}</span></td>
+
+                <td></td>
+                <td></td>
+            </tr>
+            </table>
             <header class="header-field flexrow">
                 <div class="header-title">
                     <span>Custom Qualities</span>

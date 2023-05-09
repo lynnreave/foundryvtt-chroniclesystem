@@ -272,22 +272,6 @@
       "effects": "",
       "recovery": ""
     },
-    "weapon": {
-      "templates": [
-        "itemDescription",
-        "physicalItem",
-        "equipmentItem"
-      ],
-      "specialty": "",
-      "training": 0,
-      "damage": "",
-      "qualities": [],
-      "reach": "",
-      "equipped": 0,
-      "defense": 0,
-      "isDefending": false,
-      "isPowerful": false
-    },
     "ability": {
       "templates": [
         "itemDescription"
@@ -394,6 +378,40 @@
       "arts": [],
       "scales": "",
       "works": []
+    },
+    "weapon": {
+      "templates": [
+        "itemDescription",
+        "physicalItem",
+        "equipmentItem"
+      ],
+      "damage": "",
+      "bulk": 0,
+      "defense": 0,
+      "equipped": 0,
+      "offHandRating": 0,
+      "piercing": 0,
+      "reach": 0,
+      "shattering": 0,
+      "specialty": "",
+      "training": 0,
+      "qualities": [],
+      "isAdaptable": false,
+      "isDefending": false,
+      "isFast": false,
+      "isEntangling": false,
+      "isGrabbing": false,
+      "isImpaling": false,
+      "isMounted": false,
+      "isPowerful": false,
+      "isReloadLesser": false,
+      "isReloadGreater": false,
+      "isSetForChargeOnly": false,
+      "isSlow": false,
+      "isStaggering": false,
+      "isTwoHanded": false,
+      "isUnwieldy": false,
+      "isVicious": false
     }
   }
 }

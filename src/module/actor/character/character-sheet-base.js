@@ -176,8 +176,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
         getData(document).equipped = ChronicleSystem.equippedConstants.WEARING;
         tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.WEARING);
       } else {
-        let twoHandedQuality = Object.values(getData(document).qualities).filter((quality) => quality.name.toLowerCase() === "two-handed");
-        if (twoHandedQuality.length > 0) {
+        if (getData(document).isTwoHanded) {
           tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.MAIN_HAND || getData(item).equipped === ChronicleSystem.equippedConstants.OFFHAND || getData(item).equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
           getData(document).equipped = ChronicleSystem.equippedConstants.BOTH_HANDS;
         } else {
