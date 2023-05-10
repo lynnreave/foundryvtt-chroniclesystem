@@ -119,6 +119,10 @@ export const registerCustomHelpers = function () {
       "add", function (arg1, arg2) { return arg1 + arg2; }
   );
 
+  Handlebars.registerHelper(
+      "multiply", function (arg1, arg2) { return arg1 * arg2; }
+  );
+
   Handlebars.registerHelper("formGroup", function (options) {
     return "systems/chroniclesystem/templates/actors/partials/form-group.hbs";
   });

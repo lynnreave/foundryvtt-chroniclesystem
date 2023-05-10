@@ -10,6 +10,9 @@
                         <a>{{ability.system.rating}}d{{modifier ability.system.modifier}}</a>
                     </div>
                     <label class="ability-label item-edit"><a >{{ability.name}}</a></label>
+                    <div class="ability-value item-edit">
+                        <a>{{multiply ability.system.rating 4}}</a>
+                    </div>
                     <div class="ability-specialities">
                         {{#each ability.system.specialties as |specialty key|}}
                             {{#if specialty.rating}}
