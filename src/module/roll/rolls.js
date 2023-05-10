@@ -85,6 +85,11 @@ export function adjustFormulaByWeapon (actor, formula, weapon) {
         formula.pool -= 2;
     }
 
+    // handle mounted quality
+    if (weaponData.isMounted && !isMounted(actor)) {
+        formula.pool -= 2;
+    }
+
     // handle training requirements
     if (!weaponData.training)
         return formula;
@@ -574,7 +579,6 @@ export function isMounted(character) {
      */
     let isMounted = false;
     // get current mount (if exists, character is mounted)
-    // let mounts = getData(character).owned.mounts;
     let mounts = character.getEmbeddedCollection("Item").filter(
         (item) => item.type === "mount"
     );

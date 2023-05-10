@@ -214,6 +214,35 @@ describe("rolls.js", () => {
             };
             expect(actual).toStrictEqual(expected);
         });
+        test("mounted weapon while mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc];
+            let weaponDoc = {name: "someName", system: {isMounted: true}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+            let expected = {pool: 5, bonusDice: 4, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+
+        });
+        test("mounted weapon while not mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {type: "mount", system: {equipped:0}};
+            character.owned.mounts = [mountDoc];
+            let weaponDoc = {name: "someName", system: {isMounted: true}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+            let expected = {pool: 3, bonusDice: 4, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+        });
     });
     describe("get ability test formula", () => {
         test("ability exists", () => {
