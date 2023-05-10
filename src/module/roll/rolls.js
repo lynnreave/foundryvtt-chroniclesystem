@@ -371,7 +371,7 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
         // update w/ calculated damage
         templateData.difficulty.damage = getTestDamage(
             rollType, templateData.test.tool.damageValue, degreesData.num, resistance, templateData.test.tool
-        )
+        );
         // update w/ critical or fumble
         if (rollType === "weapon-test") {
             if (isCritical(templateData.roll.total, difficultyData.difficulty)) {
@@ -397,9 +397,50 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
                 };
             }
         }
+        // update w/ triggered data
+        templateData.difficulty.triggeredData = getTestTriggeredData(
+            rollType, templateData.test.tool, degreesData.num, resistance, templateData.target
+        )
     }
     // return
     return templateData;
+}
+
+export function getTestDamage(
+    testType, baseDamage, degrees, resistance = null, tool = null
+) {
+    /**
+     * Get the calculated final damage from a test.
+     * @param {string} testType: the type of test roll.
+     * @param {number} baseDamage: the base damage of the tool for the test roll.
+     * @param {number} degrees: the degrees of success or failure (-2, -1, 1, 2, 3).
+     * @param {number} resistance: the amount of resistance the target has.
+     * @param {object} tool: the tool used for the test roll.
+     * @return {number}: the total calculated damage.
+     */
+
+    // handle invalid baseDamage
+    if (!baseDamage) { return 0; }
+
+    // multiple damage by degrees
+    let totalDamage = degrees * baseDamage;
+
+    // handle resistance
+    if (resistance) {
+        // subtract resistance from total damage
+        totalDamage -= resistance;
+
+        // handle piercing
+        if (testType === "weapon-test" && tool && getData(tool).piercing > 0) {
+            // damage from piercing cannot be greater than damage resisted
+            // but must also be at least the piercing value
+            let piercing = getData(tool).piercing
+            totalDamage = Math.max(totalDamage + Math.min(piercing, resistance), piercing);
+        }
+    }
+
+    // damage cannot be less than 0 (degrees of failure)
+    return Math.max(totalDamage, 0);
 }
 
 export function getTestDifficultyFromCurrentTarget(rollType, target) {
@@ -434,42 +475,46 @@ export function getTestDifficultyFromCurrentTarget(rollType, target) {
     return result;
 }
 
-export function getTestDamage(
-    testType, baseDamage, degrees, resistance = null, tool = null
+export function getTestTriggeredData(
+    testType, tool, degrees, resistance, target = null
 ) {
     /**
-     * Get the calculated final damage from a test.
+     * Get triggered event data for test.
      * @param {string} testType: the type of test roll.
-     * @param {number} baseDamage: the base damage of the tool for the test roll.
+     * @param {object} tool: the tool used for the test roll.
      * @param {number} degrees: the degrees of success or failure (-2, -1, 1, 2, 3).
      * @param {number} resistance: the amount of resistance the target has.
-     * @param {object} tool: the tool used for the test roll.
+     * @param {number} damage: the amount of resistance the target has.
+     * @param {Actor} totalDamage: the totalDamage calculated from the test.
+     * @returns {object}: an array of data objects containing triggered data.
      */
-
-    // handle invalid baseDamage
-    if (!baseDamage) { return 0; }
-
-    // multiple damage by degrees
-    let totalDamage = degrees * baseDamage;
-
-    // handle resistance
-    if (resistance) {
-        // subtract resistance from total damage
-        totalDamage -= resistance;
-
-        // handle piercing
-        if (testType === "weapon-test" && tool && tool.system && tool.system.piercing > 0) {
-            // damage from piercing cannot be greater than damage resisted
-            // but must also be at least the piercing value
-            totalDamage = Math.max(
-                totalDamage + Math.min(tool.system.piercing, resistance),
-                tool.system.piercing
-            );
-        }
+    let triggeredData = [];
+    // handle impaling
+    if (testType === "weapon-test" && degrees >= 3 && getData(tool).isImpaling) {
+        triggeredData.push({
+            label: "CS.chatMessages.impaled",
+            text: "CS.chatMessages.impaledDesc",
+            result: `Difficulty ${3 + resistance}`
+        });
     }
-
-    // damage cannot be less than 0 (degrees of failure)
-    return Math.max(totalDamage, 0);
+    // handle shattering
+    if (testType === "weapon-test" && degrees >= 2 && getData(tool).shattering > 0) {
+        triggeredData.push({
+            label: "CS.chatMessages.shattered",
+            text: "CS.chatMessages.shatteredDesc",
+            result: `${getData(tool).shattering} Shattered`
+        });
+    }
+    // handle staggering
+    if (testType === "weapon-test" && degrees >= 2 && getData(tool).isStaggering) {
+        triggeredData.push({
+            label: "CS.chatMessages.staggered",
+            text: "CS.chatMessages.staggeredDesc",
+            result: `- ${tool.damageValue} Damage`
+        });
+    }
+    // return
+    return triggeredData
 }
 
 export function isCritical(result, difficulty) {

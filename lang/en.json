@@ -62,7 +62,14 @@
       "customRoll": "{name} make(s) a custom {test} roll! {degreesMsg}",
       "customRollAgainst": "{name} make(s) a custom {test} roll against {target}! {degreesMsg}",
       "degreesOfSuccess": "degree(s) of success",
-      "degreesOfFailure": "degree(s) of failure"
+      "degreesOfFailure": "degree(s) of failure",
+      "damage": "Damage",
+      "impaled": "Target Impaled",
+      "impaledDesc": "You drive your weapon through your opponent, impaling them. You must immediately succeed on a Challenging (9) Athletics:Strength test or be disarmed. To yank the weapon free, succeed on an Athletics test against a Difficulty of 3 + the opponent's Armor Rating. A success frees the weapon, and every additional degree deals the weapon damage again.",
+      "shattered": "Target Shattered",
+      "shatteredDesc": "You reduce the opponent’s Defensive Bonus or Armor Rating by your weapon's Shattering rating. Weapons with a Defensive Bonus being used are affected first. Reducing a weapon’s Defensive Bonus or an armor’s Armor Rating to 0 destroys it.",
+      "staggered": "Can Stagger Target",
+      "staggeredDesc": "You may sacrifice one degree of success to prevent your foe from taking a Greater Action on their next turn."
     },
     "settings": {
       "debugLogs": {

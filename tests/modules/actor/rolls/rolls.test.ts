@@ -9,6 +9,7 @@ import {
     getRollTemplateData,
     getTestDamage,
     getTestDifficultyFromCurrentTarget,
+    getTestTriggeredData,
     isCritical,
     isFumble
 // @ts-ignore
@@ -792,6 +793,100 @@ describe("rolls.js", () => {
             expect(output.difficulty).toStrictEqual(10);
             expect(output.vFighting).toStrictEqual(5);
             expect(output.vMarksmanship).toStrictEqual(15);
+        });
+    });
+    describe("get test triggered data", () => {
+        // let targetCharacter: TestCharacter = new TestCharacter();
+        // let armorDoc = {
+        //     _id: "someId", name: "someName", type: "armor",
+        //     system: {equipped: 1, rating: 5}
+        // }
+        // targetCharacter.owned.armors = [armorDoc];
+        // addTransformer(
+        //     targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
+        //     armorDoc._id, armorDoc.system.rating,
+        //     true, true
+        // );
+        test("impale", () => {
+            let resistance = 7;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {isImpaling: true}
+            }
+            let testType: string = "weapon-test"
+            let degrees: number = 3;
+            let output = getTestTriggeredData(testType, weaponDoc, degrees, resistance)
+            let expected = {
+                label: "CS.chatMessages.impaled",
+                text: "CS.chatMessages.impaledDesc",
+                result: "Difficulty 10"
+            };
+            expect(output[0]).toStrictEqual(expected);
+        });
+        test("impale - negative", () => {
+            let resistance = 7;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {isImpaling: false}
+            }
+            let testType: string = "weapon-test"
+            let degrees: number = 2;
+            let output = getTestTriggeredData(testType, weaponDoc, degrees, resistance)
+            expect(output).toStrictEqual([]);
+        });
+        test("shattering", () => {
+            let resistance = 7;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {shattering: 2}
+            }
+            let testType: string = "weapon-test"
+            let degrees: number = 2;
+            let output = getTestTriggeredData(testType, weaponDoc, degrees, resistance)
+            let expected = {
+                label: "CS.chatMessages.shattered",
+                text: "CS.chatMessages.shatteredDesc",
+                result: `${weaponDoc.system.shattering} Shattered`
+            };
+            expect(output[0]).toStrictEqual(expected);
+        });
+        test("shattering - negative", () => {
+            let resistance = 7;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {shattering: 2}
+            }
+            let testType: string = "weapon-test"
+            let degrees: number = 1;
+            let output = getTestTriggeredData(testType, weaponDoc, degrees, resistance)
+            expect(output).toStrictEqual([]);
+        });
+        test("staggering", () => {
+            let resistance = 7;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {isStaggering: true}
+            }
+            let testType: string = "weapon-test"
+            let degrees: number = 2;
+            let output = getTestTriggeredData(testType, weaponDoc, degrees, resistance)
+            let expected = {
+                label: "CS.chatMessages.staggered",
+                text: "CS.chatMessages.staggeredDesc",
+                result: `- ${weaponDoc.damageValue} Damage`
+            };
+            expect(output[0]).toStrictEqual(expected);
+        });
+        test("shattering - negative", () => {
+            let resistance = 7;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 5,
+                system: {isStaggering: true}
+            }
+            let testType: string = "weapon-test"
+            let degrees: number = 1;
+            let output = getTestTriggeredData(testType, weaponDoc, degrees, resistance)
+            expect(output).toStrictEqual([]);
         });
     });
     describe("is critical", () => {
