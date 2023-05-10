@@ -104,19 +104,23 @@
       "generalLabels": {
         "none": "None",
         "combat": "Combat",
+        "current": "Current",
         "delete": "Delete",
         "description": "Description",
         "details": "Details",
         "edit": "Edit",
         "effects": "Effects",
         "general": "General",
+        "health": "Health",
         "intrigue": "Intrigue",
+        "maximum": "Maximum",
         "name": "Name",
         "other": "Other",
         "others": "Others",
         "total": "Total",
         "type": "Type",
-        "warfare": "Warfare"
+        "warfare": "Warfare",
+        "yes": "Yes"
       },
       "house": {
         "character": {
@@ -253,6 +257,14 @@
         "featureCost": "Feature Cost",
         "resource": "Resource",
         "canAddFeatureAfter": "You can define specific features of the holding after adding it to a house."
+      },
+      "mountItem": {
+        "armorRating": "AR",
+        "combatDefense": "Defense",
+        "cost": "Cost",
+        "movement": "Move",
+        "sprint": "Sprint",
+        "isWarhorse": "Warhorse"
       },
       "orderItem": {
         "difficulty": "Difficulty",

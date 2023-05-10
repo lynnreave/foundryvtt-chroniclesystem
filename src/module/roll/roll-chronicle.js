@@ -1,5 +1,6 @@
 import SystemUtils from "../../util/systemUtils.js";
 import {
+    adjustFormulaByMount,
     getRollTemplateData
 } from "./rolls.js";
 
@@ -19,6 +20,8 @@ export class RollChronicle {
             ui.notifications.info(SystemUtils.localize("CS.notifications.dicePoolInvalid"));
             return null;
         }
+        // adjust formula by mount
+        adjustFormulaByMount(actor, this.formula);
         // roll dice
         const pool = Math.max(this.formula.pool, 1);
         const dices = pool + this.formula.bonusDice;

@@ -1,4 +1,5 @@
 import {
+    adjustFormulaByMount,
     adjustFormulaByWeapon,
     getAbilityTestFormula,
     getBaseInfluenceForTechnique,
@@ -11,7 +12,8 @@ import {
     getTestDifficultyFromCurrentTarget,
     getTestTriggeredData,
     isCritical,
-    isFumble
+    isFumble,
+    isMounted
 // @ts-ignore
 } from "@roll/rolls";
 // @ts-ignore
@@ -45,6 +47,102 @@ const defaultTransformer = {_id: "source", mod: 1, isDocument: false};
 const defaultDifficulty: number = 6;
 
 describe("rolls.js", () => {
+    describe("adjust formula by mount", () => {
+        test("target not mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc1 = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc1];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            let mountDoc2 = {system: {equipped:0}};
+            targetCharacter.owned.mounts = [mountDoc2];
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByMount(character, formula);
+            let expected = {pool: 5, bonusDice: 3, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+        });
+        test("target is mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc1 = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc1];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            let mountDoc2 = {type: "mount", system: {equipped:7}};
+            targetCharacter.owned.mounts = [mountDoc2];
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByMount(character, formula);
+            let expected = {pool: 5, bonusDice: 2, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+        });
+        test("neither mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc1 = {type: "mount", system: {equipped:0}};
+            character.owned.mounts = [mountDoc1];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            let mountDoc2 = {type: "mount", system: {equipped:0}};
+            targetCharacter.owned.mounts = [mountDoc2];
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByMount(character, formula);
+            let expected = {pool: 5, bonusDice: 2, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+        });
+        test("target no mounts", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc1 = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc1];
+            let targetCharacter: TestCharacter = new TestCharacter();
+            let token: object = {document: {_actor: targetCharacter}};
+            let game: TestGame = new TestGame()
+            game.user.targets = [token];
+            global.game = game;
+            let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByMount(character, formula);
+            let expected = {pool: 5, bonusDice: 3, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+        });
+        test("no target", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc1 = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc1];
+            let game: TestGame = new TestGame()
+            game.user.targets = [];
+            global.game = game;
+            let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByMount(character, formula);
+            let expected = {pool: 5, bonusDice: 2, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+        });
+    });
     describe("adjust formula by weapon", () => {
         test("custom pool modifier", () => {
             let character: TestCharacter = new TestCharacter();
@@ -86,6 +184,35 @@ describe("rolls.js", () => {
             let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
             expect(adjustedFormula.pool).toStrictEqual(4)
             expect(adjustedFormula.bonusDice).toStrictEqual(0)
+        });
+        test("mounted unwieldy", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc];
+            let weaponDoc = {name: "someName", system: {isUnwieldy: true}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+            let expected = {pool: 3, bonusDice: 4, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
+
+        });
+        test("unmounted unwieldy", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {type: "mount", system: {equipped:0}};
+            character.owned.mounts = [mountDoc];
+            let weaponDoc = {name: "someName", system: {isUnwieldy: true}};
+            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+            let expected = {pool: 5, bonusDice: 4, modifier: 3};
+            let actual = {
+                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+            };
+            expect(actual).toStrictEqual(expected);
         });
     });
     describe("get ability test formula", () => {
@@ -796,17 +923,6 @@ describe("rolls.js", () => {
         });
     });
     describe("get test triggered data", () => {
-        // let targetCharacter: TestCharacter = new TestCharacter();
-        // let armorDoc = {
-        //     _id: "someId", name: "someName", type: "armor",
-        //     system: {equipped: 1, rating: 5}
-        // }
-        // targetCharacter.owned.armors = [armorDoc];
-        // addTransformer(
-        //     targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
-        //     armorDoc._id, armorDoc.system.rating,
-        //     true, true
-        // );
         test("impale", () => {
             let resistance = 7;
             let weaponDoc = {
@@ -919,6 +1035,20 @@ describe("rolls.js", () => {
                 {result: 1, active: false, discarded: true}
             ];
             expect(isFumble(dieResults)).toStrictEqual(false);
+        });
+    });
+    describe("is mounted", () => {
+        test("is mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {type: "mount", system: {equipped:7}};
+            character.owned.mounts = [mountDoc];
+            expect(isMounted(character)).toStrictEqual(true);
+        });
+        test("is not mounted", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {type: "mount", system: {equipped:0}};
+            character.owned.mounts = [mountDoc];
+            expect(isMounted(character)).toStrictEqual(false);
         });
     });
 });

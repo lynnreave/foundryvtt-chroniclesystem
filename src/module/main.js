@@ -22,6 +22,7 @@ import registerSystemSettings from "./system/settings.js";
 import SystemUtils from "../util/systemUtils.js";
 import { ActionCombatSheet } from "./item/action/action-combat-sheet.js";
 import { OrderSheet } from "./item/order/order-sheet.js";
+import { MountSheet } from "./item/mount/mount-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -100,6 +101,11 @@ Hooks.once("init", async function () {
   Items.registerSheet("chroniclesystem", CSHoldingItemSheet, {
     label: SystemUtils.localize("CS.sheets.holdingItemSheet"),
     types: ["holding"],
+    makeDefault: true,
+  });
+  Items.registerSheet("chroniclesystem", MountSheet, {
+    label: SystemUtils.localize("CS.sheets.mountItemSheet"),
+    types: ["mount"],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", OrderSheet, {

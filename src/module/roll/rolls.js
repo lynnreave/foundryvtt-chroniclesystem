@@ -7,7 +7,8 @@ import { getTransformation } from "../actor/character/transformers.js";
 import { getData } from "../common.js";
 import {
     CHARACTER_ATTR_CONSTANTS,
-    DEGREES_CONSTANTS
+    DEGREES_CONSTANTS,
+    EQUIPPED_CONSTANTS
 } from "../constants.js";
 import {
     CRITICAL_RESULTS,
@@ -43,6 +44,22 @@ const TEMPLATE_DATA = {
     difficulty: null
 };
 
+export function adjustFormulaByMount(character, formula) {
+    /**
+     * Adjust a weapon test formula by mounted status.
+     * @param {Actor} character: the character.
+     * @param {DiceRollFormula} formula: a formula object for the test.
+     */
+    // get current target (if any)
+    let target = getCurrentTarget();
+    // if target not mounted, add 1 BD
+    if (isMounted(character) && target && !isMounted(target)) {
+        formula.bonusDice += 1;
+    }
+    // return
+    return formula;
+}
+
 export function adjustFormulaByWeapon (actor, formula, weapon) {
     /**
      * Adjust a weapon test formula by the weapon.
@@ -61,6 +78,11 @@ export function adjustFormulaByWeapon (actor, formula, weapon) {
     }
     if (weaponData.customTestModifier) {
         formula.modifier += weaponData.customTestModifier;
+    }
+
+    // handle unwieldy quality
+    if (weaponData.isUnwieldy && isMounted(actor)) {
+        formula.pool -= 2;
     }
 
     // handle training requirements
@@ -541,5 +563,27 @@ export function isFumble(dieResults) {
         }
     });
     // return
-    return isFumble
+    return isFumble;
+}
+
+export function isMounted(character) {
+    /**
+     * Determine if a character is currently mounted.
+     * @param {Character} character: the character.
+     * @returns {boolean}: whether the character is mounted.
+     */
+    let isMounted = false;
+    // get current mount (if exists, character is mounted)
+    // let mounts = getData(character).owned.mounts;
+    let mounts = character.getEmbeddedCollection("Item").filter(
+        (item) => item.type === "mount"
+    );
+    if (mounts) {
+        let currentMount = mounts.find(
+            (mount) => getData(mount).equipped === EQUIPPED_CONSTANTS.MOUNTED
+        );
+        if (currentMount) { isMounted = true; }
+    }
+    // return
+    return isMounted;
 }

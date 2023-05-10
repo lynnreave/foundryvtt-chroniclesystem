@@ -31,6 +31,7 @@ export class CharacterSheet extends CharacterSheetBase {
       "armor",
       "effect",
       "equipment",
+      "mount",
       "relationship",
       "technique",
       "weapon",
@@ -61,6 +62,7 @@ export class CharacterSheet extends CharacterSheetBase {
     // sort
     character.owned.benefits = this._checkNull(data.itemsByType['benefit']);
     character.owned.drawbacks = this._checkNull(data.itemsByType['drawback']);
+    character.owned.mounts = this._checkNull(data.itemsByType['mount']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.techniques = this._checkNull(data.itemsByType['technique']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.relationships = this._checkNull(data.itemsByType['relationship']).sort((a, b) => a.name.localeCompare(b.name));
 

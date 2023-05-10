@@ -1,0 +1,127 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+"systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body flexrow">
+        <section class="details">
+            <header class="header-field">
+                <div class="header-title">
+                    <span>{{localize "CS.sheets.generalLabels.details"}}</span>
+                </div>
+            </header>
+            <table>
+                <tr>
+                    <td><header class="subheader-field"><span>
+                        {{localize "CS.sheets.generalLabels.health"}}
+                    </span></header></td>
+                    <td><header class="subheader-field"><span>&nbsp;</span></header></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.generalLabels.current"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.health.current"
+                            class="small-field"
+                            name="system.health.current"
+                            type="text"
+                            value="{{item.system.health.current}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    /></span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.generalLabels.maximum"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.health.max"
+                            class="small-field"
+                            name="system.health.max"
+                            type="text"
+                            value="{{item.system.health.max}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    /></span></td>
+                </tr>
+                <tr>
+                    <td><header class="subheader-field"><span>
+                        {{localize "CS.sheets.generalLabels.combat"}}
+                    </span></header></td>
+                    <td><header class="subheader-field"><span>&nbsp;</span></header></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.mountItem.isWarhorse"}}</span></td>
+                    <td><input class="item-flag-toggle" type="checkbox" name="isWarhorse" id="isWarhorse" value="{{item.system.isWarhorse}}" {{#if item.system.isWarhorse}} checked {{/if}}/></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.mountItem.movement"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.movement"
+                            class="small-field"
+                            name="system.movement"
+                            type="text"
+                            value="{{item.system.movement}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    /></span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.mountItem.sprint"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.sprint"
+                            class="small-field"
+                            name="system.sprint"
+                            type="text"
+                            value="{{item.system.sprint}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    /></span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.mountItem.combatDefense"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.combatDefense"
+                            class="small-field"
+                            name="system.combatDefense"
+                            type="text"
+                            value="{{item.system.combatDefense}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    /></span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.mountItem.armorRating"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.armorRating"
+                            class="small-field"
+                            name="system.armorRating"
+                            type="text"
+                            value="{{item.system.armorRating}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    /></span></td>
+                </tr>
+                <tr>
+                    <td><header class="subheader-field"><span>
+                        {{localize "CS.sheets.generalLabels.general"}}
+                    </span></header></td>
+                    <td><header class="subheader-field"><span>&nbsp;</span></header></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">{{localize "CS.sheets.mountItem.cost"}}</span></td>
+                    <td><span class="form-fields"><input
+                            id="system.cost"
+                            class="size75"
+                            name="system.cost"
+                            type="text"
+                            value="{{item.system.cost}}"
+                            placeholder="Cost"
+                            data-dtype="String"
+                    /></span></td>
+                </tr>
+            </table>
+        </section>
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+            <button class="item-send-to-chat header-field">
+                Send to Chat
+            </button>
+        </section>
+    </main>
+</form>

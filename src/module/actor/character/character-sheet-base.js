@@ -152,6 +152,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
 
     let isArmor = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.WEARING;
     let isCommander = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.COMMANDER;
+    let isMount = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.MOUNTED;
     let isUnequipping = parseInt(eventData.hand) === 0;
 
     if (isUnequipping) {
@@ -169,10 +170,12 @@ export class CharacterSheetBase extends ActorSheetChronicle {
         let items = this.actor.getEmbeddedCollection('Item')
         tempCollection = items.filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.COMMANDER);
         getData(this.actor).commander = tempCollection[0];
-      }
-      else if (isArmor) {
+      } else if (isArmor) {
         getData(document).equipped = ChronicleSystem.equippedConstants.WEARING;
         tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.WEARING);
+      } else if (isMount) {
+          getData(document).equipped = ChronicleSystem.equippedConstants.MOUNTED;
+          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.MOUNTED);
       } else {
         if (getData(document).isTwoHanded) {
           tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.MAIN_HAND || getData(item).equipped === ChronicleSystem.equippedConstants.OFFHAND || getData(item).equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);

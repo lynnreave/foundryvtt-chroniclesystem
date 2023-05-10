@@ -87,6 +87,7 @@
           "drawbacks": [],
           "effects": [],
           "equipments": [],
+          "mounts": [],
           "powers": [],
           "qualities": [],
           "relationships": [],
@@ -230,6 +231,7 @@
       "event",
       "hero",
       "holding",
+      "mount",
       "order",
       "relationship",
       "technique",
@@ -354,6 +356,22 @@
       "buildTime": "",
       "resource": "",
       "features": []
+    },
+    "mount": {
+      "templates": [
+        "itemDescription"
+      ],
+      "armorRating":  0,
+      "combatDefense": 0,
+      "cost": "",
+      "health": {
+        "current": 9,
+        "max": 9
+      },
+      "equipped": 0,
+      "movement": 8,
+      "sprint": 32,
+      "isWarhorse": false
     },
     "order": {
       "templates": [

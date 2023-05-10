@@ -299,7 +299,7 @@
                 </section>
                 <section class="weapons">
                     <header class="subheader-field">
-                        <span>Current Equipped Weapons</span>
+                        <span>Owned Weapons</span>
                     </header>
                     <table>
                         <thead>
@@ -336,7 +336,7 @@
                         </tbody>
                     </table>
                     <header class="subheader-field">
-                        <span>Current Equipped Armor</span>
+                        <span>Owned Armor</span>
                     </header>
                     <table>
                         <thead>
@@ -354,7 +354,40 @@
                                 <td>{{armor.system.rating}}</td>
                                 <td>{{armor.system.penalty}}</td>
                                 <td class="item-controls flexrow">
-                                    <a class="checkButton equipped {{showIfEquals "1" armor.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "1" armor.system.equipped 0 1}}" data-type="armor"><i class="fas fa-shield-alt"></i></a>
+                                    <a class="checkButton equipped {{showIfEquals "1" armor.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "1" armor.system.equipped 0 1}}" data-type="armor"><i class="fas fa-user"></i></a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <header class="subheader-field">
+                        <span>Owned Mounts</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Mount</th>
+                            <th>Move</th>
+                            <th>DEF</th>
+                            <th>AR</th>
+                            <th>WAR</th>
+                            <th class="item-controls"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.mounts as |mount index|}}
+                            <tr class="item mount" data-item-id="{{_id}}">
+                                <td class="armor-label item-edit field"><a>{{mount.name}}</a></td>
+                                <td>{{mount.system.movement}} ({{mount.system.sprint}})</td>
+                                <td>{{mount.system.combatDefense}}</td>
+                                <td>{{mount.system.armorRating}}</td>
+                                <td>
+                                    {{#if mount.system.isWarhorse}}
+                                        {{localize "CS.sheets.generalLabels.yes"}}
+                                    {{/if}}
+                                </td>
+                                <td class="item-controls flexrow">
+                                    <a class="checkButton equipped {{showIfEquals "7" mount.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "7" mount.system.equipped 0 7}}" data-type="mount"><i class="fas fa-paw"></i></a>
                                 </td>
                             </tr>
                         {{/each}}
