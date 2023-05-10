@@ -366,7 +366,11 @@
       "templates": [
         "itemDescription"
       ],
-      "disposition": "Indifferent"
+      "name": "Character Name",
+      "disposition": "Indifferent",
+      "img": "",
+      "influence": 0,
+      "targetId": ""
     },
     "technique": {
       "type": "",

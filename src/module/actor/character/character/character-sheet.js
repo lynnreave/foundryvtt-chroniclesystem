@@ -81,11 +81,14 @@ export class CharacterSheet extends CharacterSheetBase {
         character.owned.actionsCombat.push(action);
       }
     });
-    const half = Math.ceil(character.owned.actionsCombat.length / 2);
+    let half = Math.ceil(character.owned.actionsCombat.length / 2);
     character.owned.actionsCombatOne = character.owned.actionsCombat.slice(0, half);
     character.owned.actionsCombatTwo = character.owned.actionsCombat.slice(half);
     // intrigue
     character.owned.actionsIntrigue = this._checkNull(data.itemsByType['actionIntrigue']).sort((a, b) => a.name.localeCompare(b.name));
+    half = Math.ceil(character.owned.actionsIntrigue.length / 2);
+    character.owned.actionsIntrigueOne = character.owned.actionsIntrigue.slice(0, half);
+    character.owned.actionsIntrigueTwo = character.owned.actionsIntrigue.slice(half);
 
     // selections & data
     data.dispositions = CHARACTER_DISPOSITIONS;
@@ -355,9 +358,7 @@ export class CharacterSheet extends CharacterSheetBase {
         type: "relationship",
         name: targetActor.name,
         img: targetActor.img,
-        disposition: "Indifferent",
-        description: "",
-        system: {targetId: targetId}
+        system: {targetId: targetId, description: "", disposition: "Indifferent", influence: 0}
       }
       // this.actor.items.push({ key: targetId, value: relationshipDataObject })
       this.actor.createEmbeddedDocuments("Item", [relationshipDataObject])

@@ -1,5 +1,6 @@
 import { describe, test, expect } from "@jest/globals";
 import {
+    calculateIntrigueDefense,
     updateDisposition,
     updateWeaponDefendingState
 // @ts-ignore
@@ -25,6 +26,28 @@ const defaultWeapon = {
 };
 
 describe("helpers.js", () => {
+    describe("calculate intrigue defense", () => {
+        test("call", () => {
+            let character: TestCharacter = new TestCharacter();
+            let abilityDoc = {
+                _id: "someId", name: "Cunning", type: "ability", system: {rating: 4, modifier: 0}
+            };
+            character.owned.abilities = [abilityDoc];
+            expect(calculateIntrigueDefense(character)).toStrictEqual(8);
+        });
+        test("modifier", () => {
+            let character: TestCharacter = new TestCharacter();
+            let abilityDoc = {
+                _id: "someId", name: "Cunning", type: "ability", system: {rating: 4, modifier: 0}
+            };
+            character.owned.abilities = [abilityDoc];
+            addTransformer(
+                character, "modifiers", "intrigue_defense", "someSource", 2,
+                false, true
+            );
+            expect(calculateIntrigueDefense(character)).toStrictEqual(10);
+        });
+    });
     describe("update character disposition", () => {
         test("disposition exists => disposition", () => {
             let character: TestCharacter = new TestCharacter();

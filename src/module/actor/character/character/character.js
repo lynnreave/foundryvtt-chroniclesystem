@@ -5,7 +5,10 @@ import {
     getAllTransformers,
     getTransformation
 } from "../transformers.js";
-import { refreshDisposition } from "./helpers.js";
+import {
+    calculateIntrigueDefense,
+    refreshDisposition
+} from "./helpers.js";
 import { CHARACTER_ATTR_CONSTANTS } from "../../../constants.js";
 import { getData } from "../../../common.js";
 
@@ -65,9 +68,5 @@ export class Character extends CharacterBase {
         return this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.ENDURANCE));
     }
 
-    calcIntrigueDefense() {
-        return this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.AWARENESS)) +
-            this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.CUNNING)) +
-            this.getAbilityValue(SystemUtils.localize(ChronicleSystem.keyConstants.STATUS));
-    }
+    calcIntrigueDefense() { return calculateIntrigueDefense(this); }
 }

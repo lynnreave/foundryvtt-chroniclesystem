@@ -24,6 +24,7 @@ export const CHARACTER_ATTR_CONSTANTS = {
   COMBAT_DEFENSE: "combat_defense",
   COMBAT_DEFENSE_FIGHTING: "combat_defense_fighting",
   COMBAT_DEFENSE_MARKSMANSHIP: "combat_defense_marksmanship",
+  INTRIGUE_DEFENSE: "intrigue_defense",
   MOVEMENT: "movement",
   DISCIPLINE: "discipline",
 };

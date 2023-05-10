@@ -1,14 +1,40 @@
 import { CHARACTER_DISPOSITIONS } from "../../../selections.js";
 import {
-    addTransformer,
+    addTransformer, getTransformation,
     removeTransformer,
     saveTransformers,
     updateTempTransformers
 } from "../transformers.js";
 import { CHARACTER_ATTR_CONSTANTS, KEY_CONSTANTS } from "../../../constants.js";
 import { getData } from "../../../common.js";
+import { getAbilityValue } from "../abilities.js";
+import SystemUtils from "../../../../util/systemUtils.js";
+
+export function calculateIntrigueDefense(character) {
+    /**
+     * Calculate a character's intrigue defense.
+     * @param {Actor} character: a character Actor.
+     * @return {number}: the total intrigue defense.
+     */
+    // total from abilities
+    let awareness = getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
+    let cunning = getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.CUNNING));
+    let status = getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.STATUS));
+    let intrigueDefense = awareness + cunning + status;
+    // add modifiers
+    let mod = getTransformation(
+        character, "modifiers", CHARACTER_ATTR_CONSTANTS.INTRIGUE_DEFENSE
+    ).total;
+    intrigueDefense += mod;
+    // return
+    return intrigueDefense;
+}
 
 export function refreshDisposition(character) {
+    /**
+     * Refresh the disposition of a character Actor.
+     * @param {Actor} character: a character Actor.
+     */
     // get disposition
     let currentDisposition = getData(character).currentDisposition;
     let disposition = CHARACTER_DISPOSITIONS[parseInt(currentDisposition)];

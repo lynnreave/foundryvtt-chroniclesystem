@@ -86,7 +86,7 @@ export class ActorSheetChronicle extends ActorSheet {
         data = data.concat(itemData);
         data.forEach((doc) => {
             const item = this.actor.items.find((i) => {
-                return i.name === doc.name;
+                return (i.name === doc.name && i.type === doc.type);
             });
             if (item) {
                 embeddedItem.push(this.actor.getEmbeddedDocument("Item", item.system._id));

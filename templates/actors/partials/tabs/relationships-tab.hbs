@@ -5,14 +5,15 @@
         </header>
         <ol  class="relationships-list">
             {{#each character.owned.relationships as |relationship key|}}
-                <li class="item relationship flexrow " data-item-id="{{relationship._id}}">
+                <li class="item relationship flexrow" data-item-id="{{relationship._id}}">
                     <div class="profile-list-img-container item-edit">
                         <img class="profile-list-img" src="{{relationship.img}}" title="{{relationship.name}}" alt="{{relationship.name}} Picture" />
                     </div>
-                    <label class="relationship-label item-edit"><a >{{relationship.name}}</a></label>
-                    <label class="relationship-disposition item-edit"><a >{{relationship.system.disposition}}</a></label>
+                    <label class="relationship-label item-edit"><a>{{relationship.name}}</a></label>
+                    <label class="relationship-disposition item-edit"><a>{{relationship.system.disposition}}</a></label>
+                    <label class="relationship-label item-edit"><a>{{relationship.system.influence}}</a></label>
                     <div class="relationship-description item-edit">
-                        <a >
+                        <a>
                             <!-- TODO: make actually editable OR find better way to strip description tags -->
                             {{editor relationship.system.description target="system.description" button=true owner=owner editable=editable}}
                         </a>

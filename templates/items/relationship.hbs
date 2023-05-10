@@ -14,6 +14,20 @@
                     </select>
                 </span>
             </div>
+            <div class="form-group">
+                <label for="system.influence">Influence:</label>
+                <span class="form-fields">
+                    <input
+                            id="system.influence"
+                            class="small-field"
+                            name="system.influence"
+                            type="text"
+                            value="{{item.system.influence}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                    />
+                </span>
+            </div>
         </section>
         <section class="description">
             {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
