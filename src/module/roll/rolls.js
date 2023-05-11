@@ -14,35 +14,7 @@ import {
     CRITICAL_RESULTS,
     FUMBLE_RESULTS
 } from "../selections.js";
-
-/**
- * The base template data object
- * @type {object}
- */
-const TEMPLATE_DATA = {
-    test: {
-        type: "Test",
-        tool: {
-            name: ""
-        }
-    },
-    source: {
-        name: null,
-        img: null
-    },
-    target: null,
-    formula: {
-        pool: 0,
-        bonusDice: 0,
-        modifier: 0
-    },
-    // Die.results (this.results)
-    dice: [],
-    roll: {
-        total: 0
-    },
-    difficulty: null
-};
+import { getWeaponTestDataForActor } from "../actor/character/helpers.js";
 
 export function adjustFormulaByMount(character, formula) {
     /**
@@ -347,7 +319,29 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
      * @returns {object}: a template data object.
      */
     // base template data
-    let templateData = Object.assign({}, TEMPLATE_DATA);
+    let templateData = {
+        test: {
+            type: "Test",
+            tool: {
+                name: ""
+            }
+        },
+        source: {
+            name: null,
+            img: null
+        },
+        target: null,
+        formula: {
+            pool: 0,
+            bonusDice: 0,
+            modifier: 0
+        },
+        dice: [],
+        roll: {
+            total: 0
+        },
+        difficulty: null
+    };
     // update w/ source data
     templateData.source = actor;
     let actorData = getData(templateData.source);
@@ -379,6 +373,7 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
         tool = actorData.owned.weapons.find((weapon) => weapon.name === toolName)
         if (tool) {
             // something was transposing incorrectly so that weapons overrode each other in .owned
+            // getWeaponTestDataForActor(templateData.source, tool)
             templateData.test.tool = Object.assign({}, tool);
         }
         // get resistance from target damage resistance
@@ -401,9 +396,12 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
         }
     }
     // update w/ difficulty data
-    let difficultyData = getTestDifficultyFromCurrentTarget(
-        rollType, templateData.target
-    );
+    let difficultyData = {difficult: null};
+    if (formula.difficult > 0) {
+        difficultyData.difficulty = formula.difficult;
+    } else {
+        difficultyData = getTestDifficultyFromCurrentTarget(rollType, templateData.target);
+    }
     if (difficultyData.difficulty) {
         // update w/ degrees
         let degreesData = getDegrees(
@@ -467,7 +465,7 @@ export function getTestDamage(
      */
 
     // handle invalid baseDamage
-    if (!baseDamage) { return 0; }
+    if (!baseDamage) { return null; }
 
     // multiple damage by degrees
     let totalDamage = degrees * baseDamage;

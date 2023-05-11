@@ -121,8 +121,9 @@ async function handleRollAsync(rollType, actor, showModifierDialog = false) {
             formulaChanged.reRoll = form.data.reRoll.value;
             formulaChanged.modifier = form.data.modifier.value;
             formulaChanged.dicePenalty = form.data.dicePenalty.value;
+            formulaChanged.difficult = form.data.difficult.value;
 
-            if (formulaChanged.toStr() !== formula.toStr()) {
+            if (formulaChanged.toStr() !== formula.toStr() || formulaChanged.difficult > 0) {
                 formulaChanged.isUserChanged = true;
                 formula = formulaChanged;
             }

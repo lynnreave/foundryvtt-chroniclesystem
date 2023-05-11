@@ -636,6 +636,32 @@ describe("rolls.js", () => {
         });
     });
     describe("get roll template data", () => {
+        test("test w/ difficulty", () => {
+            let character: TestCharacter = new TestCharacter();
+            character.name = "Some Name";
+            character.img = "/some/img/path";
+            let weaponDoc = Object.assign({}, defaultWeapon)
+            character.system.owned.weapons = [weaponDoc];
+            let game: TestGame = new TestGame()
+            game.user.targets = [];
+            global.game = game;
+            let rollType: string = "weapon-test";
+            let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
+            let formula: DiceRollFormula = getFormula(rollDef, character);
+            let roll = {total: 15};
+            formula.reRoll = 0;
+            formula.difficult = 5
+            let dieResults = [
+                {result: 6, active: true},
+                {result: 1, active: false, discarded: true}
+            ];
+            let output = getRollTemplateData(
+                character, rollType, formula, roll, dieResults, weaponDoc.name
+            );
+            expect(output.difficulty.degrees).toStrictEqual(3);
+            expect(output.difficulty.text).toStrictEqual(DEGREES_CONSTANTS["3"]);
+            expect(output.difficulty.damage).toStrictEqual(9);
+        });
         test("weapon test", () => {
             let character: TestCharacter = new TestCharacter();
             character.name = "Some Name";
@@ -846,7 +872,7 @@ describe("rolls.js", () => {
         });
         test("no base damage", () => {
             let output = getTestDamage("weapon-test", undefined, 2)
-            expect(output).toStrictEqual(0);
+            expect(output).toStrictEqual(null);
         });
         test("has resistance", () => {
             let output = getTestDamage("weapon-test", 5, 2, 3)

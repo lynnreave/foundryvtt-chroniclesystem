@@ -34,7 +34,8 @@
         "bonusDice": "Bonus Dice",
         "modifier": "Modifiers",
         "dicePenalty": "Penalties",
-        "reRoll": "Re-Roll 1s"
+        "reRoll": "Re-Roll 1s",
+        "difficult": "Difficulty"
       },
       "addingHouseEvent": {
         "title": "Should the event generate the modifiers automatically?",
