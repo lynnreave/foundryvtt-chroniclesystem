@@ -20,6 +20,7 @@ export class ActorSheetChronicle extends ActorSheet {
             $(ev.currentTarget).parents('.item').find('.description').slideToggle();
         });
         html.find(".item-flag-toggle").on("click", this._onClickItemFlagToggle.bind(this));
+        html.find(".actor-flag-toggle").on("click", this._onClickActorFlagToggle.bind(this));
 
         // Update Inventory Item
         html.find('.item-edit').on("click", this._showEmbeddedItemSheet.bind(this));
@@ -31,6 +32,16 @@ export class ActorSheetChronicle extends ActorSheet {
 
     async _onClickRoll(event, targets) {
         await ChronicleSystem.eventHandleRoll(event, this.actor, targets);
+    }
+
+    async _onClickActorFlagToggle(event) {
+        let eventData = event.currentTarget.dataset;
+        let actorFlag = eventData.name;
+        let currentState = eventData.value === "true";
+        let targetState = !currentState;
+        let pkg = {};
+        pkg[`system.${actorFlag}`] = targetState;
+        await this.actor.update(pkg);
     }
 
     async _onClickItemFlagToggle(event) {

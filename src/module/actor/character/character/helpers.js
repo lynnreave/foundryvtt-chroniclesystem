@@ -16,16 +16,26 @@ export function calculateIntrigueDefense(character) {
      * @param {Actor} character: a character Actor.
      * @return {number}: the total intrigue defense.
      */
+    let intrigueDefense = 0;
+    // get character data
+    const data = getData(character);
     // total from abilities
-    let awareness = getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
-    let cunning = getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.CUNNING));
-    let status = getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.STATUS));
-    let intrigueDefense = awareness + cunning + status;
+    if (!data.ignoreIntrigueDefenseAwareness) {
+        intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
+    }
+    if (!data.ignoreIntrigueDefenseCunning) {
+        intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.CUNNING));
+    }
+    if (!data.ignoreIntrigueDefenseStatus) {
+        intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.STATUS));
+    }
     // add modifiers
     let mod = getTransformation(
         character, "modifiers", CHARACTER_ATTR_CONSTANTS.INTRIGUE_DEFENSE
     ).total;
     intrigueDefense += mod;
+    // minimum 1
+    intrigueDefense = Math.max(intrigueDefense, 1);
     // return
     return intrigueDefense;
 }

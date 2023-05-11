@@ -34,6 +34,13 @@ describe("calculations.js", () => {
       let output = calculateCombatDefense(character);
       expect(output).toStrictEqual(1);
     });
+    test("ignore agility", () => {
+      global.game.settings = TestSettingsSystemASOIAFTrue;
+      let character: TestCharacter = new TestCharacter();
+      character.system.ignoreCombatDefenseAgility = true;
+      let output = calculateCombatDefense(character);
+      expect(output).toStrictEqual(4);
+    });
   });
   describe("calculate movement data", () => {
     test("call", () => {

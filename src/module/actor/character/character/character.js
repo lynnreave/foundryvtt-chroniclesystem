@@ -32,13 +32,13 @@ export class Character extends CharacterBase {
         // get composure damage resistance
         this.system.composureResistance = getTransformation(
             this, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
-            false, true
+            false, false
         ).total;
 
         // get damage resistance
         this.system.damageResistance = getTransformation(
             this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
-            false, true
+            false, false
         ).total;
     }
 

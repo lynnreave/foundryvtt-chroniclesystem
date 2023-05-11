@@ -104,6 +104,7 @@
       "generalLabels": {
         "none": "None",
         "combat": "Combat",
+        "components": "Components",
         "current": "Current",
         "delete": "Delete",
         "description": "Description",
@@ -173,6 +174,16 @@
         }
       },
       "character": {
+        "combatDefense": {
+          "includeAgility": "Include Agility",
+          "includeAthletics": "Include Athletics",
+          "includeAwareness": "Include Awareness"
+        },
+        "intrigueDefense": {
+          "includeAwareness": "Include Awareness",
+          "includeCunning": "Include Cunning",
+          "includeStatus": "Include Status"
+        },
         "injury": "Injury",
         "wound": "Wound",
         "others": "Others",

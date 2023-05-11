@@ -47,6 +47,15 @@ describe("helpers.js", () => {
             );
             expect(calculateIntrigueDefense(character)).toStrictEqual(10);
         });
+        test("ignore cunning", () => {
+            let character: TestCharacter = new TestCharacter();
+            let abilityDoc = {
+                _id: "someId", name: "Cunning", type: "ability", system: {rating: 4, modifier: 0}
+            };
+            character.owned.abilities = [abilityDoc];
+            character.system.ignoreIntrigueDefenseCunning = true
+            expect(calculateIntrigueDefense(character)).toStrictEqual(4);
+        });
     });
     describe("update character disposition", () => {
         test("disposition exists => disposition", () => {

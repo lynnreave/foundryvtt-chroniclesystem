@@ -42,6 +42,8 @@ export class CharacterSheet extends CharacterSheetBase {
     return mergeObject(super.defaultOptions, {
       classes: ["chroniclesystem", "character", "sheet", "actor"],
       template: "systems/chroniclesystem/templates/actors/characters/character-sheet.hbs",
+      width: 900,
+      height: 1080,
       tabs: [
         {
           navSelector: ".tabs",

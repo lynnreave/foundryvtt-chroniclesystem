@@ -25,7 +25,7 @@ export class Unit extends CharacterBase {
         // get damage resistance
         this.system.damageResistance = getTransformation(
             this, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN,
-            false, true
+            false, false
         ).total;
     }
 

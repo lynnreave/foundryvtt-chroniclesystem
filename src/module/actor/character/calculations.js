@@ -17,10 +17,18 @@ export function calculateCombatDefense(character) {
    * @param {object} character: a character Actor object.
    */
   // get the default value
-  let value =
-    getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS)) +
-    getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AGILITY)) +
-    getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.ATHLETICS));
+  let value = 0;
+  // get character data
+  const data = getData(character);
+  if (!data.ignoreCombatDefenseAgility) {
+    value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AGILITY));
+  }
+  if (!data.ignoreCombatDefenseAthletics) {
+    value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.ATHLETICS));
+  }
+  if (!data.ignoreCombatDefenseAwareness) {
+    value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
+  }
   // update w/ ASOIAF-specific rules
   // eslint-disable-next-line no-undef
   if (game.settings.get(SETTINGS.SYSTEM_NAME, SETTINGS.ASOIAF_DEFENSE_STYLE)) {

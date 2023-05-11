@@ -22,27 +22,11 @@
                     <header class="subheader-field">
                         <span>Intrigue Defense</span>
                     </header>
-
                     <div class="form-group">
                         <span class="form-fields">
-                              <input
-                                      name="system.derivedStats.intrigueDefense.value"
-                                      type="text"
-                                      value="{{character.derivedStats.intrigueDefense.value}}"
-                                      placeholder="Value"
-                                      readonly="readonly"
-                                      data-dtype="Number"
-                              />
-                            <b>+</b>
-                              <input
-                                      name="system.derivedStats.intrigueDefense.modifier"
-                                      type="text"
-                                      value="{{character.derivedStats.intrigueDefense.modifier}}"
-                                      placeholder="Value"
-                                      data-dtype="Number"
-                              />
-                            <b>=</b>
+                            <!--suppress HtmlFormInputWithoutLabel -->
                             <input
+                                    id="system.derivedStats.intrigueDefense.total"
                                     name="system.derivedStats.intrigueDefense.total"
                                     type="text"
                                     value="{{character.derivedStats.intrigueDefense.total}}"
@@ -53,6 +37,16 @@
                         </span>
                     </div>
                     <header class="subheader-field">
+                        <span>{{localize "CS.sheets.generalLabels.components"}}</span>
+                    </header>
+                    <div class="center">
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseAwareness "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseAwareness" data-value="{{character.ignoreIntrigueDefenseAwareness}}" title="{{localize "CS.sheets.character.intrigueDefense.includeAwareness"}}"><i class="fas fa-eye padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseCunning "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseCunning" data-value="{{character.ignoreIntrigueDefenseCunning}}" title="{{localize "CS.sheets.character.intrigueDefense.includeCunning"}}"><i class="fa-solid fa-brain padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseStatus "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseStatus" data-value="{{character.ignoreIntrigueDefenseStatus}}" title="{{localize "CS.sheets.character.intrigueDefense.includeStatus"}}"><i class="fa-solid fa-crown padding-3"></i></a>
+                    </div>
+                    <header class="subheader-field">
                         <span class="form-fields">Damage Resistance</span>
                     </header>
                     <div class="center padding-1">{{character.composureResistance}}</div>
@@ -61,24 +55,19 @@
                     </header>
                     <div class="form-group">
                         <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
                             <input
-                                    name="system.derivedStats.composure.value"
+                                    id="system.derivedStats.composure.current"
+                                    name="system.derivedStats.composure.current"
                                     type="text"
-                                    value="{{character.derivedStats.composure.value}}"
-                                    placeholder="Value"
-                                    readonly="readonly"
+                                    value="{{character.derivedStats.composure.current}}"
+                                    placeholder="{{character.derivedStats.composure.total}}"
                                     data-dtype="Number"
                             />
-                            <b>+</b>
+                            <b> / </b>
+                            <!--suppress HtmlFormInputWithoutLabel -->
                             <input
-                                    name="system.derivedStats.composure.modifier"
-                                    type="text"
-                                    value="{{character.derivedStats.composure.modifier}}"
-                                    placeholder="Modifier"
-                                    data-dtype="Number"
-                            />
-                            <b>=</b>
-                            <input
+                                    id="system.derivedStats.composure.value"
                                     name="system.derivedStats.composure.value"
                                     type="text"
                                     value="{{character.derivedStats.composure.total}}"
@@ -88,7 +77,6 @@
                             />
                         </span>
                     </div>
-                    {{> (formGroup) labelText="Current:" id="system.derivedStats.composure.current" value=character.derivedStats.composure.current inputCssClass="" placeHolder="Current" dataType="Number" }}
                     <header class="subheader-field">
                         <span>Frustration</span>
                     </header>
@@ -150,24 +138,9 @@
                     </header>
                     <div class="form-group">
                         <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
                             <input
-                                    name="system.derivedStats.combatDefense.value"
-                                    type="text"
-                                    value="{{character.derivedStats.combatDefense.value}}"
-                                    placeholder="Value"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                            <b>+</b>
-                            <input
-                                    name="system.derivedStats.combatDefense.modifier"
-                                    type="text"
-                                    value="{{character.derivedStats.combatDefense.modifier}}"
-                                    placeholder="Modifier"
-                                    data-dtype="Number"
-                            />
-                            <b>=</b>
-                            <input
+                                    id="system.derivedStats.combatDefense.value"
                                     name="system.derivedStats.combatDefense.value"
                                     type="text"
                                     value="{{character.derivedStats.combatDefense.total}}"
@@ -178,6 +151,16 @@
                         </span>
                     </div>
                     <header class="subheader-field">
+                        <span>{{localize "CS.sheets.generalLabels.components"}}</span>
+                    </header>
+                    <div class="center">
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAgility "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAgility" data-value="{{character.ignoreCombatDefenseAgility}}" title="{{localize "CS.sheets.character.combatDefense.includeAgility"}}"><i class="fas fa-universal-access padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAthletics "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAthletics" data-value="{{character.ignoreCombatDefenseAthletics}}" title="{{localize "CS.sheets.character.combatDefense.includeAthletics"}}"><i class="fa-solid fa-hand-fist padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAwareness "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAwareness" data-value="{{character.ignoreCombatDefenseAwareness}}" title="{{localize "CS.sheets.character.combatDefense.includeAwareness"}}"><i class="fas fa-eye padding-3"></i></a>
+                    </div>
+                    <header class="subheader-field">
                         <span class="form-fields">Damage Resistance</span>
                     </header>
                     <div class="center padding-1">{{character.damageResistance}}</div>
@@ -186,41 +169,24 @@
                     </header>
                     <div class="form-group">
                         <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
                             <input
-                                    name="system.derivedStats.health.value"
+                                    id="system.derivedStats.health.current"
+                                    name="system.derivedStats.health.current"
                                     type="text"
-                                    value="{{character.derivedStats.health.value}}"
-                                    placeholder="Value"
-                                    readonly="readonly"
+                                    value="{{character.derivedStats.health.current}}"
+                                    placeholder="{{character.derivedStats.health.total}}"
                                     data-dtype="Number"
                             />
-                            <b>+</b>
+                            <b> / </b>
+                            <!--suppress HtmlFormInputWithoutLabel -->
                             <input
-                                    name="system.derivedStats.health.modifier"
-                                    type="text"
-                                    value="{{character.derivedStats.health.modifier}}"
-                                    placeholder="Modifier"
-                                    data-dtype="Number"
-                            />
-                            <b>=</b>
-                            <input
-                                    name="system.derivedStats.health.value"
+                                    id="system.derivedStats.health.total"
+                                    name="system.derivedStats.health.total"
                                     type="text"
                                     value="{{character.derivedStats.health.total}}"
                                     placeholder="Total"
                                     readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="system.derivedStats.health.current">Current</label>
-                        <span class="form-fields">
-                            <input
-                                    name="system.derivedStats.health.current"
-                                    type="text"
-                                    value="{{character.derivedStats.health.current}}"
-                                    placeholder="Current"
                                     data-dtype="Number"
                             />
                         </span>
@@ -261,6 +227,7 @@
                             <li class="injury flexrow" data-item-id="{{id}}">
                                 <!--suppress HtmlFormInputWithoutLabel -->
                                 <input
+                                        id="system.injuries.{{id}}"
                                         class="big-field"
                                         type="text"
                                         name="system.injuries.{{id}}"
@@ -285,6 +252,7 @@
                             <li class="wound flexrow" data-item-id="{{id}}">
                                 <!--suppress HtmlFormInputWithoutLabel -->
                                 <input
+                                        id="system.wounds.{{id}}"
                                         class="big-field"
                                         type="text"
                                         name="system.wounds.{{id}}"

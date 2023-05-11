@@ -121,7 +121,13 @@
       "templates": [
         "common",
         "character-common"
-      ]
+      ],
+      "ignoreCombatDefenseAgility": false,
+      "ignoreCombatDefenseAthletics": false,
+      "ignoreCombatDefenseAwareness": false,
+      "ignoreIntrigueDefenseAwareness": false,
+      "ignoreIntrigueDefenseCunning": false,
+      "ignoreIntrigueDefenseStatus": false
     },
     "house": {
       "realm": "",
