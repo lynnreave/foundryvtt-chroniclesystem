@@ -476,10 +476,11 @@ export function getTestDamage(
     if (character) {
         let currentMount = getCurrentMount(character);
         if (currentMount && getData(currentMount).isStationary) {
-            totalDamage += (degrees * 2);
+            if ((tool && getData(tool).reach && getData(tool).reach < 10) || (tool && !getData(tool).reach)) {
+                totalDamage += (degrees * 2);
+            }
         }
     }
-
 
     // handle resistance
     if (resistance) {

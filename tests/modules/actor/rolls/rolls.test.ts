@@ -897,7 +897,7 @@ describe("rolls.js", () => {
             let resistance = 5;
             let weaponDoc = {
                 _id: "someId", name: "someName", type: "weapon", damageValue: 3,
-                system: {}
+                system: {reach: 3}
             }
             let output = getTestDamage(
                 "weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc, character
@@ -914,6 +914,22 @@ describe("rolls.js", () => {
             let weaponDoc = {
                 _id: "someId", name: "someName", type: "weapon", damageValue: 3,
                 system: {}
+            }
+            let output = getTestDamage(
+                "weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc, character
+            )
+            expect(output).toStrictEqual(1);
+        });
+        test("mounted: stationary w/ ranged", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {
+                type: "mount", system: {equipped:7, isStationary: true}
+            };
+            character.owned.mounts = [mountDoc];
+            let resistance = 5;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 3,
+                system: {reach: 10}
             }
             let output = getTestDamage(
                 "weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc, character
