@@ -888,6 +888,38 @@ describe("rolls.js", () => {
             let output = getTestDamage("weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc)
             expect(output).toStrictEqual(2);
         });
+        test("mounted: stationary", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {
+                type: "mount", system: {equipped:7, isStationary: true}
+            };
+            character.owned.mounts = [mountDoc];
+            let resistance = 5;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 3,
+                system: {}
+            }
+            let output = getTestDamage(
+                "weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc, character
+            )
+            expect(output).toStrictEqual(5);
+        });
+        test("mounted: not stationary", () => {
+            let character: TestCharacter = new TestCharacter();
+            let mountDoc = {
+                type: "mount", system: {equipped:7, isStationary: false}
+            };
+            character.owned.mounts = [mountDoc];
+            let resistance = 5;
+            let weaponDoc = {
+                _id: "someId", name: "someName", type: "weapon", damageValue: 3,
+                system: {}
+            }
+            let output = getTestDamage(
+                "weapon-test", weaponDoc.damageValue, 2, resistance, weaponDoc, character
+            )
+            expect(output).toStrictEqual(1);
+        });
     });
     describe("get test difficulty from actor target", () => {
         test("no targets", () => {

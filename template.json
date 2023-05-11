@@ -371,7 +371,8 @@
       "equipped": 0,
       "movement": 8,
       "sprint": 32,
-      "isWarhorse": false
+      "isWarhorse": false,
+      "isStationary": false
     },
     "order": {
       "templates": [

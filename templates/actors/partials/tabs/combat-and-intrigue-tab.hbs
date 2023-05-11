@@ -387,6 +387,9 @@
                                     {{/if}}
                                 </td>
                                 <td class="item-controls flexrow">
+                                    {{#ifDifferent mount.system.equipped ../notEquipped}}
+                                    <a class="checkButton item-flag-toggle {{showIfFalse mount.system.isStationary "activated" ""}}" data-item-id="{{_id}}" data-name="isStationary" data-value="{{mount.system.isStationary}}"><i class="fas fa-arrow-circle-up"></i></a>
+                                    {{/ifDifferent}}
                                     <a class="checkButton equipped {{showIfEquals "7" mount.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "7" mount.system.equipped 0 7}}" data-type="mount"><i class="fas fa-paw"></i></a>
                                 </td>
                             </tr>

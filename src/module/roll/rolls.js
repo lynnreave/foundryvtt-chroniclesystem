@@ -211,6 +211,24 @@ export function getBaseInfluenceForTechnique(characterData, technique) {
     return influenceBaseDamage;
 }
 
+export function getCurrentMount(character) {
+    /**
+     * Get current mount (if any).
+     * @param {Character} character: the character object.
+     */
+    let currentMount = null;
+    let mounts = character.getEmbeddedCollection("Item").filter(
+        (item) => item.type === "mount"
+    );
+    if (mounts) {
+        currentMount = mounts.find(
+            (mount) => getData(mount).equipped === EQUIPPED_CONSTANTS.MOUNTED
+        );
+    }
+    // return
+    return currentMount;
+}
+
 export function getCurrentTarget(){
     /**
      * Get the current target of the select token.
@@ -397,7 +415,8 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
         };
         // update w/ calculated damage
         templateData.difficulty.damage = getTestDamage(
-            rollType, templateData.test.tool.damageValue, degreesData.num, resistance, templateData.test.tool
+            rollType, templateData.test.tool.damageValue, degreesData.num, resistance,
+            templateData.test.tool, templateData.source
         );
         // update w/ critical or fumble
         if (rollType === "weapon-test") {
@@ -434,7 +453,7 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
 }
 
 export function getTestDamage(
-    testType, baseDamage, degrees, resistance = null, tool = null
+    testType, baseDamage, degrees, resistance = null, tool = null, character = null
 ) {
     /**
      * Get the calculated final damage from a test.
@@ -443,6 +462,7 @@ export function getTestDamage(
      * @param {number} degrees: the degrees of success or failure (-2, -1, 1, 2, 3).
      * @param {number} resistance: the amount of resistance the target has.
      * @param {object} tool: the tool used for the test roll.
+     * @param {Actor} character: the character performing the test.
      * @return {number}: the total calculated damage.
      */
 
@@ -451,6 +471,15 @@ export function getTestDamage(
 
     // multiple damage by degrees
     let totalDamage = degrees * baseDamage;
+
+    // handle mounted
+    if (character) {
+        let currentMount = getCurrentMount(character);
+        if (currentMount && getData(currentMount).isStationary) {
+            totalDamage += (degrees * 2);
+        }
+    }
+
 
     // handle resistance
     if (resistance) {
@@ -579,15 +608,8 @@ export function isMounted(character) {
      */
     let isMounted = false;
     // get current mount (if exists, character is mounted)
-    let mounts = character.getEmbeddedCollection("Item").filter(
-        (item) => item.type === "mount"
-    );
-    if (mounts) {
-        let currentMount = mounts.find(
-            (mount) => getData(mount).equipped === EQUIPPED_CONSTANTS.MOUNTED
-        );
-        if (currentMount) { isMounted = true; }
-    }
+    let currentMount = getCurrentMount(character);
+    if (currentMount) { isMounted = true; }
     // return
     return isMounted;
 }
