@@ -104,6 +104,7 @@
       "weaponItemSheet": "Weapon Sheet",
       "generalLabels": {
         "none": "None",
+        "actions": "Actions",
         "combat": "Combat",
         "components": "Components",
         "current": "Current",
@@ -205,10 +206,12 @@
           "abilities": "Abilities",
           "actions-combat": "Combat Actions",
           "actions-intrigue": "Intrigue Actions",
+          "combat": "Combat",
           "combat-intrigue": "Combat and Intrigue",
           "description": "Description",
           "effects": "Effects",
           "equipments": "Equipments",
+          "intrigue": "Intrigue",
           "qualities": "Qualities",
           "relationships": "Relationships",
           "sorcery": "Sorcery"

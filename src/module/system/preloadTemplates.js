@@ -14,6 +14,8 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/chroniclesystem/templates/actors/partials/tabs/actions-intrigue-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/orders-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/combat-and-intrigue-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/combat-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/intrigue-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/qualities-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/sorcery-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/equipments-tab.hbs',

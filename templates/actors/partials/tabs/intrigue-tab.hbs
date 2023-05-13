@@ -1,0 +1,170 @@
+<div class="tab flexrow" data-group="primary" data-tab="intrigue">
+    <section class="derived-statistics">
+        <header class="header-field">
+            <span>Destiny Points</span>
+        </header>
+        <section class="destiny flexrow">
+            <section class="">
+            </section>
+            <section class="">
+            </section>
+            <section class="flexrow">
+                {{> (formGroup) labelText="Current:" id="system.destinyPoints.current" value=character.destinyPoints.current inputCssClass="small-field" placeHOlder="Current" dataType="Number" }}
+                {{> (formGroup) labelText="Max:" id="system.destinyPoints.max" value=character.destinyPoints.max inputCssClass="small-field" placeHOlder="Max" dataType="Number" }}
+            </section>
+        </section>
+        <section class="intrigue">
+            <header class="header-field">
+                <span>Intrigue</span>
+            </header>
+            <section class="content flexrow">
+                <section class="stats">
+                    <header class="subheader-field">
+                        <span>Intrigue Defense</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.intrigueDefense.total"
+                                    name="system.derivedStats.intrigueDefense.total"
+                                    type="text"
+                                    value="{{character.derivedStats.intrigueDefense.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <header class="subheader-field">
+                        <span>{{localize "CS.sheets.generalLabels.components"}}</span>
+                    </header>
+                    <div class="center">
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseAwareness "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseAwareness" data-value="{{character.ignoreIntrigueDefenseAwareness}}" title="{{localize "CS.sheets.character.intrigueDefense.includeAwareness"}}"><i class="fas fa-eye padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseCunning "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseCunning" data-value="{{character.ignoreIntrigueDefenseCunning}}" title="{{localize "CS.sheets.character.intrigueDefense.includeCunning"}}"><i class="fa-solid fa-brain padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseStatus "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseStatus" data-value="{{character.ignoreIntrigueDefenseStatus}}" title="{{localize "CS.sheets.character.intrigueDefense.includeStatus"}}"><i class="fa-solid fa-crown padding-3"></i></a>
+                    </div>
+                    <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.composureResistance}}</div>
+                    <header class="subheader-field">
+                        <span>Composure</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.composure.current"
+                                    name="system.derivedStats.composure.current"
+                                    type="text"
+                                    value="{{character.derivedStats.composure.current}}"
+                                    placeholder="{{character.derivedStats.composure.total}}"
+                                    data-dtype="Number"
+                            />
+                            <b> / </b>
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.composure.value"
+                                    name="system.derivedStats.composure.value"
+                                    type="text"
+                                    value="{{character.derivedStats.composure.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <header class="subheader-field">
+                        <span>Frustration</span>
+                    </header>
+                    {{> (ratingCheckbox) max=character.derivedStats.frustration.total currentValue=character.derivedStats.frustration.current dataType="Frustration" }}
+                    <section class="stress flexrow">
+                    <header class="subheader-field">
+                        <span>Stress</span>
+                    </header>
+                    {{> (ratingCheckbox) max=2 currentValue=character.currentStress dataType="Stress" }}
+                    </section>
+                </section>
+                <section class="disposition">
+                    <header class="subheader-field">
+                        <span>Current Disposition</span>
+                    </header>
+                    <div class="disposition-list">
+                        {{#each dispositions}}
+                                <div class="disposition option capitalize {{showIfEquals @index ../character.currentDisposition "selected"}}" data-id="{{@index}}">
+                                    {{localize this.name}}
+                                </div>
+                        {{/each}}
+                    </div>
+                </section>
+                <section class="techniques">
+                    <header class="subheader-field">
+                        <span>Techniques</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Technique</th>
+                            <th>Influence</th>
+                            <th>Persuasion</th>
+                            <th>Deception</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each techniques}}
+                        <tr>
+                            <td class="capitalize">{{this.name}}</td>
+                            <td>{{this.influence}}</td>
+                            <td class="rollable" id="persuasion:{{this.name}}:{{formulaToStr this.persuasion}}"><a>{{format-formula this.persuasion}}</a></td>
+                            <td class="rollable" id="deception:{{this.name}}:{{formulaToStr this.deception}}"><a>{{format-formula this.deception}}</a></td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+        </section>
+        <header class="header-field">
+            <span>{{localize "CS.sheets.generalLabels.actions"}}</span>
+        </header>
+        <section class="intrigue flexrow">
+            <ol class="list equipment-list">
+                <li class="list-header flexrow">
+                    <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                    <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                </li>
+                {{#each character.owned.actionsIntrigueOne as |action index|}}
+                    <li  class="item flexrow" data-item-id="{{_id}}">
+                        <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                            <div class="weapon-label field">{{action.name}}</div>
+                        </a>
+                        <div class="item-controls padding-3">
+                            <a class="item-control item-edit" title="{{localize "CS.sheets.generalLabels.edit"}}"><i class="fas fa-edit"></i></a>
+                            <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsIntrigueOne" data-action="delete"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </li>
+                {{/each}}
+            </ol>
+            <ol class="list equipment-list">
+                <li class="list-header flexrow">
+                    <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                    <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                </li>
+                {{#each character.owned.actionsIntrigueTwo as |action index|}}
+                    <li  class="item flexrow" data-item-id="{{_id}}">
+                        <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                            <div class="weapon-label field">{{action.name}}</div>
+                        </a>
+                        <div class="item-controls padding-3">
+                            <a class="item-control item-edit" title="{{localize "CS.sheets.generalLabels.edit"}}"><i class="fas fa-edit"></i></a>
+                            <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsIntrigueTwo" data-action="delete"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </li>
+                {{/each}}
+            </ol>
+        </section>
+    </section>
+</div>

@@ -1,0 +1,365 @@
+<div class="tab flexrow" data-group="primary" data-tab="combat">
+    <section class="derived-statistics">
+        <header class="header-field">
+            <span>Destiny Points</span>
+        </header>
+        <section class="destiny flexrow">
+            <section class="">
+            </section>
+            <section class="">
+            </section>
+            <section class="flexrow">
+                {{> (formGroup) labelText="Current:" id="system.destinyPoints.current" value=character.destinyPoints.current inputCssClass="small-field" placeHOlder="Current" dataType="Number" }}
+                {{> (formGroup) labelText="Max:" id="system.destinyPoints.max" value=character.destinyPoints.max inputCssClass="small-field" placeHOlder="Max" dataType="Number" }}
+            </section>
+        </section>
+        <section class="combat">
+            <header class="header-field">
+                <span>Combat</span>
+            </header>
+            <section class="content flexrow">
+                <section class="stats">
+                    <header class="subheader-field">
+                        <span>Combat Defense</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.combatDefense.value"
+                                    name="system.derivedStats.combatDefense.value"
+                                    type="text"
+                                    value="{{character.derivedStats.combatDefense.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <header class="subheader-field">
+                        <span>{{localize "CS.sheets.generalLabels.components"}}</span>
+                    </header>
+                    <div class="center">
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAgility "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAgility" data-value="{{character.ignoreCombatDefenseAgility}}" title="{{localize "CS.sheets.character.combatDefense.includeAgility"}}"><i class="fas fa-universal-access padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAthletics "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAthletics" data-value="{{character.ignoreCombatDefenseAthletics}}" title="{{localize "CS.sheets.character.combatDefense.includeAthletics"}}"><i class="fa-solid fa-hand-fist padding-3"></i></a>
+                        <b>+</b>
+                        <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAwareness "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAwareness" data-value="{{character.ignoreCombatDefenseAwareness}}" title="{{localize "CS.sheets.character.combatDefense.includeAwareness"}}"><i class="fas fa-eye padding-3"></i></a>
+                    </div>
+                    <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.damageResistance}}</div>
+                    <header class="subheader-field">
+                        <span>Health</span>
+                    </header>
+                    <div class="form-group">
+                        <span class="form-fields">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.health.current"
+                                    name="system.derivedStats.health.current"
+                                    type="text"
+                                    value="{{character.derivedStats.health.current}}"
+                                    placeholder="{{character.derivedStats.health.total}}"
+                                    data-dtype="Number"
+                            />
+                            <b> / </b>
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.health.total"
+                                    name="system.derivedStats.health.total"
+                                    type="text"
+                                    value="{{character.derivedStats.health.total}}"
+                                    placeholder="Total"
+                                    readonly="readonly"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </div>
+                    <header class="subheader-field">
+                        <span>Fatigue</span>
+                    </header>
+                    {{> (ratingCheckbox) max=character.derivedStats.fatigue.total currentValue=character.derivedStats.fatigue.current dataType="Fatigue" }}
+                    <header class="subheader-field">
+                        <span>Movement</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Base</th>
+                            <th>Sprint</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{character.movement.total}}</td>
+                            <td>{{character.movement.sprintTotal}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="healthState">
+                    <header class="subheader-field flexrow">
+                        <div class="header-title">
+                            <span>Injuries ({{currentInjuries}} / {{maxInjuries}})</span>
+                        </div>
+                        <div class="header-field-add">
+                            <a class="injury-create" data-type="skill"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </header>
+                    <ol class="injuries-list list resizable" data-base-size="150">
+                        {{#each character.injuries as |injury id|}}
+                            <li class="injury flexrow" data-item-id="{{id}}">
+                                <!--suppress HtmlFormInputWithoutLabel -->
+                                <input
+                                        id="system.injuries.{{id}}"
+                                        class="big-field"
+                                        type="text"
+                                        name="system.injuries.{{id}}"
+                                        value="{{injury}}"
+                                        placeholder="Description"
+                                        data-dtype="String"
+                                />
+                                <a class="injury-control item-controls" data-id="{{id}}" data-action="delete"><i class="fas fa-trash"></i></a>
+                            </li>
+                        {{/each}}
+                    </ol>
+                    <header class="subheader-field flexrow">
+                        <div class="header-title">
+                            <span>Wounds ({{currentWounds}} / {{maxWounds}})</span>
+                        </div>
+                        <div class="header-field-add">
+                            <a class="wound-create" data-type="skill"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </header>
+                    <ol class="wounds-list list resizable" data-base-size="150">
+                        {{#each character.wounds as |wound id|}}
+                            <li class="wound flexrow" data-item-id="{{id}}">
+                                <!--suppress HtmlFormInputWithoutLabel -->
+                                <input
+                                        id="system.wounds.{{id}}"
+                                        class="big-field"
+                                        type="text"
+                                        name="system.wounds.{{id}}"
+                                        value="{{wound}}"
+                                        placeholder="Description"
+                                        data-dtype="String"
+                                />
+                                <a class="wound-control item-controls" data-id="{{id}}" data-action="delete"><i class="fas fa-trash"></i></a>
+                            </li>
+                        {{/each}}
+                    </ol>
+                </section>
+                <section class="weapons">
+                    <header class="subheader-field">
+                        <span>Owned Weapons</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Weapon</th>
+                            <th>Test</th>
+                            <th>Damage</th>
+                            <th>Defense</th>
+                            <th class="item-controls"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.weapons as |weapon index|}}
+                            <tr class="item weapon" data-item-id="{{_id}}">
+                                <td class="weapon-label item-edit field"><a>{{weapon.name}} {{showIfEquals weapon.system.equipped 3 "(Off-hand)" : ""}}</a></td>
+                                <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
+                                    <a>{{format-formula weapon.formula}}</a>
+                                </td>
+                                <td> {{weapon.damageValue}}</td>
+                                <td>
+                                    {{showIfDifferent 0 weapon.system.defense weapon.system.defense : ""}}
+                                </td>
+                                <td class="item-controls flexrow">
+                                    {{#ifDifferent weapon.system.equipped ../notEquipped}}
+                                    {{#ifDifferent 0 weapon.system.defense}}
+                                    <a class="checkButton defending {{showIfTrue weapon.system.isDefending "activated" ""}}" data-item-id="{{_id}}" data-to-state="{{showIfTrue weapon.system.isDefending false true}}"><i class="fas fa-shield-alt"></i></a>
+                                    {{/ifDifferent}}
+                                    {{/ifDifferent}}
+                                    <a class="checkButton equipped {{showIfContains "2|4" weapon.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfContains "2|4" weapon.system.equipped 0 2}}" data-type="weapon"><i class="fa fa-hand-paper"></i></a>
+                                    <a class="checkButton equipped off-hand {{showIfContains "3|4" weapon.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfContains "3|4" weapon.system.equipped 0 3}}" data-type="weapon"><i class="fa fa-hand-paper"></i></a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <header class="subheader-field">
+                        <span>Owned Armor</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Armor</th>
+                            <th>Rating</th>
+                            <th>Penalty</th>
+                            <th class="item-controls"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.armors as |armor index|}}
+                            <tr class="item armor" data-item-id="{{_id}}">
+                                <td class="armor-label item-edit field"><a>{{armor.name}}</a></td>
+                                <td>{{armor.system.rating}}</td>
+                                <td>{{armor.system.penalty}}</td>
+                                <td class="item-controls flexrow">
+                                    <a class="checkButton equipped {{showIfEquals "1" armor.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "1" armor.system.equipped 0 1}}" data-type="armor"><i class="fas fa-user"></i></a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <header class="subheader-field">
+                        <span>Owned Mounts</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Mount</th>
+                            <th>Move</th>
+                            <th>DEF</th>
+                            <th>AR</th>
+                            <th>WAR</th>
+                            <th class="item-controls"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.mounts as |mount index|}}
+                            <tr class="item mount" data-item-id="{{_id}}">
+                                <td class="armor-label item-edit field"><a>{{mount.name}}</a></td>
+                                <td>{{mount.system.movement}} ({{mount.system.sprint}})</td>
+                                <td>{{mount.system.combatDefense}}</td>
+                                <td>{{mount.system.armorRating}}</td>
+                                <td>
+                                    {{#if mount.system.isWarhorse}}
+                                        {{localize "CS.sheets.generalLabels.yes"}}
+                                    {{/if}}
+                                </td>
+                                <td class="item-controls flexrow">
+                                    {{#ifDifferent mount.system.equipped ../notEquipped}}
+                                    <a class="checkButton item-flag-toggle {{showIfFalse mount.system.isStationary "activated" ""}}" data-item-id="{{_id}}" data-name="isStationary" data-value="{{mount.system.isStationary}}"><i class="fas fa-arrow-circle-up"></i></a>
+                                    {{/ifDifferent}}
+                                    <a class="checkButton equipped {{showIfEquals "7" mount.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "7" mount.system.equipped 0 7}}" data-type="mount"><i class="fas fa-paw"></i></a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+        </section>
+        <header class="header-field">
+            <span>{{localize "CS.sheets.generalLabels.actions"}}</span>
+        </header>
+        <section class="actions flexrow">
+            <section class="combat">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.generalLabels.combat"}}</span>
+                </header>
+                <ol class="list equipment-list">
+                    <li class="list-header flexrow">
+                        <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                        <div class="equipment-cost padding-3">{{localize "CS.sheets.generalLabels.type"}}</div>
+                        <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                    </li>
+                    {{#each character.owned.actionsCombatOne as |action index|}}
+                        <li class="item flexrow" data-item-id="{{_id}}">
+                            <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                                <div class="weapon-label field">
+                                    {{action.name}}
+                                </div>
+                                <div class="equipment-cost field">
+                                    {{toUpperCase (localize action.system.typeName)}}
+                                </div>
+                            </a>
+                            <div class="item-controls padding-3">
+                                <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsCombatOne" data-action="delete"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ol>
+            </section>
+            <section class="combat">
+                <header class="header-field">
+                    <span>&nbsp;</span>
+                </header>
+                <ol class="list equipment-list">
+                    <li class="list-header flexrow">
+                        <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                        <div class="equipment-cost padding-3">{{localize "CS.sheets.generalLabels.type"}}</div>
+                        <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                    </li>
+                    {{#each character.owned.actionsCombatTwo as |action index|}}
+                        <li class="item flexrow" data-item-id="{{_id}}">
+                            <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                                <div class="weapon-label field">
+                                    {{action.name}}
+                                </div>
+                                <div class="equipment-cost field">
+                                    {{toUpperCase (localize action.system.typeName)}}
+                                </div>
+                            </a>
+                            <div class="item-controls padding-3">
+                                <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsCombatTwo" data-action="delete"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ol>
+            </section>
+            <section class="warfare">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.generalLabels.warfare"}}</span>
+                </header>
+                <ol class="list equipment-list">
+                    <li class="list-header flexrow">
+                        <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                        <div class="equipment-cost padding-3">{{localize "CS.sheets.generalLabels.type"}}</div>
+                        <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                    </li>
+                    {{#each character.owned.actionsWarfare as |action index|}}
+                        <li  class="item flexrow" data-item-id="{{_id}}">
+                            <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                                <div class="weapon-label field">{{action.name}}</div>
+                                <div class="equipment-cost field">
+                                    {{toUpperCase (localize action.system.typeName)}}
+                                </div>
+                            </a>
+                            <div class="item-controls padding-3">
+                                <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsWarfare" data-action="delete"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ol>
+                <ol class="list equipment-list">
+                    <li class="list-header flexrow">
+                        <div class="center">{{localize "CS.sheets.actionItem.isWarfareTurnEnds"}}</div>
+                    </li>
+                    <li class="list-header flexrow">
+                        <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
+                        <div class="equipment-cost padding-3">{{localize "CS.sheets.generalLabels.type"}}</div>
+                        <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                    </li>
+                    {{#each character.owned.actionsWarfareTurnEnd as |action index|}}
+                        <li class="item flexrow" data-item-id="{{_id}}">
+                            <a class="item item-edit flexrow" data-item-id="{{_id}}">
+                                <div class="weapon-label field">{{action.name}}</div>
+                                <div class="equipment-cost field">
+                                    {{toUpperCase (localize action.system.typeName)}}
+                                </div>
+                            </a>
+                            <div class="item-controls padding-3">
+                                <a class="item-control owned-item-control" title="{{localize "CS.sheets.generalLabels.delete"}}" data-index="{{index}}" data-list="actionsWarfareTurnEnd" data-action="delete"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ol>
+
+            </section>
+        </section>
+    </section>
+</div>

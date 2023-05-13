@@ -65,6 +65,9 @@ export function getWeaponTestDataForActor(actor, weapon) {
         actor, "modifiers", CHARACTER_ATTR_CONSTANTS.BASE_WEAPON_DAMAGE
     ).total
 
+    // min 1 damage
+    weapon.damageValue = Math.max(weapon.damageValue, 1);
+
     // update weapon with test data
     weapon.formula = formula;
 }

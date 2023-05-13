@@ -76,7 +76,7 @@ export function calculateMovementData(character) {
     "modifiers",
     CHARACTER_ATTR_CONSTANTS.MOVEMENT,
     false,
-    true
+    false
   ).total;
   // update modifier if athletics is only 1
   if (runFormula.pool < 2 && runFormula.bonusDice < 1) {
@@ -92,5 +92,6 @@ export function calculateMovementData(character) {
   );
   // get sprint total
   data.movement.sprintTotal =
-      data.movement.base * data.movement.sprintMultiplier - bulkMod.total;
+      data.movement.total * data.movement.sprintMultiplier - bulkMod.total;
+      // (data.movement.base + data.movement.runBonus + data.movement.modifier) * data.movement.sprintMultiplier - bulkMod.total;
 }
