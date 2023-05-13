@@ -187,8 +187,10 @@
         "intrigueDefense": {
           "includeAwareness": "Include Awareness",
           "includeCunning": "Include Cunning",
-          "includeStatus": "Include Status"
+          "includeStatus": "Include Status",
+          "override": "Override Intrigue Defense"
         },
+        "destinyPoints": "DestinyPoints",
         "injury": "Injury",
         "wound": "Wound",
         "others": "Others",
