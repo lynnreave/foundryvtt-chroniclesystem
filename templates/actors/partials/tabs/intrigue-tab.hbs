@@ -66,29 +66,39 @@
                     <header class="subheader-field">
                         <span>Composure</span>
                     </header>
-                    <div class="form-group">
-                        <span class="form-fields">
-                            <!--suppress HtmlFormInputWithoutLabel -->
-                            <input
-                                    id="system.derivedStats.composure.current"
-                                    name="system.derivedStats.composure.current"
-                                    type="text"
-                                    value="{{character.derivedStats.composure.current}}"
-                                    placeholder="{{character.derivedStats.composure.total}}"
-                                    data-dtype="Number"
-                            />
-                            <b> / </b>
-                            <!--suppress HtmlFormInputWithoutLabel -->
-                            <input
-                                    id="system.derivedStats.composure.value"
-                                    name="system.derivedStats.composure.value"
-                                    type="text"
-                                    value="{{character.derivedStats.composure.total}}"
-                                    placeholder="Total"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
+                    <div class="center flexrow">
+                        <div class="flex-1 flexcolumn padding-3">
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.composure.current" data-value="{{add character.derivedStats.composure.current 1}}" data-max="{{character.derivedStats.composure.total}}" title="{{localize "CS.sheets.character.tooltips.increment"}}"><i class="fa-solid fa-square-plus fa-lg"></i></a>
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.composure.current" data-value="{{subtract character.derivedStats.composure.current 1}}" data-min="0" title="{{localize "CS.sheets.character.tooltips.decrement"}}"><i class="fa-solid fa-square-minus fa-lg"></i></a>
+                        </div>
+                        <div class="flex-8">
+                            <span class="flexrow center-vertically-inside">
+                                <!--suppress HtmlFormInputWithoutLabel -->
+                                <input
+                                        id="system.derivedStats.composure.current"
+                                        name="system.derivedStats.composure.current"
+                                        type="text"
+                                        value="{{character.derivedStats.composure.current}}"
+                                        placeholder="{{character.derivedStats.composure.total}}"
+                                        data-dtype="Number"
+                                />
+                                <b> / </b>
+                                <!--suppress HtmlFormInputWithoutLabel -->
+                                <input
+                                        id="system.derivedStats.composure.value"
+                                        name="system.derivedStats.composure.value"
+                                        type="text"
+                                        value="{{character.derivedStats.composure.total}}"
+                                        placeholder="Total"
+                                        readonly="readonly"
+                                        data-dtype="Number"
+                                />
                         </span>
+                        </div>
+                        <div class="flex-1 flexcolumn padding-3">
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.composure.current" data-value="{{add character.derivedStats.composure.current character.abilities.will}}" data-max="{{character.derivedStats.composure.total}}" title="{{localize "CS.sheets.character.tooltips.incrementWill"}}"><i class="fa-solid fa-square-plus fa-lg"></i></a>
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.composure.current" data-value="{{subtract character.derivedStats.composure.current character.abilities.will}}" data-min="0" title="{{localize "CS.sheets.character.tooltips.decrementWill"}}"><i class="fa-solid fa-square-minus fa-lg"></i></a>
+                        </div>
                     </div>
                     <header class="subheader-field">
                         <span>Current Disposition</span>

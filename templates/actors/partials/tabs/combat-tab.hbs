@@ -77,29 +77,39 @@
                     <header class="subheader-field">
                         <span>Health</span>
                     </header>
-                    <div class="form-group">
-                        <span class="form-fields">
-                            <!--suppress HtmlFormInputWithoutLabel -->
-                            <input
-                                    id="system.derivedStats.health.current"
-                                    name="system.derivedStats.health.current"
-                                    type="text"
-                                    value="{{character.derivedStats.health.current}}"
-                                    placeholder="{{character.derivedStats.health.total}}"
-                                    data-dtype="Number"
-                            />
-                            <b> / </b>
-                            <!--suppress HtmlFormInputWithoutLabel -->
-                            <input
-                                    id="system.derivedStats.health.total"
-                                    name="system.derivedStats.health.total"
-                                    type="text"
-                                    value="{{character.derivedStats.health.total}}"
-                                    placeholder="Total"
-                                    readonly="readonly"
-                                    data-dtype="Number"
-                            />
-                        </span>
+                    <div class="center flexrow">
+                        <div class="flex-1 flexcolumn padding-3">
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.health.current" data-value="{{add character.derivedStats.health.current 1}}" data-max="{{character.derivedStats.health.total}}" title="{{localize "CS.sheets.character.tooltips.increment"}}"><i class="fa-solid fa-square-plus fa-lg"></i></a>
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.health.current" data-value="{{subtract character.derivedStats.health.current 1}}" data-min="0" title="{{localize "CS.sheets.character.tooltips.decrement"}}"><i class="fa-solid fa-square-minus fa-lg"></i></a>
+                        </div>
+                        <div class="flex-8">
+                            <span class="flexrow center-vertically-inside">
+                                <!--suppress HtmlFormInputWithoutLabel -->
+                                <input
+                                        id="system.derivedStats.health.current"
+                                        name="system.derivedStats.health.current"
+                                        type="text"
+                                        value="{{character.derivedStats.health.current}}"
+                                        placeholder="{{character.derivedStats.health.total}}"
+                                        data-dtype="Number"
+                                />
+                                <b> / </b>
+                                <!--suppress HtmlFormInputWithoutLabel -->
+                                <input
+                                        id="system.derivedStats.health.total"
+                                        name="system.derivedStats.health.total"
+                                        type="text"
+                                        value="{{character.derivedStats.health.total}}"
+                                        placeholder="Total"
+                                        readonly="readonly"
+                                        data-dtype="Number"
+                                />
+                            </span>
+                        </div>
+                        <div class="flex-1 flexcolumn padding-3">
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.health.current" data-value="{{add character.derivedStats.health.current character.abilities.endurance}}" data-max="{{character.derivedStats.health.total}}" title="{{localize "CS.sheets.character.tooltips.incrementEndurance"}}"><i class="fa-solid fa-square-plus fa-lg"></i></a>
+                            <a class="checkButton padding-3 flex-2 actor-field-update activated" data-item-id="{{_id}}" data-field="derivedStats.health.current" data-value="{{subtract character.derivedStats.health.current character.abilities.endurance}}" data-min="0" title="{{localize "CS.sheets.character.tooltips.decrementEndurance"}}"><i class="fa-solid fa-square-minus fa-lg"></i></a>
+                        </div>
                     </div>
                     <header class="subheader-field flexrow">
                         <div class="header-title">

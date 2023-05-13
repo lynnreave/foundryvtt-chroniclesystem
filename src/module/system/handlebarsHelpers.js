@@ -116,7 +116,11 @@ export const registerCustomHelpers = function () {
   });
 
   Handlebars.registerHelper(
-      "add", function (arg1, arg2) { return arg1 + arg2; }
+      "add", function (arg1, arg2) { return parseInt(arg1) + parseInt(arg2); }
+  );
+
+  Handlebars.registerHelper(
+      "subtract", function (arg1, arg2) { return parseInt(arg1) - parseInt(arg2); }
   );
 
   Handlebars.registerHelper(

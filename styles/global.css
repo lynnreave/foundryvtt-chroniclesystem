@@ -239,3 +239,7 @@
   height: 100% !important;
   width: 100%;
 }
+
+.center-vertically-inside {
+  transform: translate(0%, 50%);
+}

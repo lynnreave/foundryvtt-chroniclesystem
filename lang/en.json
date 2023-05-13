@@ -178,6 +178,14 @@
         }
       },
       "character": {
+        "tooltips": {
+          "increment": "Increment",
+          "decrement": "Decrement",
+          "incrementEndurance": "Increment by Endurance Rank",
+          "decrementEndurance": "Decrement by Endurance Rank",
+          "incrementWill": "Increment by Will Rank",
+          "decrementWill": "Decrement by Will Rank"
+        },
         "combatDefense": {
           "includeAgility": "Include Agility",
           "includeAthletics": "Include Athletics",

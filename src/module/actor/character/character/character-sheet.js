@@ -14,6 +14,8 @@ import {
 } from "../../../selections.js";
 import { refreshEmbeddedActorData } from "../helpers.js";
 import { getData } from "../../../common.js";
+import { getAbilityValue } from "../abilities.js";
+import { CHARACTER_ATTR_CONSTANTS } from "../../../constants.js";
 
 /**
  * The ActorSheet entity for handling characters.
@@ -119,6 +121,12 @@ export class CharacterSheet extends CharacterSheetBase {
     character.owned.relationships.forEach((relationship) => {
       refreshEmbeddedActorData(relationship);
     })
+
+    // ability ranks for quick updates
+    character.abilities = {
+      endurance: getAbilityValue(this.actor, CHARACTER_ATTR_CONSTANTS.ENDURANCE),
+      will: getAbilityValue(this.actor, CHARACTER_ATTR_CONSTANTS.WILL)
+    }
 
     // return
     data.currentInjuries = Object.values(character.injuries).length;

@@ -21,6 +21,7 @@ export class ActorSheetChronicle extends ActorSheet {
         });
         html.find(".item-flag-toggle").on("click", this._onClickItemFlagToggle.bind(this));
         html.find(".actor-flag-toggle").on("click", this._onClickActorFlagToggle.bind(this));
+        html.find(".actor-field-update").on("click", this._onClickActorFieldUpdate.bind(this));
 
         // Update Inventory Item
         html.find('.item-edit').on("click", this._showEmbeddedItemSheet.bind(this));
@@ -32,6 +33,21 @@ export class ActorSheetChronicle extends ActorSheet {
 
     async _onClickRoll(event, targets) {
         await ChronicleSystem.eventHandleRoll(event, this.actor, targets);
+    }
+
+    async _onClickActorFieldUpdate(event) {
+        let eventData = event.currentTarget.dataset;
+        let actorField = eventData.field;
+        let value = parseInt(eventData.value || 0);
+        let max = parseInt(eventData.max);
+        let min = parseInt(eventData.min);
+        // handle min/max
+        if (max) { value = Math.min(value, max); }
+        if (!isNaN(min)) { value = Math.max(value, min); }
+        // update actor
+        let pkg = {};
+        pkg[`system.${actorField}`] = value;
+        await this.actor.update(pkg);
     }
 
     async _onClickActorFlagToggle(event) {
