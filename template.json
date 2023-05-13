@@ -19,7 +19,9 @@
         "derivedStats": {
           "intrigueDefense": {
             "value": 0,
-            "modifier": 0
+            "modifier": 0,
+            "override": false,
+            "overrideValue": 0
           },
           "composure": {
             "value": 0,
@@ -33,7 +35,9 @@
           },
           "combatDefense": {
             "value": 0,
-            "modifier": 0
+            "modifier": 0,
+            "override": false,
+            "overrideValue": 0
           },
           "health": {
             "value": 0,

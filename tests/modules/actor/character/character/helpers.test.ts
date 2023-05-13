@@ -56,6 +56,12 @@ describe("helpers.js", () => {
             character.system.ignoreIntrigueDefenseCunning = true
             expect(calculateIntrigueDefense(character)).toStrictEqual(4);
         });
+        test("override", () => {
+            let character: TestCharacter = new TestCharacter();
+            character.system.derivedStats.intrigueDefense.override = true;
+            character.system.derivedStats.intrigueDefense.overrideValue = 10;
+            expect(calculateIntrigueDefense(character)).toStrictEqual(10);
+        });
     });
     describe("update character disposition", () => {
         test("disposition exists => disposition", () => {

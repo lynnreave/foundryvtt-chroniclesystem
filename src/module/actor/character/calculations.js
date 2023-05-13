@@ -20,27 +20,35 @@ export function calculateCombatDefense(character) {
   let value = 0;
   // get character data
   const data = getData(character);
-  if (!data.ignoreCombatDefenseAgility) {
-    value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AGILITY));
+  // override
+  if (data.derivedStats.combatDefense.override) {
+    value = data.derivedStats.combatDefense.overrideValue;
+  } else {
+    // calculate defense
+    if (!data.ignoreCombatDefenseAgility) {
+      value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AGILITY));
+    }
+    if (!data.ignoreCombatDefenseAthletics) {
+      value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.ATHLETICS));
+    }
+    if (!data.ignoreCombatDefenseAwareness) {
+      value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
+    }
+    // update w/ ASOIAF-specific rules
+    // eslint-disable-next-line no-undef
+    // TODO: if user turns off ASOIAF, NO modifiers to combat defense will be included
+    // move this to equip generation of modifiers
+    if (game.settings.get(SETTINGS.SYSTEM_NAME, SETTINGS.ASOIAF_DEFENSE_STYLE)) {
+      let mod = getTransformation(
+          character,
+          "modifiers",
+          CHARACTER_ATTR_CONSTANTS.COMBAT_DEFENSE
+      );
+      value += mod.total;
+    }
+    // minimum 1
+    value = Math.max(value, 1);
   }
-  if (!data.ignoreCombatDefenseAthletics) {
-    value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.ATHLETICS));
-  }
-  if (!data.ignoreCombatDefenseAwareness) {
-    value += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
-  }
-  // update w/ ASOIAF-specific rules
-  // eslint-disable-next-line no-undef
-  if (game.settings.get(SETTINGS.SYSTEM_NAME, SETTINGS.ASOIAF_DEFENSE_STYLE)) {
-    let mod = getTransformation(
-      character,
-      "modifiers",
-      CHARACTER_ATTR_CONSTANTS.COMBAT_DEFENSE
-    );
-    value += mod.total;
-  }
-  // minimum 1
-  value = Math.max(value, 1);
   // return
   return value;
 }

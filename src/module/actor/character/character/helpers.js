@@ -19,23 +19,28 @@ export function calculateIntrigueDefense(character) {
     let intrigueDefense = 0;
     // get character data
     const data = getData(character);
-    // total from abilities
-    if (!data.ignoreIntrigueDefenseAwareness) {
-        intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
+    // override
+    if (data.derivedStats.intrigueDefense.override) {
+        intrigueDefense = data.derivedStats.intrigueDefense.overrideValue;
+    } else {
+        // total from abilities
+        if (!data.ignoreIntrigueDefenseAwareness) {
+            intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.AWARENESS));
+        }
+        if (!data.ignoreIntrigueDefenseCunning) {
+            intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.CUNNING));
+        }
+        if (!data.ignoreIntrigueDefenseStatus) {
+            intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.STATUS));
+        }
+        // add modifiers
+        let mod = getTransformation(
+            character, "modifiers", CHARACTER_ATTR_CONSTANTS.INTRIGUE_DEFENSE
+        ).total;
+        intrigueDefense += mod;
+        // minimum 1
+        intrigueDefense = Math.max(intrigueDefense, 1);
     }
-    if (!data.ignoreIntrigueDefenseCunning) {
-        intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.CUNNING));
-    }
-    if (!data.ignoreIntrigueDefenseStatus) {
-        intrigueDefense += getAbilityValue(character, SystemUtils.localize(KEY_CONSTANTS.STATUS));
-    }
-    // add modifiers
-    let mod = getTransformation(
-        character, "modifiers", CHARACTER_ATTR_CONSTANTS.INTRIGUE_DEFENSE
-    ).total;
-    intrigueDefense += mod;
-    // minimum 1
-    intrigueDefense = Math.max(intrigueDefense, 1);
     // return
     return intrigueDefense;
 }

@@ -41,6 +41,14 @@ describe("calculations.js", () => {
       let output = calculateCombatDefense(character);
       expect(output).toStrictEqual(4);
     });
+    test("override", () => {
+      global.game.settings = TestSettingsSystemASOIAFTrue;
+      let character: TestCharacter = new TestCharacter();
+      character.system.derivedStats.combatDefense.override = true;
+      character.system.derivedStats.combatDefense.overrideValue = 10;
+      let output = calculateCombatDefense(character);
+      expect(output).toStrictEqual(10);
+    });
   });
   describe("calculate movement data", () => {
     test("call", () => {

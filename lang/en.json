@@ -108,6 +108,8 @@
         "combat": "Combat",
         "components": "Components",
         "current": "Current",
+        "custom": "Custom",
+        "defense": "Defense",
         "delete": "Delete",
         "description": "Description",
         "details": "Details",
@@ -179,7 +181,8 @@
         "combatDefense": {
           "includeAgility": "Include Agility",
           "includeAthletics": "Include Athletics",
-          "includeAwareness": "Include Awareness"
+          "includeAwareness": "Include Awareness",
+          "override": "Override Combat Defense"
         },
         "intrigueDefense": {
           "includeAwareness": "Include Awareness",

@@ -48,7 +48,7 @@ export class CharacterSheet extends CharacterSheetBase {
         {
           navSelector: ".tabs",
           contentSelector: ".sheet-body",
-          initial: "combat-and-intrigue"
+          initial: "combat"
         }
       ],
     });

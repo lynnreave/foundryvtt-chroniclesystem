@@ -20,6 +20,10 @@
             <section class="content flexrow">
                 <section class="stats">
                     <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.composureResistance}}</div>
+                    <header class="subheader-field">
                         <span>Intrigue Defense</span>
                     </header>
                     <div class="form-group">
@@ -36,9 +40,6 @@
                             />
                         </span>
                     </div>
-                    <header class="subheader-field">
-                        <span>{{localize "CS.sheets.generalLabels.components"}}</span>
-                    </header>
                     <div class="center">
                         <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseAwareness "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseAwareness" data-value="{{character.ignoreIntrigueDefenseAwareness}}" title="{{localize "CS.sheets.character.intrigueDefense.includeAwareness"}}"><i class="fas fa-eye padding-3"></i></a>
                         <b>+</b>
@@ -47,9 +48,34 @@
                         <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreIntrigueDefenseStatus "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreIntrigueDefenseStatus" data-value="{{character.ignoreIntrigueDefenseStatus}}" title="{{localize "CS.sheets.character.intrigueDefense.includeStatus"}}"><i class="fa-solid fa-crown padding-3"></i></a>
                     </div>
                     <header class="subheader-field">
-                        <span class="form-fields">Damage Resistance</span>
+                        <span>{{localize "CS.sheets.generalLabels.custom"}} {{localize "CS.sheets.generalLabels.defense"}}</span>
                     </header>
-                    <div class="center padding-1">{{character.composureResistance}}</div>
+                    <div class="center flexrow">
+                        <span class="form-fields padding-3 flex-8">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.intrigueDefense.overrideValue"
+                                    name="system.derivedStats.intrigueDefense.overrideValue"
+                                    type="text"
+                                    value="{{character.derivedStats.intrigueDefense.overrideValue}}"
+                                    placeholder="{{character.derivedStats.intrigueDefense.total}}"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                        <a class="checkButton padding-3 flex-2 actor-flag-toggle {{showIfTrue character.derivedStats.intrigueDefense.override "activated" ""}}" data-item-id="{{_id}}" data-name="derivedStats.intrigueDefense.override" data-value="{{character.derivedStats.intrigueDefense.override}}" title="{{localize "CS.sheets.character.intrigueDefense.override"}}"><i class="fa-solid fa-toggle-on padding-3"></i></a>
+                    </div>
+                    <header class="subheader-field">
+                        <span>Frustration</span>
+                    </header>
+                    {{> (ratingCheckbox) max=character.derivedStats.frustration.total currentValue=character.derivedStats.frustration.current dataType="Frustration" }}
+                    <section class="stress flexrow">
+                    <header class="subheader-field">
+                        <span>Stress</span>
+                    </header>
+                    {{> (ratingCheckbox) max=2 currentValue=character.currentStress dataType="Stress" }}
+                    </section>
+                </section>
+                <section class="disposition">
                     <header class="subheader-field">
                         <span>Composure</span>
                     </header>
@@ -78,23 +104,11 @@
                         </span>
                     </div>
                     <header class="subheader-field">
-                        <span>Frustration</span>
-                    </header>
-                    {{> (ratingCheckbox) max=character.derivedStats.frustration.total currentValue=character.derivedStats.frustration.current dataType="Frustration" }}
-                    <section class="stress flexrow">
-                    <header class="subheader-field">
-                        <span>Stress</span>
-                    </header>
-                    {{> (ratingCheckbox) max=2 currentValue=character.currentStress dataType="Stress" }}
-                    </section>
-                </section>
-                <section class="disposition">
-                    <header class="subheader-field">
                         <span>Current Disposition</span>
                     </header>
                     <div class="disposition-list">
                         {{#each dispositions}}
-                                <div class="disposition option capitalize {{showIfEquals @index ../character.currentDisposition "selected"}}" data-id="{{@index}}">
+                                <div class="disposition option capitalize center {{showIfEquals @index ../character.currentDisposition "selected"}}" data-id="{{@index}}">
                                     {{localize this.name}}
                                 </div>
                         {{/each}}

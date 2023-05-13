@@ -19,6 +19,20 @@ export class TestCharacter {
         abilities: []
     };
     system: object = {
+        derivedStats: {
+            combatDefense: {
+                "value": 0,
+                "modifier": 0,
+                "override": false,
+                "overrideValue": 0
+            },
+            intrigueDefense: {
+                "value": 0,
+                "modifier": 0,
+                "override": false,
+                "overrideValue": 0
+            }
+        },
         currentDisposition: 0,
         currentFacing: 0,
         currentFormation: 0,

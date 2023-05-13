@@ -20,6 +20,10 @@
             <section class="content flexrow">
                 <section class="stats">
                     <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.damageResistance}}</div>
+                    <header class="subheader-field">
                         <span>Combat Defense</span>
                     </header>
                     <div class="form-group">
@@ -36,9 +40,6 @@
                             />
                         </span>
                     </div>
-                    <header class="subheader-field">
-                        <span>{{localize "CS.sheets.generalLabels.components"}}</span>
-                    </header>
                     <div class="center">
                         <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAgility "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAgility" data-value="{{character.ignoreCombatDefenseAgility}}" title="{{localize "CS.sheets.character.combatDefense.includeAgility"}}"><i class="fas fa-universal-access padding-3"></i></a>
                         <b>+</b>
@@ -47,9 +48,45 @@
                         <a class="checkButton actor-flag-toggle {{showIfFalse character.ignoreCombatDefenseAwareness "activated" ""}}" data-item-id="{{_id}}" data-name="ignoreCombatDefenseAwareness" data-value="{{character.ignoreCombatDefenseAwareness}}" title="{{localize "CS.sheets.character.combatDefense.includeAwareness"}}"><i class="fas fa-eye padding-3"></i></a>
                     </div>
                     <header class="subheader-field">
-                        <span class="form-fields">Damage Resistance</span>
+                        <span>{{localize "CS.sheets.generalLabels.custom"}} {{localize "CS.sheets.generalLabels.defense"}}</span>
                     </header>
-                    <div class="center padding-1">{{character.damageResistance}}</div>
+                    <div class="center flexrow">
+                        <span class="form-fields padding-3 flex-8">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.combatDefense.overrideValue"
+                                    name="system.derivedStats.combatDefense.overrideValue"
+                                    type="text"
+                                    value="{{character.derivedStats.combatDefense.overrideValue}}"
+                                    placeholder="{{character.derivedStats.combatDefense.total}}"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                        <a class="checkButton padding-3 flex-2 actor-flag-toggle {{showIfTrue character.derivedStats.combatDefense.override "activated" ""}}" data-item-id="{{_id}}" data-name="derivedStats.combatDefense.override" data-value="{{character.derivedStats.combatDefense.override}}" title="{{localize "CS.sheets.character.combatDefense.override"}}"><i class="fa-solid fa-toggle-on padding-3"></i></a>
+                    </div>
+                    <header class="subheader-field">
+                        <span>Fatigue</span>
+                    </header>
+                    {{> (ratingCheckbox) max=character.derivedStats.fatigue.total currentValue=character.derivedStats.fatigue.current dataType="Fatigue" }}
+                    <header class="subheader-field">
+                        <span>Movement</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Base</th>
+                            <th>Sprint</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{character.movement.total}}</td>
+                            <td>{{character.movement.sprintTotal}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="healthState">
                     <header class="subheader-field">
                         <span>Health</span>
                     </header>
@@ -77,29 +114,6 @@
                             />
                         </span>
                     </div>
-                    <header class="subheader-field">
-                        <span>Fatigue</span>
-                    </header>
-                    {{> (ratingCheckbox) max=character.derivedStats.fatigue.total currentValue=character.derivedStats.fatigue.current dataType="Fatigue" }}
-                    <header class="subheader-field">
-                        <span>Movement</span>
-                    </header>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Base</th>
-                            <th>Sprint</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{{character.movement.total}}</td>
-                            <td>{{character.movement.sprintTotal}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </section>
-                <section class="healthState">
                     <header class="subheader-field flexrow">
                         <div class="header-title">
                             <span>Injuries ({{currentInjuries}} / {{maxInjuries}})</span>

@@ -239,7 +239,12 @@
 }
 
 .chroniclesystem.sheet.actor .content .healthState {
-    flex: 1;
+    flex: 0.5;
+    margin: 3px;
+}
+
+.chroniclesystem.sheet.actor .content .disposition {
+    flex: 0.5;
     margin: 3px;
 }
 
