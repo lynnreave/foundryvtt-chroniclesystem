@@ -243,3 +243,7 @@
 .center-vertically-inside {
   transform: translate(0%, 50%);
 }
+
+.center-horizontally-inside {
+  transform: translate(50%, 0%);
+}

@@ -105,6 +105,7 @@
       "generalLabels": {
         "none": "None",
         "actions": "Actions",
+        "armorRating": "AR",
         "combat": "Combat",
         "components": "Components",
         "current": "Current",
@@ -124,6 +125,7 @@
         "others": "Others",
         "total": "Total",
         "type": "Type",
+        "uses": "Uses",
         "warfare": "Warfare",
         "yes": "Yes"
       },
@@ -287,7 +289,6 @@
         "canAddFeatureAfter": "You can define specific features of the holding after adding it to a house."
       },
       "mountItem": {
-        "armorRating": "AR",
         "combatDefense": "Defense",
         "cost": "Cost",
         "movement": "Move",

@@ -28,3 +28,46 @@
           />
     </span>
 </div>
+<table>
+    <tr>
+        <td><span class="padding-3">{{localize "CS.sheets.generalLabels.armorRating"}}</span></td>
+        <td><span class="form-fields"><input
+                id="system.armorRating"
+                class="small-field center"
+                name="system.armorRating"
+                type="text"
+                value="{{item.system.armorRating}}"
+                placeholder="0"
+                data-dtype="Number"
+        /></span></td>
+    </tr>
+    <tr>
+        <td colspan=2><header class="subheader-field"><span>
+            {{localize "CS.sheets.generalLabels.health"}} / {{localize "CS.sheets.generalLabels.uses"}}
+        </span></header></td>
+    </tr>
+    <tr>
+        <td><span class="padding-3">{{localize "CS.sheets.generalLabels.current"}}</span></td>
+        <td><span class="form-fields"><input
+                id="system.health.current"
+                class="small-field center"
+                name="system.health.current"
+                type="text"
+                value="{{item.system.health.current}}"
+                placeholder="0"
+                data-dtype="Number"
+        /></span></td>
+    </tr>
+    <tr>
+        <td><span class="padding-3">{{localize "CS.sheets.generalLabels.maximum"}}</span></td>
+        <td><span class="form-fields"><input
+                id="system.health.max"
+                class="small-field center"
+                name="system.health.max"
+                type="text"
+                value="{{item.system.health.max}}"
+                placeholder="0"
+                data-dtype="Number"
+        /></span></td>
+    </tr>
+</table>
