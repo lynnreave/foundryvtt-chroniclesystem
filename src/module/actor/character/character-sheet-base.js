@@ -61,6 +61,10 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     return data;
   }
 
+  async handleRollAsync(rollType, actor, showModifierDialog = false) {
+    await ChronicleSystem.handleRollAsync(rollType, actor, showModifierDialog)
+  }
+
   /* -------------------------------------------- */
 
   activateListeners(html) {
