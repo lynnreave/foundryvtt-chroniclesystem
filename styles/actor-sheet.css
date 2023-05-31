@@ -397,9 +397,23 @@
     overflow: hidden;
     text-align: center;
     vertical-align: middle;
-    background: white;
     margin: 3px;
     flex: 0.2;
+}
+
+.profile-td-img-container {
+    height: auto;
+    width: 50px;
+    max-width: 50px;
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.profile-td-img {
+    max-width: 100%;
+    max-height: 100%;
+    border: none;
 }
 
 .commander-profile-img-container {
@@ -410,7 +424,6 @@
     overflow: hidden;
     text-align: center;
     vertical-align: middle;
-    background: white;
     margin: 3px;
     flex: 0.5;
 }
@@ -513,4 +526,8 @@
 .chroniclesystem.sheet.actor .item-control {
     margin: 1px;
     padding: 1px;
+}
+
+.background-white {
+    background: white;
 }

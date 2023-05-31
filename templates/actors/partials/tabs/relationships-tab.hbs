@@ -6,7 +6,7 @@
         <ol  class="relationships-list">
             {{#each character.owned.relationships as |relationship key|}}
                 <li class="item relationship flexrow" data-item-id="{{relationship._id}}">
-                    <div class="profile-list-img-container item-edit">
+                    <div class="profile-list-img-container item-edit background-white">
                         <img class="profile-list-img" src="{{relationship.img}}" title="{{relationship.name}}" alt="{{relationship.name}} Picture" />
                     </div>
                     <label class="relationship-label item-edit"><a>{{relationship.name}}</a></label>

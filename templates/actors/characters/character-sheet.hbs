@@ -12,6 +12,10 @@
                 <input class="medium-field" type="text" name="system.gender" value="{{character.gender}}"  data-dtype="String"/>
                 <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
             </div>
+            <div class="complements flexrow">
+                <label class="attribute-label"> {{localize "CS.sheets.character.labels.fullName"}}: </label>
+                <input class="medium-field flex2" type="text" name="system.fullName" value="{{character.fullName}}"  data-dtype="String"/>
+            </div>
             <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
         </div>
     </header>

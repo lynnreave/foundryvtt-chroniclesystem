@@ -1,8 +1,8 @@
 import LOGGER from "../../../util/logger.js";
 import SystemUtils from "../../../util/systemUtils.js";
 import { ActorChronicle } from "../actor-chronicle.js";
-import { CSConstants } from "../../system/csConstants.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
+import { getAbilityValue } from "../character/abilities.js";
 
 /**
  * An Actor entity for handling character Houses.
@@ -205,26 +205,49 @@ export class House extends ActorChronicle {
         if (Array.isArray(membersData)) {
             membersData.forEach((member) => {
                 let actor = this._getCharacterDataById(member.id);
-                members.push({"name": actor.name, "age": actor.age, "id": member.id, "description": member.description});
+                members.push({
+                    "id": member.id,
+                    "name": actor.name,
+                    "age": actor.age,
+                    "img": actor.img,
+                    "status": actor.status,
+                    "description": member.description
+                });
             })
         } else {
             let actor = this._getCharacterDataById(membersData.id);
-            members = {"name": actor.name, "age": actor.age, "id": membersData.id, "description": membersData.description};
+            members = {
+                "id": membersData.id,
+                "name": actor.name,
+                "age": actor.age,
+                "img": actor.img,
+                "status": actor.status,
+                "description": membersData.description
+            };
         }
         return members;
     }
 
     _getCharacterDataById(id) {
+        // get character by id
         if (!id)
             return SystemUtils.localize("CS.messages.nobodyHasBeenChosen");
         let actor = game.actors.get(id);
+
+        // build embedded character data
         let name = SystemUtils.localize('CS.messages.actorDoesntExists');
+        let img = null;
         let age = 0;
+        let status = 1;
         if (actor) {
             name = actor.name;
             age = actor.getData().age;
+            img = actor.img;
+            status = getAbilityValue(actor, "status");
         }
-        return {"name": name, "age": age};
+
+        // return
+        return {name: name, img: img, age: age, status: status};
     }
 
     _updateResourceTotal(data, resource) {

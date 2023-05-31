@@ -146,7 +146,7 @@
           "modifiers": "Effects"
         },
         "fortune": {
-          "title": "House Fortune",
+          "title": "Fortune",
           "lawModifier": "Law Mod",
           "populationModifier": "Population Mod",
           "holdingModifier": "Mods from Holdings"
@@ -168,18 +168,22 @@
         },
         "labels": {
           "members": "Members",
-          "head": "Head of House",
+          "head": "Leader",
           "realm": "Realm",
           "liege": "Liege",
           "steward": "Steward",
           "heirsAndFamily": "Heirs and Family",
+          "family": "Family",
           "retainersAndServants": "Retainers and Servants",
           "startingValue": "Starting Value",
-          "coatOfArms": "Coat of Arms",
-          "motto": "Motto"
+          "coatOfArms": "Symbol",
+          "motto": "Motto",
+          "role": "Position",
+          "status": "Status"
         }
       },
       "character": {
+        "age": "Age",
         "tooltips": {
           "increment": "Increment",
           "decrement": "Decrement",
@@ -230,6 +234,9 @@
           "qualities": "Qualities",
           "relationships": "Relationships",
           "sorcery": "Sorcery"
+        },
+        "labels": {
+          "fullName": "Full Name"
         }
       },
       "unit": {

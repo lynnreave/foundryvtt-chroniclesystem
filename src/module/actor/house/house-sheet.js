@@ -2,8 +2,8 @@ import SystemUtils from "../../../util/systemUtils.js";
 import LOGGER from "../../../util/logger.js";
 import { ActorSheetChronicle } from "../actor-sheet-chronicle.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
-import { CSHoldingItem } from "../../item/cs-holding-item.js";
 import { CSConstants } from "../../system/csConstants.js";
+import { refreshEmbeddedActorData } from "../character/helpers.js";
 
 /**
  * An ActorSheet entity for handling character Houses.
@@ -21,7 +21,7 @@ export class HouseSheet extends ActorSheetChronicle {
             classes: ["chroniclesystem", "sheet", "house", "actor"],
             template: "systems/chroniclesystem/templates/actors/houses/house-sheet.hbs",
             width: 800,
-            height: 600,
+            height: 800,
             tabs: [
                 {
                     navSelector: ".tabs",
@@ -109,9 +109,9 @@ export class HouseSheet extends ActorSheetChronicle {
 
         if (!this.options.editable) return;
 
-        html.find(".family-list").on("click", ".item-control", this._onclickMemberControl.bind(this));
-        html.find(".servants-list").on("click", ".item-control", this._onclickMemberControl.bind(this));
+        html.find(".member-list").on("click", ".item-control", this._onclickMemberControl.bind(this));
         html.find('.member-name').click(this._openActorSheet.bind(this));
+        html.find('.open-actor-sheet').click(this._openActorSheet.bind(this));
         html.find('.resource-edit').click(this._openResourceEditor.bind(this));
         html.find('.regenerate-resources').click(this._regenerateResources.bind(this));
 

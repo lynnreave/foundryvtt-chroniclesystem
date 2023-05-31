@@ -247,3 +247,37 @@
 .center-horizontally-inside {
   transform: translate(50%, 0%);
 }
+
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.hover-table {
+}
+
+.hover-table td {
+}
+
+.hover-table tr {
+}
+
+.hover-table tr:hover {
+  /*background-color: #005390;*/
+  background-color: black;
+  color: white;
+}
+
+.minimal-width {
+  width: 0.1%;
+  white-space: nowrap;
+  padding-left: 5px;
+  padding-right: 5px
+}

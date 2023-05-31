@@ -200,8 +200,14 @@ export const registerCustomHelpers = function () {
   });
 
   Handlebars.registerHelper(
-      "toUpperCase",
+    "toUpperCase",
+    function (arg1) {
+      return String(arg1).toUpperCase();
+  });
+
+  Handlebars.registerHelper(
+      "toLowerCase",
       function (arg1) {
-        return String(arg1).toUpperCase();
+        return String(arg1).toLowerCase();
       });
 };

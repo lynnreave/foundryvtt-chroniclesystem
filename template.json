@@ -126,6 +126,7 @@
         "common",
         "character-common"
       ],
+      "fullName": "",
       "ignoreCombatDefenseAgility": false,
       "ignoreCombatDefenseAthletics": false,
       "ignoreCombatDefenseAwareness": false,
@@ -155,6 +156,9 @@
         "startingValue": 0,
         "description": "",
         "total": 0
+      },
+      "owned": {
+        "characters": []
       },
       "population": {
         "startingValue": 0,
