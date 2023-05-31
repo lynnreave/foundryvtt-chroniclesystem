@@ -1,9 +1,8 @@
 <form class="{{cssClass}}" autocomplete="off">
-    {{log character}}
+    {{log actor}}
     {{!-- Sheet Header --}}
     <header class="sheet-header">
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
             <div class="complements flexrow">
                 <label class="attribute-label"> Ancestry: </label>
                 <input class="medium-field flex2" type="text" name="system.ancestries" value="{{character.ancestries}}"  data-dtype="String"/>
@@ -11,7 +10,9 @@
                 <input class="small-field" type="text" name="system.age" value="{{character.age}}"  data-dtype="Number"/>
                 <label class="attribute-label"> Gender: </label>
                 <input class="medium-field" type="text" name="system.gender" value="{{character.gender}}"  data-dtype="String"/>
+                <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
             </div>
+            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
         </div>
     </header>
 

@@ -2,7 +2,6 @@
     {{log actor}}
     <header class="sheet-header">
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
             <div class="complements flexrow">
                 <label  class="attribute-label"> {{localize "CS.sheets.house.labels.head"}}: </label>
                 <label  class="link-field member-name size75" data-id="{{actor.system.head.id}}"><a>{{actor.system.head.name}}</a></label>
@@ -10,7 +9,9 @@
                 <input  class="size75"  type="text"  name="data.realm"  value="{{actor.system.realm}}"  data-dtype="String"/>
                 <label  class="attribute-label"> {{localize "CS.sheets.house.labels.liege"}}: </label>
                 <input  class="size75"  type="text"  name="data.liege"  value="{{actor.system.liege}}"  data-dtype="String"/>
+                <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
             </div>
+            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
         </div>
     </header>
     {{!-- Sheet Tab Navigation --}}

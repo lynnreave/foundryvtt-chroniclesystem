@@ -1,12 +1,14 @@
 <form class="{{cssClass}}" autocomplete="off">
+    {{log actor}}
     {{!-- Sheet Header --}}
     <header class="sheet-header">
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
             <div class="complements flexrow">
                 <label  class="attribute-label"> Owner: </label>
                 <input  class="medium-field flex2" type="text"  name="system.owner"  value="{{character.owner}}"  data-dtype="String"/>
+                <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
             </div>
+            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
         </div>
     </header>
 

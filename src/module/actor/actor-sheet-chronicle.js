@@ -29,6 +29,9 @@ export class ActorSheetChronicle extends ActorSheet {
 
         // open another sheet
         html.find('.actor-open').click(this._showLinkedActorSheet.bind(this));
+
+        // refresh sheet data
+        html.find('.refresh-sheet').on("click", this._refreshSheet.bind(this))
     }
 
     async _onClickRoll(event, targets) {
@@ -75,6 +78,11 @@ export class ActorSheetChronicle extends ActorSheet {
         let pkg = {};
         pkg[`system.${itemFlag}`] = targetState;
         await item.update(pkg);
+    }
+
+    _refreshSheet(event) {
+        event.preventDefault();
+        this.actor.sheet.render(true)
     }
 
     _showEmbeddedItemSheet(event) {
