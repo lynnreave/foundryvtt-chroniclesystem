@@ -266,6 +266,25 @@
           "formation": "Formation",
           "orders": "Orders",
           "warfare": "Warfare"
+        },
+        "training": {
+          "0": "Not Set",
+          "1": "Green",
+          "2": "Trained",
+          "3": "Veteran",
+          "4": "Elite"
+        },
+        "warfare": {
+          "command": "Command",
+          "commander": "Commander",
+          "currentOrder": "Current Order",
+          "difficulty": "Difficulty",
+          "discipline": "Discipline",
+          "formation": "Formation",
+          "order": "Order",
+          "standingOrder": "Standing Orders",
+          "status": "Status",
+          "training": "Training"
         }
       },
       "actionItem": {
@@ -452,7 +471,8 @@
         "facing": "Facing",
         "formation": "Formation",
         "heroes": "Heroes",
-        "disposition": "Disposition"
+        "disposition": "Disposition",
+        "training": "Training"
       }
     }
   }

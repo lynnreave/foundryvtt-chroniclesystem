@@ -7,7 +7,8 @@ import {
     updateFacing,
     updateFormation,
     updateOrdersReceived,
-    updateStatus
+    updateStatus,
+    updateTraining
 // @ts-ignore
 } from "@actor/character/unit/helpers";
 // @ts-ignore
@@ -249,6 +250,44 @@ describe("unit.js", () => {
             let unit: TestCharacter = new TestCharacter();
             updateStatus(unit, 99);
             expect(unit.system.currentStatus).toStrictEqual(0);
+        });
+    });
+    describe("update training", () => {
+        test("0 value", () => {
+            let unit: TestCharacter = new TestCharacter();
+            let newValue: number = 0;
+            updateTraining(unit, newValue);
+            expect(unit.system.training.current).toStrictEqual(newValue);
+            expect(
+                getTransformation(unit, "modifiers", "discipline").total
+            ).toStrictEqual(9);
+        });
+        test("1 value", () => {
+            let unit: TestCharacter = new TestCharacter();
+            let newValue: number = 1;
+            updateTraining(unit, newValue);
+            expect(unit.system.training.current).toStrictEqual(newValue);
+            expect(
+                getTransformation(unit, "modifiers", "discipline").total
+            ).toStrictEqual(6);
+        });
+        test("2 value", () => {
+            let unit: TestCharacter = new TestCharacter();
+            let newValue: number = 2;
+            updateTraining(unit, newValue);
+            expect(unit.system.training.current).toStrictEqual(newValue);
+            expect(
+                getTransformation(unit, "modifiers", "discipline").total
+            ).toStrictEqual(3);
+        });
+        test("3 value", () => {
+            let unit: TestCharacter = new TestCharacter();
+            let newValue: number = 3;
+            updateTraining(unit, newValue);
+            expect(unit.system.training.current).toStrictEqual(newValue);
+            expect(
+                getTransformation(unit, "modifiers", "discipline").total
+            ).toStrictEqual(0);
         });
     });
 });

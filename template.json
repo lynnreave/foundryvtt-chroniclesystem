@@ -190,6 +190,7 @@
       "commander": "",
       "currentFacing": 0,
       "currentFormation": 0,
+      "currentOrder": "",
       "currentStatus": 0,
       "discipline": {
         "value": 0,
@@ -225,7 +226,12 @@
         "orders": [],
         "weapons": []
       },
-      "owner": ""
+      "owner": "",
+      "training": {
+        "value": 0,
+        "modifier": 0,
+        "current": 0
+      }
     }
   },
   "Item": {
@@ -394,6 +400,7 @@
         "itemDescription"
       ],
       "difficulty": 0,
+      "equipped": 0,
       "standingOrder": ""
     },
     "relationship": {

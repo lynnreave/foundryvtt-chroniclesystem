@@ -5,7 +5,8 @@ import {
     updateFacing,
     updateFormation,
     updateOrdersReceived,
-    updateStatus
+    updateStatus,
+    updateTraining
 } from "./helpers.js";
 import {
     UNIT_FACINGS,
@@ -37,6 +38,8 @@ export class UnitSheet extends CharacterSheetBase {
         return mergeObject(super.defaultOptions, {
             classes: ["chroniclesystem", "unit", "sheet", "actor"],
             template: "systems/chroniclesystem/templates/actors/characters/unit-sheet.hbs",
+            width: 900,
+            height: 1080,
             tabs: [
                 {
                     navSelector: ".tabs",
@@ -102,6 +105,10 @@ export class UnitSheet extends CharacterSheetBase {
 
     async setOrdersReceivedValue(newValue) {
         updateOrdersReceived(this.actor, newValue);
+    }
+
+    async setTrainingValue(newValue) {
+        updateTraining(this.actor, newValue);
     }
 
     async _onUnitStatusChanged(event, targets) {

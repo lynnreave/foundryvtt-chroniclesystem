@@ -165,7 +165,9 @@ export function getTransformation(
                             tempItem = character.getEmbeddedDocument("Item", transformer._id);
                         }
                         if (tempItem) {
-                            detail.push({ docName: tempItem.name, mod: transformer.mod })
+                            detail.push({
+                                docName: tempItem.name, mod: transformer.mod, source: transformer._id
+                            })
                         }
                     }
                 }

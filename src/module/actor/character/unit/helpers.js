@@ -337,3 +337,42 @@ export function updateStatus(unit, statusId) {
     // update actor current status
     unit.update({"system.currentStatus": statusId});
 }
+
+export function updateTraining(unit, newValue) {
+    /**
+     * Update the current training of a unit Actor.
+     * @param {object} unit: a unit Actor.
+     * @param {number} newValue: the new disorganisation value.
+     */
+    // save temp transformers to actor
+    updateTempTransformers(unit);
+    // get current disorganisation (cannot be greater than total allowed)
+    let data = getData(unit);
+    let value = Math.max(
+        Math.min(
+            parseInt(newValue),
+            data.training.total
+        ), 0
+    );
+    // update transformers
+    if (value !== 0) {
+        addTransformer(
+            unit,
+            "modifiers",
+            CHARACTER_ATTR_CONSTANTS.DISCIPLINE,
+            KEY_CONSTANTS.TRAINING,
+            12 - (value * 3),
+            false
+        )
+    } else {
+        removeTransformer(
+            unit,
+            "modifiers",
+            CHARACTER_ATTR_CONSTANTS.DISCIPLINE,
+            KEY_CONSTANTS.TRAINING
+        )
+    }
+    saveTransformers(unit);
+    // update unit current facing
+    unit.update({"system.training.current": value});
+}

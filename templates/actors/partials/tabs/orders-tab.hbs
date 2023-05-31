@@ -5,12 +5,16 @@
     <section class="orders flexrow">
         <ol class="list equipment-list">
             <li class="list-header flexrow">
+                <div class="padding-3 flex-1">&nbsp;</div>
                 <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
                 <div class="equipment-cost padding-3">{{localize "CS.sheets.orderItem.difficulty"}}</div>
-                <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                <div class="padding-3 flex-1">&nbsp;</div>
             </li>
             {{#each character.owned.ordersOne as |order index|}}
                 <li class="item flexrow" data-item-id="{{_id}}">
+                    <div class="item-controls padding-3">
+                        <a class="item-control-left checkButton equipped {{showIfEquals "8" order.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "8" order.system.equipped 0 8}}" data-type="order"><i class="fas fa-star"></i></a>
+                    </div>
                     <a class="item item-edit flexrow" data-item-id="{{_id}}">
                         <div class="weapon-label field">
                             {{order.name}}
@@ -27,12 +31,16 @@
         </ol>
         <ol class="list equipment-list">
             <li class="list-header flexrow">
+                <div class="padding-3 flex-1">&nbsp;</div>
                 <div class="weapon-label padding-3">{{localize "CS.sheets.generalLabels.name"}}</div>
                 <div class="equipment-cost padding-3">{{localize "CS.sheets.orderItem.difficulty"}}</div>
-                <div class="item-controls item-controls-column"><i class="fas fa-cog"></i></div>
+                <div class="padding-3 flex-1">&nbsp;</div>
             </li>
             {{#each character.owned.ordersTwo as |order index|}}
                 <li class="item flexrow" data-item-id="{{_id}}">
+                    <div class="item-controls padding-3">
+                        <a class="item-control-left checkButton equipped {{showIfEquals "8" order.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "8" order.system.equipped 0 8}}" data-type="order"><i class="fas fa-star"></i></a>
+                    </div>
                     <a class="item item-edit flexrow" data-item-id="{{_id}}">
                         <div class="weapon-label field">
                             {{order.name}}

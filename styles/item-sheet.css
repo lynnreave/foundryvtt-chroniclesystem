@@ -24,6 +24,15 @@
     line-height: normal;
 }
 
+.chroniclesystem.sheet.item .sheet-header .item-control-left {
+    flex: 0 0 36px;
+    margin-right: 10px;
+    align-self: center;
+    align-items: center;
+    color: black;
+    line-height: normal;
+}
+
 .chroniclesystem.sheet.item {
     min-width: 460px;
     min-height: 400px;

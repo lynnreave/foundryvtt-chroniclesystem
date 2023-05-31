@@ -2,12 +2,12 @@
     <section class="derived-statistics flex-7">
         <section class="command">
             <header class="header-field">
-                <span>Command</span>
+                <span>{{localize "CS.sheets.unit.warfare.command"}}</span>
             </header>
             <section class="flexrow">
                 <section class="commander flex-4">
                     <header class="subheader-field">
-                        <span>Commander</span>
+                        <span>{{localize "CS.sheets.unit.warfare.commander"}}</span>
                     </header>
                     <ol  class="list equipment-list">
                         <li class="item flexrow">
@@ -20,7 +20,7 @@
                 </section>
                 <section class="status flex-2">
                     <header class="subheader-field">
-                        <span>Status</span>
+                        <span>{{localize "CS.sheets.generalLabels.total"}}</span>
                     </header>
                     <div class="disposition-list">
                         {{#each statuses}}
@@ -32,7 +32,7 @@
                 </section>
                 <section class="discipline flex-4">
                     <header class="subheader-field">
-                        <span>Discipline</span>
+                        <span>{{localize "CS.sheets.unit.warfare.discipline"}}</span>
                     </header>
                     <ol class="list equipment-list">
                         <li class="list-header flexrow">
@@ -89,6 +89,31 @@
                 </section>
             </section>
         </section>
+        <section class="standing-order">
+            <header class="header-field">
+                <span>{{localize "CS.sheets.unit.warfare.currentOrder"}}</span>
+            </header>
+            {{#if character.currentOrder }}
+                <ol class="list equipment-list">
+                    <li class="list-header flexrow">
+                        <div class="flex-1">&nbsp;</div>
+                        <div class="weapon-label">{{localize "CS.sheets.generalLabels.name"}}</div>
+                        <div class="">{{localize "CS.sheets.unit.warfare.standingOrder"}}</div>
+                    </li>
+                    <li class="item flexrow" data-item-id="{{character.currentOrder._id}}">
+                        <a class="item item-edit flexrow">
+                            <div class="flex-1">&nbsp;</div>
+                            <div class="weapon-label field">
+                                <p>{{character.currentOrder.name}}</p>
+                            </div>
+                            <div class="weapon-label field">
+                                {{enrich character.currentOrder.system.standingOrder}}
+                            </div>
+                        </a>
+                    </li>
+                </ol>
+            {{/if}}
+        </section>
         <section class="combat">
             <header class="header-field">
                 <span>Combat</span>
@@ -96,11 +121,12 @@
             <section class="flexrow">
                 <section class="stats flex-1">
                     <header class="subheader-field">
+                        <span class="form-fields">Damage Resistance</span>
+                    </header>
+                    <div class="center padding-1">{{character.damageResistance}}</div>
+                    <header class="subheader-field">
                         <span>Defense</span>
                     </header>
-                    <li class="list-header flexrow">
-                        <div class="center padding-1">Base</div>
-                    </li>
                     <div class="form-group">
                         <span class="form-fields">
                             <input
@@ -128,9 +154,22 @@
                         </tbody>
                     </table>
                     <header class="subheader-field">
-                        <span class="form-fields">Damage Resistance</span>
+                        <span>{{localize "CS.sheets.generalLabels.custom"}} {{localize "CS.sheets.generalLabels.defense"}}</span>
                     </header>
-                    <div class="center padding-1">{{character.damageResistance}}</div>
+                    <div class="center flexrow">
+                        <span class="form-fields padding-3 flex-8">
+                            <!--suppress HtmlFormInputWithoutLabel -->
+                            <input
+                                    id="system.derivedStats.combatDefense.overrideValue"
+                                    name="system.derivedStats.combatDefense.overrideValue"
+                                    type="text"
+                                    value="{{character.derivedStats.combatDefense.overrideValue}}"
+                                    placeholder="{{character.derivedStats.combatDefense.total}}"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                        <a class="checkButton padding-3 flex-2 actor-flag-toggle {{showIfTrue character.derivedStats.combatDefense.override "activated" ""}}" data-item-id="{{_id}}" data-name="derivedStats.combatDefense.override" data-value="{{character.derivedStats.combatDefense.override}}" title="{{localize "CS.sheets.character.combatDefense.override"}}"><i class="fa-solid fa-toggle-on padding-3"></i></a>
+                    </div>
                     <header class="subheader-field">
                         <span>Health</span>
                     </header>
@@ -195,50 +234,73 @@
                 </section>
                 <section class="weapons flex-5">
                     <header class="subheader-field">
-                        <span>Current Equipped Weapons</span>
+                        <span>Attacks</span>
                     </header>
                     <table>
                         <thead>
                         <tr>
-                            <th>Weapon</th>
+                            <th>Type</th>
                             <th>Test</th>
                             <th>Damage</th>
                         </tr>
                         </thead>
                         <tbody>
                         {{#each character.owned.weapons as |weapon index|}}
-                            {{#ifDifferent weapon.system.equipped ../notEquipped}}
-                                <tr>
-                                    <td>{{weapon.name}}</td>
-                                    <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
-                                        <a>{{format-formula weapon.formula}}</a>
-                                    </td>
-                                    <td> {{weapon.damageValue}}</td>
-                                </tr>
-                            {{/ifDifferent}}
+                            <tr class="item weapon" data-item-id="{{_id}}">
+                                <td class="weapon-label item-edit field"><a>{{weapon.name}}</a></td>
+                                <td class="rollable" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
+                                    <a>{{format-formula weapon.formula}}</a>
+                                </td>
+                                <td class="weapon-label item-edit field"><a>{{weapon.damageValue}}</a></td>
+                            </tr>
                         {{/each}}
                         </tbody>
                     </table>
                     <header class="subheader-field">
-                        <span>Current Equipped Armor</span>
+                        <span>Armor</span>
                     </header>
                     <table>
                         <thead>
                         <tr>
-                            <th>Armor</th>
                             <th>Rating</th>
                             <th>Penalty</th>
+                            <th>Bulk</th>
+                            <th class="item-controls"></th>
                         </tr>
                         </thead>
                         <tbody>
                         {{#each character.owned.armors as |armor index|}}
-                            {{#ifDifferent armor.system.equipped ../notEquipped}}
-                                <tr>
-                                    <td>{{armor.name}}</td>
-                                    <td>{{armor.system.rating}}</td>
-                                    <td>{{armor.system.penalty}}</td>
-                                </tr>
-                            {{/ifDifferent}}
+                            <tr class="item armor" data-item-id="{{_id}}">
+                                <td class="item-edit"><a>{{armor.system.rating}}</a></td>
+                                <td class="item-edit"><a>{{armor.system.penalty}}</a></td>
+                                <td class="item-edit"><a>{{armor.system.bulk}}</a></td>
+                                <td class="item-controls flexrow">
+                                    <a class="checkButton equipped {{showIfEquals "1" armor.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfEquals "1" armor.system.equipped 0 1}}" data-type="armor"><i class="fas fa-user"></i></a>
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <header class="subheader-field">
+                        <span>Equipment</span>
+                    </header>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>AR</th>
+                            <th>Health/Uses</th>
+                            <th>Cost</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each character.owned.equipments as |equipment index|}}
+                            <tr class="item equipment" data-item-id="{{_id}}">
+                                <td class="item-edit"><a>{{equipment.name}}</a></td>
+                                <td class="item-edit"><a>{{equipment.system.armorRating}}</a></td>
+                                <td class="item-edit"><a>{{equipment.system.health.current}}</a></td>
+                                <td class="item-edit"><a>{{equipment.system.cost}}</a></td>
+                            </tr>
                         {{/each}}
                         </tbody>
                     </table>
@@ -268,11 +330,18 @@
     </section>
     <section class="formation flex-3">
         <header class="header-field">
-            <span>Formation</span>
+            <span>{{localize "CS.sheets.unit.warfare.training"}}</span>
+        </header>
+        <header class="subheader-field">
+            <span>{{localize (concat "CS.sheets.unit.training." character.training.current) }}</span>
+        </header>
+        {{> (ratingCheckbox) max=character.training.total currentValue=character.training.current dataType="Training" }}
+        <header class="header-field">
+            <span>{{localize "CS.sheets.unit.warfare.formation"}}</span>
         </header>
         <li class="list-header flexrow">
-            <div class="flex-9">Name</div>
-            <div class="center flex-1">Difficulty</div>
+            <div class="flex-9">{{localize "CS.sheets.generalLabels.name"}}</div>
+            <div class="center flex-1">{{localize "CS.sheets.unit.warfare.difficulty"}}</div>
         </li>
         <div class="disposition-list">
             {{#each formations}}

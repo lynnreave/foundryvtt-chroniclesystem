@@ -24,9 +24,15 @@ export function getWeaponTestDataForActor(actor, weapon) {
     let weaponData = getData(weapon);
 
     // get weapon specialty (format "Ability:Specialty")
-    let specialtyData = weaponData.specialty.split(":");
-    if (specialtyData.length < 2) {
-        return "";
+    // and handle if none, or no specialty (for warfare units)
+    let specialtyData;
+    if (!weaponData.specialty.trim()) {
+        specialtyData = ["None", null];
+    } else {
+        specialtyData = weaponData.specialty.split(":");
+    }
+    if (specialtyData.length === 1) {
+        specialtyData.push(null);
     }
     let weaponAbility = specialtyData[0];
     let weaponSpecialty = specialtyData[1];
@@ -37,15 +43,17 @@ export function getWeaponTestDataForActor(actor, weapon) {
     formula = adjustFormulaByWeapon(actor, formula, weapon);
 
     // get damage by ability
-    weapon.damageValue = 0
-    let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
-    if (matches) {
-        if (matches.length === 4) {
-            let damageAbility = matches[1];
-            let abilityValue = getAbilityValue(actor, damageAbility);
-            let operator = matches[2];
-            let modifier = matches[3];
-            weapon.damageValue = eval(`${abilityValue}${operator}${modifier}`);
+    weapon.damageValue = 2;
+    if (weaponData.damage) {
+        let matches = weaponData.damage.match('@([a-zA-Z]*)([-\+\/\*]*)([0-9]*)');
+        if (matches) {
+            if (matches.length === 4) {
+                let damageAbility = matches[1];
+                let abilityValue = getAbilityValue(actor, damageAbility);
+                let operator = matches[2];
+                let modifier = matches[3];
+                weapon.damageValue = eval(`${abilityValue}${operator}${modifier}`);
+            }
         }
     }
     // handle powerful quality

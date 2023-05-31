@@ -66,6 +66,12 @@ export class TestCharacter {
             "current": 0,
             "total": 1
         },
+        training: {
+            "value": 0,
+            "modifier": 0,
+            "current": 0,
+            "total": 3
+        },
         techniques: {},
         owned: {
             abilities: []

@@ -55,7 +55,8 @@ export const EQUIPPED_CONSTANTS = {
   BOTH_HANDS: 4,
   COMMANDER: 5,
   DEFENDING: 6,
-  MOUNTED: 7
+  MOUNTED: 7,
+  ORDER: 8
 };
 
 /**
@@ -107,7 +108,8 @@ export const KEY_CONSTANTS = {
   FACING: "CS.constants.others.facing",
   FORMATION: "CS.constants.others.formation",
   HEROES: "CS.constants.others.heroes",
-  DISPOSITION: "CS.constants.others.disposition"
+  DISPOSITION: "CS.constants.others.disposition",
+  TRAINING: "CS.constants.others.training"
 };
 
 /**

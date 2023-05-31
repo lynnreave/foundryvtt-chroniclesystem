@@ -204,7 +204,7 @@ describe("transformers.js", () => {
         });
         test("include detail => type", () => {
             let character: TestCharacter = new TestCharacter();
-            let testTransformer = Object.assign({}, defaultTransformer);
+            let testTransformer = {_id: "source", mod: 1, isDocument: false};
             for (let type of transformerTypes) {
                 // clean
                 character[type]["someAttr"] = null;
@@ -213,7 +213,9 @@ describe("transformers.js", () => {
                 character.system[type]["someAttr"] = [testTransformer];
                 let output = getTransformation(character, type, "someAttr", true);
                 expect(output.total).toBe(testTransformer.mod);
-                expect(output.detail).toStrictEqual([{docName: undefined, mod: testTransformer.mod}]);
+                expect(output.detail).toStrictEqual(
+                    [{docName: undefined, mod: testTransformer.mod, source: testTransformer._id}]
+                );
                 // reset
                 character[type]["someAttr"] = null;
                 character.system[type]["someAttr"] = null;
@@ -232,7 +234,9 @@ describe("transformers.js", () => {
                 character.system[type]["someAttr"] = [transformer];
                 let output = getTransformation(character, type, "someAttr", true);
                 expect(output.total).toBe(transformer.mod);
-                expect(output.detail).toStrictEqual([{docName: itemDoc.name, mod: transformer.mod}]);
+                expect(output.detail).toStrictEqual(
+                    [{docName: itemDoc.name, mod: transformer.mod, source: transformer._id}]
+                );
                 // reset
                 character[type]["someAttr"] = null;
                 character.system[type]["someAttr"] = null;

@@ -3,10 +3,15 @@ import { CharacterBase } from "../character-base.js";
 import { ChronicleSystem } from "../../../system/ChronicleSystem.js";
 import { getCommander } from "./helpers.js";
 import {
+    addTransformer,
     getAllTransformers,
     getTransformation
 } from "../transformers.js";
-import { CHARACTER_ATTR_CONSTANTS } from "../../../constants.js";
+import {
+    CHARACTER_ATTR_CONSTANTS,
+    EQUIPPED_CONSTANTS,
+    KEY_CONSTANTS
+} from "../../../constants.js";
 import { getData } from "../../../common.js";
 
 /**
@@ -34,6 +39,11 @@ export class Unit extends CharacterBase {
 
         // commander
         data.commander = getCommander(this.getEmbeddedCollection("Item"));
+
+        // current order
+        data.currentOrder = this.getEmbeddedCollection("Item").find(
+            (item) => item.type === 'order' && item.system.equipped === EQUIPPED_CONSTANTS.ORDER
+        ) || null;
 
         // "equipped" hardcoded entities
         // formation
@@ -81,5 +91,9 @@ export class Unit extends CharacterBase {
         data.discipline.total = data.discipline.value + data.discipline.modifier;
         data.discipline.totalWithOrders = data.discipline.total
             + parseInt(data.discipline.ordersReceivedModifier);
+
+        // training
+        data.training.value = 4;
+        data.training.total = data.training.value + parseInt(data.training.modifier);
     }
 }

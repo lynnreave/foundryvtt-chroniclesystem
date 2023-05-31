@@ -50,14 +50,32 @@ describe("helpers.js", () => {
       );
       expect(weaponDoc.damageValue).toStrictEqual(abilityDoc.system.rating);
     });
-    test("invalid specialty", () => {
+    test("no specialty ability", () => {
       let character: TestCharacter = new TestCharacter();
       let weaponDoc = {
         name: "someName", damageValue: null, formula: null, system: {specialty: ""}
       };
       getWeaponTestDataForActor(character, weaponDoc);
-      expect(weaponDoc.formula).toStrictEqual(null);
-      expect(weaponDoc.damageValue).toStrictEqual(null);
+      expect(weaponDoc.formula.toStr()).toStrictEqual("2|0|0|0|0");
+      expect(weaponDoc.damageValue).toStrictEqual(2);
+    });
+    test("no specialty specialty", () => {
+      let character: TestCharacter = new TestCharacter();
+      let specialty = {name: 'Swords', rating: 1, modifier: 1};
+      let abilityDoc = {
+        _id: "someId", name: "Fighting", type: "ability", system: {
+          rating: 5, modifier: 0, specialties: [specialty]
+        }
+      }
+      character.owned.abilities = [abilityDoc];
+      let weaponDoc = {
+        name: "Sword", damageValue: null, formula: null, system: {
+          specialty: `${abilityDoc.name}`, damage: `@${abilityDoc.name}`
+        }
+      };
+      getWeaponTestDataForActor(character, weaponDoc);
+      expect(weaponDoc.formula.ToFormattedStr()).toStrictEqual(`${abilityDoc.system.rating}d6`);
+      expect(weaponDoc.damageValue).toStrictEqual(abilityDoc.system.rating);
     });
     test("has powerful trait", () => {
       global.game = new TestGame();
