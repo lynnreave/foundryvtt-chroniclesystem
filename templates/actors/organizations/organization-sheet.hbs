@@ -1,0 +1,60 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{log actor}}
+    <header class="sheet-header">
+        <div class="header-fields">
+            <div class="complements flexrow">
+                <label class="attribute-label">
+                    {{#if actor.system.roles.leader.name}}
+                        {{actor.system.roles.leader.name}}
+                    {{else}}
+                        {{localize "CS.sheets.organization.roles.leader"}}:
+                    {{/if}}
+                </label>
+                <label class="link-field open-actor-sheet size75" data-id="{{actor.system.roles.leader.id}}">
+                    <a>{{actor.system.roles.leader.holder.name}}</a>
+                </label>
+                <label class="attribute-label">
+                    {{#if actor.system.roles.successor.name}}
+                        {{actor.system.roles.successor.name}}
+                    {{else}}
+                        {{localize "CS.sheets.organization.roles.successor"}}:
+                    {{/if}}
+                </label>
+                <label class="link-field open-actor-sheet size75" data-id="{{actor.system.roles.successor.id}}">
+                    <a>{{actor.system.roles.successor.holder.name}}</a>
+                </label>
+                <label class="attribute-label">
+                    {{#if actor.system.roles.superior.name}}
+                        {{actor.system.roles.superior.name}}
+                    {{else}}
+                        {{localize "CS.sheets.organization.roles.superior"}}:
+                    {{/if}}
+                </label>
+                <label class="link-field open-actor-sheet size75" data-id="{{actor.system.roles.superior.id}}">
+                    <a>{{actor.system.roles.superior.holder.name}}</a>
+                </label>
+                <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
+            </div>
+            <div class="flexrow">
+                <h1 class="charname flex-9"><input name="name" type="text" value="{{actor.name}}" placeholder="{{localize "CS.sheets.generalLabels.name"}}"/></h1>
+                <div class="profile-list-img-container flex-1" style="height: 50px;">
+                    <img class="profile-list-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs flexrow tabs" data-group="primary">
+        <a class="item" data-tab="roles">{{localize "CS.sheets.organization.labels.roles"}}</a>
+        <a class="item" data-tab="structure">{{localize "CS.sheets.organization.labels.structure"}}</a>
+        <a class="item" data-tab="associates">{{localize "CS.sheets.organization.labels.associates"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/roles-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/structure-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/associates-tab.hbs"}}
+    </section>
+</form>

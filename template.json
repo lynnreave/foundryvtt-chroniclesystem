@@ -3,6 +3,7 @@
     "types": [
       "character",
       "house",
+      "organization",
       "unit"
     ],
     "templates": {
@@ -157,9 +158,6 @@
         "description": "",
         "total": 0
       },
-      "owned": {
-        "characters": []
-      },
       "population": {
         "startingValue": 0,
         "description": "",
@@ -184,6 +182,28 @@
         "family": [],
         "retainers": [],
         "servants": []
+      }
+    },
+    "organization": {
+      "leader": "",
+      "steward": "",
+      "owned": {
+        "characters": [],
+        "positions": []
+      },
+      "roles": {
+        "administrator": {
+          "name": ""
+        },
+        "leader": {
+          "name": ""
+        },
+        "successor": {
+          "name": ""
+        },
+        "superior": {
+          "name": ""
+        }
       }
     },
     "unit": {
@@ -253,6 +273,7 @@
       "holding",
       "mount",
       "order",
+      "position",
       "relationship",
       "technique",
       "weapon"
@@ -398,6 +419,12 @@
       "sprint": 32,
       "isWarhorse": false,
       "isStationary": false
+    },
+    "position": {
+      "templates": [
+        "itemDescription"
+      ],
+      "holder": ""
     },
     "order": {
       "templates": [

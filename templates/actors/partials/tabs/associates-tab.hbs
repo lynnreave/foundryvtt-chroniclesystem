@@ -1,0 +1,90 @@
+<div class="tab flexrow" data-group="primary" data-tab="associates">
+    <section class="associates">
+        <header class="header-field">
+            <span>{{localize "CS.sheets.organization.labels.associates"}}</span>
+        </header>
+        <section class="flexrow">
+            <table class="associates-list hover-table">
+                <colgroup>
+                    <col style="width: 15%" />
+                    <col style="width: 5%" />
+                    <col style="width: 70%;" />
+                    <col style="width: 10%;" />
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>{{localize "CS.sheets.organization.labels.relationship"}}</th>
+                    <th></th>
+                    <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.name"}}</span></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each actor.system.owned.characters as |associate index|}}
+                <tr class="embedded-actor">
+                    <td>
+                        <div class="flexrow center">
+                            <a
+                                    class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 0 associate.relationship "activated" ""}}"
+                                    data-id="{{id}}"
+                                    data-name="relationship"
+                                    data-value="0"
+                                    data-list="characters"
+                                    title="{{localize "CS.sheets.generalLabels.none"}}"
+                            >
+                                <i class="fa-solid fa-ban"></i>
+                            </a>
+                            <a
+                                    class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 1 associate.relationship "activated" ""}}"
+                                    data-id="{{id}}"
+                                    data-name="relationship"
+                                    data-value="1"
+                                    data-list="characters"
+                                    title="{{localize "CS.sheets.organization.labels.member"}}"
+                            >
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                            <a
+                                    class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 2 associate.relationship "activated" ""}}"
+                                    data-id="{{id}}"
+                                    data-name="relationship"
+                                    data-value="2"
+                                    data-list="characters"
+                                    title="{{localize "CS.sheets.organization.labels.ally"}}"
+                            >
+                                <i class="fa-solid fa-face-smile"></i>
+                            </a>
+                            <a
+                                    class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 3 associate.relationship "activated" ""}}"
+                                    data-id="{{id}}"
+                                    data-name="relationship"
+                                    data-value="3"
+                                    data-list="characters"
+                                    title="{{localize "CS.sheets.organization.labels.enemy"}}"
+                            >
+                                <i class="fa-solid fa-face-angry"></i>
+                            </a>
+                        </div>
+                    </td>
+                    <td class="field img profile-td-img-container open-actor-sheet" data-id="{{associate.id}}">
+                        <img class="profile-td-img" src="{{associate.img}}" title="{{associate.name}}" alt="{{associate.img}}" />
+                    </td>
+                    <td class="field name text-align-left open-actor-sheet" data-id="{{associate.id}}">{{associate.name}}</td>
+                    <td class="field">
+                        <a
+                                class="item-control owned-list-control"
+                                data-index="{{index}}"
+                                data-list="characters"
+                                data-action="delete"
+                                title={{localize "CS.sheets.generalLabels.remove"}}
+                        >
+                            <i class="fa-solid fa-right-from-bracket padding-3"></i>
+                        </a>
+                    </td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </section>
+    </section>
+</div>

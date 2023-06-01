@@ -1,4 +1,5 @@
 import { ChronicleSystem } from "../system/ChronicleSystem.js";
+import { getData } from "../common.js";
 
 /**
  * Extend the ActorSheet entity with generic, top-level attributes for the Chronicle System.
@@ -19,9 +20,14 @@ export class ActorSheetChronicle extends ActorSheet {
             ev.preventDefault();
             $(ev.currentTarget).parents('.item').find('.description').slideToggle();
         });
+        html.find(".owned-item-control").on("click", this._onClickOwnedItemControl.bind(this));
         html.find(".item-flag-toggle").on("click", this._onClickItemFlagToggle.bind(this));
         html.find(".actor-flag-toggle").on("click", this._onClickActorFlagToggle.bind(this));
         html.find(".actor-field-update").on("click", this._onClickActorFieldUpdate.bind(this));
+
+
+        html.find(".owned-list-item-flag-toggle").on("click", this._onClickOwnedListItemFlagToggle.bind(this));
+        html.find(".owned-list-item-field-update").on("click", this._onClickOwnedListItemFieldUpdate.bind(this));
 
         // Update Inventory Item
         html.find('.item-edit').on("click", this._showEmbeddedItemSheet.bind(this));
@@ -29,11 +35,24 @@ export class ActorSheetChronicle extends ActorSheet {
 
         // open another sheet
         html.find('.actor-open').click(this._showLinkedActorSheet.bind(this));
+        html.find('.open-actor-sheet').click(this._openActorSheet.bind(this));
 
         // refresh sheet data
         html.find('.refresh-sheet').on("click", this._refreshSheet.bind(this))
     }
 
+    async _onClickOwnedItemControl(event) {
+        event.preventDefault();
+        const a = event.currentTarget;
+        const itemIndex = parseInt(a.dataset.index);
+        const list = a.dataset.list;
+        const action = a.dataset.action;
+        const itemId = this.actor.system.owned[list][itemIndex]._id
+
+        if ( action === "delete" ) {
+            await this.actor.deleteEmbeddedDocuments("Item", [itemId,])
+        }
+    }
     async _onClickRoll(event, targets) {
         await ChronicleSystem.eventHandleRoll(event, this.actor, targets);
     }
@@ -63,6 +82,53 @@ export class ActorSheetChronicle extends ActorSheet {
         await this.actor.update(pkg);
     }
 
+    async _onClickOwnedListItemFlagToggle(event) {
+        // get data
+        const eventData = event.currentTarget.dataset;
+        const itemId = eventData.id;
+        const list = eventData.list;
+        const actorFlag = eventData.name;
+        const currentState = eventData.value === "true";
+        const targetState = !currentState;
+        const actorData = getData(this.actor)
+
+        // update current list
+        let currentList = actorData.owned[list];
+        currentList.find((item) => {
+            if (item.id === itemId) {
+                item[actorFlag] = targetState;
+            }
+        });
+
+        // push update
+        let updatePkg = {};
+        updatePkg[`system.owned.${list}`] = currentList;
+        await this.actor.update(updatePkg)
+    }
+
+    async _onClickOwnedListItemFieldUpdate(event) {
+        // get data
+        const eventData = event.currentTarget.dataset;
+        const itemId = eventData.id;
+        const list = eventData.list;
+        const actorField = eventData.name;
+        const value = eventData.value;
+        const actorData = getData(this.actor)
+
+        // update current list
+        let currentList = actorData.owned[list];
+        currentList.find((item) => {
+            if (item.id === itemId) {
+                item[actorField] = value;
+            }
+        });
+
+        // push update
+        let updatePkg = {};
+        updatePkg[`system.owned.${list}`] = currentList;
+        await this.actor.update(updatePkg)
+    }
+
     async _onClickItemFlagToggle(event) {
         let eventData = event.currentTarget.dataset;
         let itemId = eventData.itemId;
@@ -88,8 +154,17 @@ export class ActorSheetChronicle extends ActorSheet {
     _showEmbeddedItemSheet(event) {
         event.preventDefault();
         const li = $(event.currentTarget).parents('.item');
-        const item = this.actor.items.get(li.data('itemId'));
+        const itemId = li.data('itemId');
+        const item = this.actor.items.get(itemId);
         item.sheet.render(true);
+    }
+
+    _openActorSheet(ev) {
+        ev.preventDefault();
+        const id = ev.currentTarget.dataset.id;
+        const actor = game.actors.get(id);
+        if (actor)
+            actor.sheet.render(true);
     }
 
     _showLinkedActorSheet(event) {

@@ -260,7 +260,7 @@ describe("unit.js", () => {
             expect(unit.system.training.current).toStrictEqual(newValue);
             expect(
                 getTransformation(unit, "modifiers", "discipline").total
-            ).toStrictEqual(9);
+            ).toStrictEqual(0);
         });
         test("1 value", () => {
             let unit: TestCharacter = new TestCharacter();
@@ -269,7 +269,7 @@ describe("unit.js", () => {
             expect(unit.system.training.current).toStrictEqual(newValue);
             expect(
                 getTransformation(unit, "modifiers", "discipline").total
-            ).toStrictEqual(6);
+            ).toStrictEqual(9);
         });
         test("2 value", () => {
             let unit: TestCharacter = new TestCharacter();
@@ -278,7 +278,7 @@ describe("unit.js", () => {
             expect(unit.system.training.current).toStrictEqual(newValue);
             expect(
                 getTransformation(unit, "modifiers", "discipline").total
-            ).toStrictEqual(3);
+            ).toStrictEqual(6);
         });
         test("3 value", () => {
             let unit: TestCharacter = new TestCharacter();
@@ -287,7 +287,7 @@ describe("unit.js", () => {
             expect(unit.system.training.current).toStrictEqual(newValue);
             expect(
                 getTransformation(unit, "modifiers", "discipline").total
-            ).toStrictEqual(0);
+            ).toStrictEqual(3);
         });
     });
 });

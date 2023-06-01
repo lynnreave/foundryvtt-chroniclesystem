@@ -78,25 +78,11 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     html.find('.item .toggle-active').click(this._onItemToggleActive.bind(this));
     html.find('.equipped').click(this._onEquippedStateChanged.bind(this));
     html.find(".square").on("click", this._onClickSquare.bind(this));
-    html.find(".owned-item-control").on("click", this._onClickOwnedItemControl.bind(this));
     html.find(".effect-clear").on("click", this._onClickEffectClear.bind(this));
     html.find(".effect-clear-all").on("click", this._onClickEffectClearAll.bind(this));
   }
 
   /* -------------------------------------------- */
-
-  async _onClickOwnedItemControl(event) {
-    event.preventDefault();
-    const a = event.currentTarget;
-    const itemIndex = parseInt(a.dataset.index);
-    const list = a.dataset.list;
-    const action = a.dataset.action;
-    const itemId = this.actor.system.owned[list][itemIndex]._id
-
-    if ( action === "delete" ) {
-      await this.actor.deleteEmbeddedDocuments("Item", [itemId,])
-    }
-  }
 
   async _onClickSquare(ev) {
     ev.preventDefault();

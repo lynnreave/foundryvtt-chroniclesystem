@@ -267,12 +267,18 @@
 }
 
 .hover-table tr {
+  opacity: 0.85;
+  /*transition: color .3s ease-in-out, box-shadow .3s ease-in-out;*/
 }
 
 .hover-table tr:hover {
   /*background-color: #005390;*/
-  background-color: black;
-  color: white;
+  /*background-color: black;*/
+  /*color: white;*/
+  opacity: 1;
+  font-size: 105%;
+  font-weight: bold;
+  /*box-shadow: inset 100px 0 0 0 #005390;*/
 }
 
 .minimal-width {

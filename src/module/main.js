@@ -23,6 +23,7 @@ import SystemUtils from "../util/systemUtils.js";
 import { ActionCombatSheet } from "./item/action/action-combat-sheet.js";
 import { OrderSheet } from "./item/order/order-sheet.js";
 import { MountSheet } from "./item/mount/mount-sheet.js";
+import { OrganizationSheet } from "./actor/organization/organization-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -66,6 +67,11 @@ Hooks.once("init", async function () {
     types: ["house"],
     makeDefault: true,
   });
+  Actors.registerSheet("chroniclesystem", OrganizationSheet, {
+    label: SystemUtils.localize("CS.sheets.organizationSheet"),
+    types: ["organization"],
+    makeDefault: true,
+  });
   Actors.registerSheet("chroniclesystem", UnitSheet, {
     label: SystemUtils.localize("CS.sheets.unitSheet"),
     types: ["unit"],
@@ -85,7 +91,7 @@ Hooks.once("init", async function () {
   });
   Items.registerSheet("chroniclesystem", ItemSheetChronicle, {
     label: SystemUtils.localize("CS.sheets.itemSheet"),
-    types: ["actionIntrigue", "armor", "benefit", "drawback", "equipment"],
+    types: ["actionIntrigue", "armor", "benefit", "drawback", "equipment", "position"],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", EffectSheet, {

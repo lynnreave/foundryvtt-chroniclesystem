@@ -1,12 +1,14 @@
 import factory from "../../util/factory.js";
 import { Character } from "./character/character/character.js";
 import { House } from "./house/house.js";
+import { Organization } from "./organization/organization.js";
 import { Unit } from "./character/unit/unit.js";
 
 // define available actor types
 const actorTypes = {};
 actorTypes.character = Character;
 actorTypes.house = House;
+actorTypes.organization = Organization;
 actorTypes.unit = Unit;
 // add any new actor types here as actorTypes.newType = newType;
 

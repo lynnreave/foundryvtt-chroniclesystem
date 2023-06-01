@@ -23,6 +23,7 @@ itemTypes.hero = ItemChronicle;
 itemTypes.holding = CSHoldingItem;
 itemTypes.mount = ItemChronicle;
 itemTypes.order = ItemChronicle;
+itemTypes.position = ItemChronicle;
 itemTypes.relationship = ItemChronicle;
 itemTypes.technique = CSTechniqueItem;
 itemTypes.weapon = Weapon;

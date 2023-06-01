@@ -94,6 +94,7 @@
       "actionCombatSheet": "Combat Action",
       "characterSheet": "Character Sheet",
       "houseSheet": "House Sheet",
+      "organizationSheet": "Organization Sheet",
       "unitSheet": "Unit Sheet",
       "itemSheet": "Item Sheet",
       "abilityItemSheet": "Ability Sheet",
@@ -121,13 +122,41 @@
         "intrigue": "Intrigue",
         "maximum": "Maximum",
         "name": "Name",
+        "none": "None",
         "other": "Other",
         "others": "Others",
+        "remove": "Remove",
+        "status": "Status",
         "total": "Total",
         "type": "Type",
         "uses": "Uses",
         "warfare": "Warfare",
         "yes": "Yes"
+      },
+      "organization": {
+        "labels": {
+          "ally": "Ally",
+          "associates": "Associates",
+          "enemy": "Enemy",
+          "holder": "Holder",
+          "leadership": "Key Roles",
+          "member": "Member",
+          "positions": "Additional Positions",
+          "relationship": "Relationship",
+          "role": "Role",
+          "roles": "Roles & Responsibilities",
+          "structure": "Structure"
+        },
+        "roles": {
+          "administrator": "Administrator",
+          "adminDesc": "The character who manages the organization and sees to it that the orders of the leader are carried out. This might be a steward, a treasurer, a seneschal, or a sergeant.",
+          "leader": "Leader",
+          "leaderDesc": "The leader of the organization. This may be a head of household, captain, administrator, or any other character who ultimately makes decisions for the organization.",
+          "successor": "Successor",
+          "successorDesc": "The next in line to lead the organization. This might be an heir, a second-in-command, or a lieutenant.",
+          "superior": "Superior",
+          "superiorDesc": "The character or organization that this organization answers or belongs to, if any. This might be an owner, a liege lord, or someone else to which the organization leader has sworn fealty."
+        }
       },
       "house": {
         "character": {

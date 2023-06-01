@@ -3,7 +3,6 @@ import LOGGER from "../../../util/logger.js";
 import { ActorSheetChronicle } from "../actor-sheet-chronicle.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
 import { CSConstants } from "../../system/csConstants.js";
-import { refreshEmbeddedActorData } from "../character/helpers.js";
 
 /**
  * An ActorSheet entity for handling character Houses.
