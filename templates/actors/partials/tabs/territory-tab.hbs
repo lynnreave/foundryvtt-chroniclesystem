@@ -1,0 +1,203 @@
+<div class="tab flexrow" data-group="primary" data-tab="territory">
+    <section class="roles">
+        <header class="header-field">
+            <span>{{localize "CS.sheets.organization.labels.territory"}} {{localize "CS.sheets.organization.labels.holdings"}}</span>
+        </header>
+        <section class="summary">
+            <table class="benefits-table hover-table">
+                <thead>
+                <tr><th>{{localize "CS.sheets.holdings.labels.benefits"}}</th></tr>
+                </thead>
+                <tbody>
+                {{#each character.benefits as |benefit index|}}
+                    <tr class="padding-3"><td class="font-small">{{enrich benefit}}</td></tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </section>
+        <section class="flexrow">
+            <section class="lands flex-6" style="margin-right: 2px;">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.organization.labels.lands"}}</span>
+                </header>
+                <table class="lands-list hover-table">
+                    <colgroup>
+                        <col style="width: 15%" />
+                        <col style="width: 15%" />
+                        <col style="width: 45%;" />
+                        <col style="width: 10%;" />
+                        <col style="width: 10%;" />
+                        <col style="width: 5%;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th class="center">{{localize "CS.sheets.holdings.labels.pop"}}</th>
+                        <th class="center">
+                            {{localize "CS.sheets.generalLabels.other"}}
+                            {{localize "CS.sheets.holdings.labels.investments"}}
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each actor.system.owned.lands as |land index|}}
+                    <tr class="embedded-actor">
+                        <td class="profile-td-img-container open-actor-sheet" data-id="{{land.id}}">
+                            <img
+                                    class="profile-td-img"
+                                    src="{{land.terrain.img}}"
+                                    title="{{land.terrain.name}}"
+                            />
+                        </td>
+                        <td class="profile-td-img-container open-actor-sheet" data-id="{{land.id}}">
+                            <img
+                                    class="profile-td-img"
+                                    src="{{land.img}}"
+                            />
+                        </td>
+                        <td
+                                class="text-align-left open-actor-sheet"
+                                data-id="{{land.id}}"
+                        >
+                            {{land.name}}
+                        </td>
+                        <td class="center item-edit">{{land.summarizedData.investmentPopulation}}</td>
+                        <td class="center item-edit">{{land.summarizedData.investmentTotal}}</td>
+                        <td >
+                            <a
+                                    class="item-control owned-list-control"
+                                    data-index="{{index}}"
+                                    data-list="lands"
+                                    data-action="delete"
+                                    title={{localize "CS.sheets.generalLabels.remove"}}
+                            >
+                                <i class="fa-solid fa-right-from-bracket padding-3"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+            <section class="other flex-4" style="margin-left: 2px; ">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.generalLabels.other"}}</span>
+                </header>
+                <header class="subheader-field">
+                    <span>{{localize "CS.sheets.holdings.labels.terrain"}}</span>
+                </header>
+                <table class="terrains-list hover-table">
+                    <colgroup>
+                        <col style="width: 25%" />
+                        <col style="width: 70%;" />
+                        <col style="width: 5%;" />
+                    </colgroup>
+                    <tbody>
+                    {{#each actor.system.owned.terrains as |terrain index|}}
+                        <tr class="item" data-item-id="{{_id}}">
+                            <td class="profile-td-img-container item-edit">
+                                <img
+                                        class="profile-td-img"
+                                        src="{{terrain.img}}"
+                                        title="{{terrain.name}}"
+                                />
+                            </td>
+                            <td class="item-edit">{{terrain.name}}</td>
+                            <td>
+                                <a
+                                        class="item-control owned-item-control"
+                                        data-index="{{index}}"
+                                        data-list="terrains"
+                                        data-action="delete"
+                                        title="{{localize "CS.sheets.generalLabels.delete"}}"
+                                >
+                                    <i class="fas fa-trash padding-3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+                <section class="flexrow">
+                    <section class="terrain" style="margin-right: 2px;">
+                        <header class="subheader-field">
+                            <span>{{localize "CS.sheets.holdings.labels.terrainFeatures"}}</span>
+                        </header>
+                        <table class="terrain-features-list hover-table">
+                            <colgroup>
+                                <col style="width: 25%" />
+                                <col style="width: 70%;" />
+                                <col style="width: 5%;" />
+                            </colgroup>
+                            <tbody>
+                            {{#each actor.system.owned.features as |feature index|}}
+                                <tr class="item" data-item-id="{{_id}}">
+                                    <td class="profile-td-img-container item-edit">
+                                        <img
+                                                class="profile-td-img"
+                                                src="{{feature.img}}"
+                                                title="{{feature.name}}"
+                                        />
+                                    </td>
+                                    <td class="item-edit">{{feature.name}}</td>
+                                    <td>
+                                        <a
+                                                class="item-control owned-item-control"
+                                                data-index="{{index}}"
+                                                data-list="features"
+                                                data-action="delete"
+                                                title="{{localize "CS.sheets.generalLabels.delete"}}"
+                                        >
+                                            <i class="fas fa-trash padding-3"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="buildings" style="margin-left: 2px;">
+                        <header class="subheader-field">
+                            <span>{{localize "CS.sheets.holdings.labels.buildings"}}</span>
+                        </header>
+                        <table class="terrain-features-list hover-table">
+                            <colgroup>
+                                <col style="width: 25%" />
+                                <col style="width: 70%;" />
+                                <col style="width: 5%;" />
+                            </colgroup>
+                            <tbody>
+                            {{#each actor.system.owned.buildings as |building index|}}
+                                <tr class="item" data-item-id="{{_id}}">
+                                    <td class="profile-td-img-container item-edit">
+                                        <img
+                                                class="profile-td-img"
+                                                src="{{showIfFalse building.system.isUnderConstruction building.img "icons/terrain/construction.png"}}"
+                                                title="{{showIfTrue building.system.isUnderConstruction (localize "CS.sheets.holdings.labels.isUnderConstruction") building.name}}"
+                                        />
+                                    </td>
+                                    <td class="item-edit">{{building.name}}</td>
+                                    <td>
+                                        <a
+                                                class="item-control owned-item-control"
+                                                data-index="{{index}}"
+                                                data-list="buildings"
+                                                data-action="delete"
+                                                title="{{localize "CS.sheets.generalLabels.delete"}}"
+                                        >
+                                            <i class="fas fa-trash padding-3"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+</div>

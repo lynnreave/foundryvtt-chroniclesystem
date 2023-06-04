@@ -56,7 +56,9 @@ export const EQUIPPED_CONSTANTS = {
   COMMANDER: 5,
   DEFENDING: 6,
   MOUNTED: 7,
-  ORDER: 8
+  ORDER: 8,
+  LEADER_POSITION: 9,
+  STEWARD_POSITION: 10
 };
 
 /**
@@ -64,6 +66,20 @@ export const EQUIPPED_CONSTANTS = {
  * @type {number}
  */
 export const DEFAULT_MOVEMENT = 4;
+
+/**
+ * Organization resources.
+ * @type {object}
+ */
+export const ORGANIZATION_RESOURCES = {
+  DEFENSE: "CS.sheets.house.resources.defense",
+  INFLUENCE: "CS.sheets.house.resources.influence",
+  LANDS: "CS.sheets.house.resources.lands",
+  LAW: "CS.sheets.house.resources.law",
+  POPULATION: "CS.sheets.house.resources.population",
+  POWER: "CS.sheets.house.resources.power",
+  WEALTH: "CS.sheets.house.resources.wealth"
+}
 
 /**
  * Used for sourceId values when adding transformers to Character objects.

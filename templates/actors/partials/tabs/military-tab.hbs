@@ -1,0 +1,96 @@
+<div class="tab flexrow" data-group="primary" data-tab="military">
+    <section class="military">
+        <header class="header-field">
+            <span>{{localize "CS.sheets.organization.labels.military"}} {{localize "CS.sheets.organization.labels.holdings"}}</span>
+        </header>
+        <section class="flexrow">
+            <section class="units" style="margin-right: 2px;">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.organization.labels.units"}}</span>
+                </header>
+                <table class="units-list hover-table">
+                    <colgroup>
+                        <col style="width: 15%" />
+                        <col style="width: 55%;" />
+                        <col style="width: 15%;" />
+                        <col style="width: 15%;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th class="center">
+                            {{localize "CS.sheets.holdings.labels.investment"}}
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each actor.system.owned.units as |unit index|}}
+                    <tr>
+                        <td class="profile-td-img-container open-actor-sheet" data-id="{{unit.id}}">
+                            <img class="profile-td-img" src="{{unit.img}}"/>
+                        </td>
+                        <td class="text-align-left open-actor-sheet" data-id="{{unit.id}}">
+                            {{unit.name}}
+                        </td>
+                        <td class="center item-edit">{{unit.investment}}</td>
+                        <td >
+                            <a
+                                    class="item-control owned-list-control"
+                                    data-index="{{index}}"
+                                    data-list="units"
+                                    data-action="delete"
+                                    title={{localize "CS.sheets.generalLabels.remove"}}
+                            >
+                                <i class="fa-solid fa-right-from-bracket padding-3"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+            <section class="vassals" style="margin-left: 2px;">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.organization.labels.vassals"}}</span>
+                </header>
+                <table class="vassals-list hover-table">
+                    <thead>
+                    <tr>
+                        <th colspan="2" class="text-align-right">
+                            {{localize "CS.sheets.generalLabels.total"}}
+                            {{localize "CS.sheets.holdings.labels.investment"}}
+                        </th>
+                        <th>{{character.powerFromVassals}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each actor.system.owned.vassals as |vassal index|}}
+                        <tr>
+                            <td class="profile-td-img-container open-actor-sheet" data-id="{{vassal.id}}">
+                                <img class="profile-td-img" src="{{vassal.img}}"/>
+                            </td>
+                            <td class="text-align-left open-actor-sheet" data-id="{{vassal.id}}">
+                                {{vassal.name}}
+                            </td>
+                            <td >
+                                <a
+                                        class="item-control padding-3 flex-1 owned-list-item-field-update"
+                                        data-id="{{vassal.id}}"
+                                        data-name="relationship"
+                                        data-value="0"
+                                        data-list="organizations"
+                                        title={{localize "CS.sheets.generalLabels.removeFromList"}}
+                                >
+                                    <i class="fa-solid fa-ban"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+        </section>
+    </section>
+</div>

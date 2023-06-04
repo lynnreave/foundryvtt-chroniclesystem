@@ -6,22 +6,43 @@
         <section class="flexrow">
             <table class="associates-list hover-table">
                 <colgroup>
-                    <col style="width: 15%" />
                     <col style="width: 5%" />
-                    <col style="width: 70%;" />
+                    <col style="width: 35%;" />
+                    <col style="width: 35%;" />
+                    <col style="width: 15%" />
                     <col style="width: 10%;" />
                 </colgroup>
                 <thead>
                 <tr>
-                    <th>{{localize "CS.sheets.organization.labels.relationship"}}</th>
                     <th></th>
                     <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.name"}}</span></th>
+                    <th class="text-align-left"><span>{{localize "CS.sheets.organization.labels.position"}}</span></th>
+                    <th class="center">{{localize "CS.sheets.organization.labels.relationship"}}</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 {{#each actor.system.owned.characters as |associate index|}}
                 <tr class="embedded-actor">
+                    <td class="field img profile-td-img-container open-actor-sheet" data-id="{{associate.id}}">
+                        <img class="profile-td-img" src="{{associate.img}}" title="{{associate.name}}" alt="{{associate.img}}" />
+                    </td>
+                    <td class="field name text-align-left open-actor-sheet" data-id="{{associate.id}}">{{associate.name}}</td>
+                    <td>
+                        <span class="form-fields">
+                            <select
+                                    name="position"
+                                    class="owned-list-item-field-update-select"
+                                    data-id="{{id}}"
+                                    data-name="position"
+                                    data-list="characters"
+                                    style="width: 100%;"
+                            >
+                                <option value="">{{localize "CS.sheets.generalLabels.none"}}</option>
+                                {{selectOptions ../actor.system.owned.positions nameAttr="_id" labelAttr="name" selected=associate.position}}
+                            </select>
+                        </span>
+                    </td>
                     <td>
                         <div class="flexrow center">
                             <a
@@ -30,7 +51,7 @@
                                     data-name="relationship"
                                     data-value="0"
                                     data-list="characters"
-                                    title="{{localize "CS.sheets.generalLabels.none"}}"
+                                    title="{{localize "CS.sheets.organization.associates.isUnrelatedDesc"}}"
                             >
                                 <i class="fa-solid fa-ban"></i>
                             </a>
@@ -40,7 +61,7 @@
                                     data-name="relationship"
                                     data-value="1"
                                     data-list="characters"
-                                    title="{{localize "CS.sheets.organization.labels.member"}}"
+                                    title="{{localize "CS.sheets.organization.associates.isMemberDesc"}}"
                             >
                                 <i class="fa-solid fa-user"></i>
                             </a>
@@ -50,7 +71,7 @@
                                     data-name="relationship"
                                     data-value="2"
                                     data-list="characters"
-                                    title="{{localize "CS.sheets.organization.labels.ally"}}"
+                                    title="{{localize "CS.sheets.organization.associates.isAllyDesc"}}"
                             >
                                 <i class="fa-solid fa-face-smile"></i>
                             </a>
@@ -60,16 +81,12 @@
                                     data-name="relationship"
                                     data-value="3"
                                     data-list="characters"
-                                    title="{{localize "CS.sheets.organization.labels.enemy"}}"
+                                    title="{{localize "CS.sheets.organization.associates.isEnemyDesc"}}"
                             >
                                 <i class="fa-solid fa-face-angry"></i>
                             </a>
                         </div>
                     </td>
-                    <td class="field img profile-td-img-container open-actor-sheet" data-id="{{associate.id}}">
-                        <img class="profile-td-img" src="{{associate.img}}" title="{{associate.name}}" alt="{{associate.img}}" />
-                    </td>
-                    <td class="field name text-align-left open-actor-sheet" data-id="{{associate.id}}">{{associate.name}}</td>
                     <td class="field">
                         <a
                                 class="item-control owned-list-control"
@@ -82,6 +99,70 @@
                         </a>
                     </td>
                 </tr>
+                {{/each}}
+                {{#each actor.system.owned.organizations as |organization index|}}
+                    <tr class="embedded-actor">
+                        <td class="field img profile-td-img-container open-actor-sheet" data-id="{{organization.id}}">
+                            <img class="profile-td-img" src="{{organization.img}}" title="{{organization.name}}" alt="{{organization.img}}" />
+                        </td>
+                        <td class="field name text-align-left open-actor-sheet" data-id="{{organization.id}}">{{organization.name}}</td>
+                        <td></td>
+                        <td>
+                            <div class="flexrow center">
+                                <a
+                                        class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 0 organization.relationship "activated" ""}}"
+                                        data-id="{{id}}"
+                                        data-name="relationship"
+                                        data-value="0"
+                                        data-list="organizations"
+                                        title="{{localize "CS.sheets.organization.associates.isUnrelatedDesc"}}"
+                                >
+                                    <i class="fa-solid fa-ban"></i>
+                                </a>
+                                <a
+                                        class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 1 organization.relationship "activated" ""}}"
+                                        data-id="{{id}}"
+                                        data-name="relationship"
+                                        data-value="1"
+                                        data-list="organizations"
+                                        title="{{localize "CS.sheets.organization.associates.isMemberDesc"}}"
+                                >
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+                                <a
+                                        class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 2 organization.relationship "activated" ""}}"
+                                        data-id="{{id}}"
+                                        data-name="relationship"
+                                        data-value="2"
+                                        data-list="organizations"
+                                        title="{{localize "CS.sheets.organization.associates.isAllyDesc"}}"
+                                >
+                                    <i class="fa-solid fa-face-smile"></i>
+                                </a>
+                                <a
+                                        class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 3 organization.relationship "activated" ""}}"
+                                        data-id="{{id}}"
+                                        data-name="relationship"
+                                        data-value="3"
+                                        data-list="organizations"
+                                        title="{{localize "CS.sheets.organization.associates.isEnemyDesc"}}"
+                                >
+                                    <i class="fa-solid fa-face-angry"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="field">
+                            <a
+                                    class="item-control owned-list-control"
+                                    data-index="{{index}}"
+                                    data-list="organizations"
+                                    data-action="delete"
+                                    title={{localize "CS.sheets.generalLabels.remove"}}
+                            >
+                                <i class="fa-solid fa-right-from-bracket padding-3"></i>
+                            </a>
+                        </td>
+                    </tr>
                 {{/each}}
                 </tbody>
             </table>

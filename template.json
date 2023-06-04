@@ -3,6 +3,7 @@
     "types": [
       "character",
       "house",
+      "land",
       "organization",
       "unit"
     ],
@@ -184,26 +185,72 @@
         "servants": []
       }
     },
-    "organization": {
-      "leader": "",
-      "steward": "",
+    "land": {
+      "description": "",
+      "population": 0,
       "owned": {
-        "characters": [],
-        "positions": []
+        "buildings": [],
+        "features": [],
+        "terrain": null
+      }
+    },
+    "organization": {
+      "motto": "",
+      "leaders": "",
+      "leaderPosition": "",
+      "stewards": "",
+      "stewardPosition": "",
+      "defense": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
       },
-      "roles": {
-        "administrator": {
-          "name": ""
-        },
-        "leader": {
-          "name": ""
-        },
-        "successor": {
-          "name": ""
-        },
-        "superior": {
-          "name": ""
-        }
+      "influence": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
+      },
+      "lands": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
+      },
+      "law": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
+      },
+      "population": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
+      },
+      "power": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
+      },
+      "wealth": {
+        "current": 0,
+        "invested": 0,
+        "overrideInvested": false,
+        "total": 0
+      },
+      "owned": {
+        "buildings": [],
+        "characters": [],
+        "events": [],
+        "features": [],
+        "lands": [],
+        "organizations": [],
+        "positions": [],
+        "units": []
       }
     },
     "unit": {
@@ -236,6 +283,7 @@
         "modifier": 0,
         "current": 0
       },
+      "investment": 0,
       "ordersReceived": {
         "value": 0,
         "modifier": 0,
@@ -265,6 +313,7 @@
       "actionIntrigue",
       "armor",
       "benefit",
+      "building",
       "drawback",
       "effect",
       "equipment",
@@ -276,6 +325,8 @@
       "position",
       "relationship",
       "technique",
+      "terrain",
+      "terrainFeature",
       "weapon"
     ],
     "templates": {
@@ -307,18 +358,23 @@
       "qualities": [],
       "equipped": 0
     },
-    "poison": {
+    "building": {
       "templates": [
-        "itemDescription",
-        "equipmentItem"
+        "itemDescription"
       ],
-      "delivery": "",
-      "virulence": "",
-      "frequency": "",
-      "toxicity": 0,
-      "diagnosis": 0,
-      "effects": "",
-      "recovery": ""
+      "benefit": "",
+      "investment": 0,
+      "resource": 0,
+      "constructionTime": {
+        "text": "",
+        "elapsed": 0,
+        "required": 0,
+        "measurementUnit": "Month(s)"
+      },
+      "isUnderConstruction": false,
+      "defenseBonus": 0,
+      "fortuneModifier": 0,
+      "fortunePoolModifier": 0
     },
     "ability": {
       "templates": [
@@ -394,7 +450,13 @@
       },
       "playerChoice": false,
       "numberOfChoices": 0,
-      "bonusToChoices": ""
+      "bonusToChoices": "",
+      "date": {
+        "year": 0,
+        "month": 0,
+        "day": 0
+      },
+      "timestamp": 0
     },
     "holding": {
       "description": "",
@@ -420,11 +482,26 @@
       "isWarhorse": false,
       "isStationary": false
     },
+    "poison": {
+      "templates": [
+        "itemDescription",
+        "equipmentItem"
+      ],
+      "delivery": "",
+      "virulence": "",
+      "frequency": "",
+      "toxicity": 0,
+      "diagnosis": 0,
+      "effects": "",
+      "recovery": ""
+    },
     "position": {
       "templates": [
         "itemDescription"
       ],
-      "holder": ""
+      "isImportant": false,
+      "equipped": 0,
+      "weight": 0
     },
     "order": {
       "templates": [
@@ -454,6 +531,18 @@
       "arts": [],
       "scales": "",
       "works": []
+    },
+    "terrain": {
+      "templates": [
+        "itemDescription"
+      ],
+      "investment": 0
+    },
+    "terrainFeature": {
+      "templates": [
+        "itemDescription"
+      ],
+      "investment": 0
     },
     "weapon": {
       "templates": [

@@ -51,6 +51,7 @@ export function getWeaponTestDataForActor(actor, weapon) {
                 let damageAbility = matches[1];
                 let abilityValue = getAbilityValue(actor, damageAbility);
                 let operator = matches[2];
+                // NOTE: hyphen not detected as minus sign
                 let modifier = matches[3];
                 weapon.damageValue = eval(`${abilityValue}${operator}${modifier}`);
             }

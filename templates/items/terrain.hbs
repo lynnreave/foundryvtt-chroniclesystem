@@ -9,32 +9,18 @@
                 </div>
             </header>
             <table>
-                <tr title="{{localize "CS.sheets.organization.positions.isImportantDesc"}}">
+                <tr title="{{localize "CS.sheets.holdings.labels.investmentDesc"}}">
                     <td><span class="padding-3">
-                        {{localize "CS.sheets.organization.positions.isImportant"}}
-                    </span></td>
-                    <td class="center">
-                        <input
-                                class="item-flag-toggle"
-                                type="checkbox"
-                                name="isImportant"
-                                id="isImportant"
-                                value="{{item.system.isImportant}}" {{#if item.system.isImportant}} checked {{/if}}
-                        />
-                    </td>
-                </tr>
-                <tr title="{{localize "CS.sheets.organization.positions.weightDesc"}}">
-                    <td><span class="padding-3">
-                        {{localize "CS.sheets.organization.positions.weight"}}
+                        {{localize "CS.sheets.holdings.labels.investment"}}
                     </span></td>
                     <td class="center">
                         <span class="form-fields">
                             <input
-                                    id="system.weight"
+                                    id="system.investment"
                                     class="small-field center"
-                                    name="system.weight"
+                                    name="system.investment"
                                     type="text"
-                                    value="{{item.system.weight}}"
+                                    value="{{item.system.investment}}"
                                     placeholder="0"
                                     data-dtype="Number"
                             />

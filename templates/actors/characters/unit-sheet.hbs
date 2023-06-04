@@ -6,6 +6,8 @@
             <div class="complements flexrow">
                 <label  class="attribute-label"> Owner: </label>
                 <input  class="medium-field flex2" type="text"  name="system.owner"  value="{{character.owner}}"  data-dtype="String"/>
+                <label  class="attribute-label"> {{localize "CS.sheets.holdings.labels.investment" }}: </label>
+                <input  class="medium-field flex2" type="text"  name="system.investment"  value="{{character.investment}}"  data-dtype="Number"/>
                 <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
             </div>
             <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>

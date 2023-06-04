@@ -28,6 +28,7 @@ export class ActorSheetChronicle extends ActorSheet {
 
         html.find(".owned-list-item-flag-toggle").on("click", this._onClickOwnedListItemFlagToggle.bind(this));
         html.find(".owned-list-item-field-update").on("click", this._onClickOwnedListItemFieldUpdate.bind(this));
+        html.find(".owned-list-item-field-update-select").on("change", this._onChangeOwnedListFieldUpdateSelect.bind(this));
 
         // Update Inventory Item
         html.find('.item-edit').on("click", this._showEmbeddedItemSheet.bind(this));
@@ -39,6 +40,30 @@ export class ActorSheetChronicle extends ActorSheet {
 
         // refresh sheet data
         html.find('.refresh-sheet').on("click", this._refreshSheet.bind(this))
+    }
+
+    async _onChangeOwnedListFieldUpdateSelect(event) {
+        // event.preventDefault();
+        // get data
+        const eventData = event.currentTarget.dataset;
+        const itemId = eventData.id;
+        const list = eventData.list;
+        const actorField = eventData.name;
+        const value = event.currentTarget.value;
+        const actorData = getData(this.actor)
+
+        // update current list
+        let currentList = actorData.owned[list];
+        currentList.find((item) => {
+            if (item.id === itemId) {
+                item[actorField] = value;
+            }
+        });
+
+        // push update
+        let updatePkg = {};
+        updatePkg[`system.owned.${list}`] = currentList;
+        await this.actor.update(updatePkg)
     }
 
     async _onClickOwnedItemControl(event) {
@@ -53,6 +78,7 @@ export class ActorSheetChronicle extends ActorSheet {
             await this.actor.deleteEmbeddedDocuments("Item", [itemId,])
         }
     }
+
     async _onClickRoll(event, targets) {
         await ChronicleSystem.eventHandleRoll(event, this.actor, targets);
     }
@@ -176,9 +202,13 @@ export class ActorSheetChronicle extends ActorSheet {
         actor.sheet.render(true);
     }
 
-    isItemPermitted(type) {
-        return true;
-    }
+    // isItemPermitted(type) {
+    //     return true;
+    // }
+
+    isActorPermitted(type) { return this.actorTypesPermitted.includes(type); }
+
+    isItemPermitted(type) { return this.itemTypesPermitted.includes(type); }
 
     splitItemsByType(data) {
         data.itemsByType = {};

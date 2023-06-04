@@ -1,0 +1,179 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+"systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body flexrow">
+        <section class="details">
+            <header class="header-field">
+                <div class="header-title">
+                    <span>{{localize "CS.sheets.generalLabels.details"}}</span>
+                </div>
+            </header>
+            <table>
+                <tr title="{{localize "CS.sheets.holdings.labels.investmentDesc"}}">
+                    <td><span class="padding-3">
+                        {{localize "CS.sheets.holdings.labels.investment"}}
+                    </span></td>
+                    <td class="center"><span class="form-fields">
+                        <input
+                                id="system.investment"
+                                class="small-field center"
+                                name="system.investment"
+                                type="text"
+                                value="{{item.system.investment}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                    </span></td>
+                </tr>
+                <tr title="{{localize "CS.sheets.holdings.labels.resourceDesc"}}">
+                    <td><span class="padding-3">
+                        {{localize "CS.sheets.holdings.labels.resource"}}
+                    </span></td>
+                    <td class="center">
+                    <span class="form-fields">
+                        <select name="system.resource">
+                            {{selectOptions resourceTypes nameAttr="id" labelAttr="name" selected=item.system.resource localize=true}}
+                        </select>
+                    </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><header class="subheader-field"><span>
+                        {{localize "CS.sheets.holdings.labels.construction"}}
+                    </span></header></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3">
+                        {{localize "CS.sheets.holdings.labels.measurementUnit"}}
+                    </span></td>
+                    <td class="center"><span class="form-fields">
+                        <input
+                                id="system.constructionTime.measurementUnit"
+                                class="medium-field"
+                                name="system.constructionTime.measurementUnit"
+                                type="text"
+                                value="{{item.system.constructionTime.measurementUnit}}"
+                                placeholder="0"
+                                data-dtype="String"
+                        />
+                    </span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3 font-small">
+                        {{localize "CS.sheets.holdings.labels.constructionTimeText"}}
+                    </span></td>
+                    <td class="center"><span class="form-fields">
+                        <input
+                                id="system.constructionTime.text"
+                                class="medium-field"
+                                name="system.constructionTime.text"
+                                type="text"
+                                value="{{item.system.constructionTime.text}}"
+                                placeholder="0"
+                                data-dtype="String"
+                        />
+                    </span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3 font-small">{{localize "CS.sheets.holdings.labels.timeElapsed"}}</span></td>
+                    <td><span class="form-fields">
+                        <input
+                            id="system.constructionTime.elapsed"
+                            class="medium-field center"
+                            name="system.constructionTime.elapsed"
+                            type="text"
+                            value="{{item.system.constructionTime.elapsed}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                        />
+                    </span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3 font-small">{{localize "CS.sheets.holdings.labels.timeRequired"}}</span></td>
+                    <td><span class="form-fields">
+                        <input
+                            id="system.constructionTime.required"
+                            class="medium-field center"
+                            name="system.constructionTime.required"
+                            type="text"
+                            value="{{item.system.constructionTime.required}}"
+                            placeholder="0"
+                            data-dtype="Number"
+                        />
+                    </span></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3 font-small">{{localize "CS.sheets.holdings.labels.isUnderConstruction"}}</span></td>
+                    <td class="center">
+                        <input
+                                class="item-flag-toggle"
+                                type="checkbox"
+                                name="isUnderConstruction"
+                                id="isUnderConstruction"
+                                value="{{item.system.isUnderConstruction}}" {{#if item.system.isUnderConstruction}} checked {{/if}}
+                        />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><header class="subheader-field"><span>
+                        {{localize "CS.sheets.generalLabels.bonuses"}}
+                    </span></header></td>
+                </tr>
+                <tr>
+                    <td><span class="padding-3 font-small">{{localize "CS.sheets.holdings.labels.defenseModifier"}}</span></td>
+                    <td><span class="form-fields">
+                        <input
+                                id="system.defenseBonus"
+                                class="medium-field center"
+                                name="system.defenseBonus"
+                                type="text"
+                                value="{{item.system.defenseBonus}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                    </span></td>
+                </tr>
+                <tr title="{{localize "CS.sheets.holdings.labels.fortunePoolModifierDesc"}}">
+                    <td><span class="padding-3 font-small">{{localize "CS.sheets.holdings.labels.fortunePoolModifier"}}</span></td>
+                    <td><span class="form-fields">
+                        <input
+                                id="system.fortunePoolModifier"
+                                class="medium-field center"
+                                name="system.fortunePoolModifier"
+                                type="text"
+                                value="{{item.system.fortunePoolModifier}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                    </span></td>
+                </tr>
+                <tr title="{{localize "CS.sheets.holdings.labels.fortuneModifierDesc"}}">
+                    <td><span class="padding-3 font-small">{{localize "CS.sheets.holdings.labels.fortuneModifier"}}</span></td>
+                    <td><span class="form-fields">
+                        <input
+                                id="system.fortuneModifier"
+                                class="medium-field center"
+                                name="system.fortuneModifier"
+                                type="text"
+                                value="{{item.system.fortuneModifier}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                    </span></td>
+                </tr>
+            </table>
+        </section>
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+            <header class="header-field">
+                <span>{{localize "CS.sheets.holdings.labels.otherBenefits"}}</span>
+            </header>
+            <div class="form-group">
+                {{editor item.system.benefit target="system.benefit" button=true owner=owner editable=editable}}
+            </div>
+            <button class="item-send-to-chat header-field">
+                Send to Chat
+            </button>
+        </section>
+    </main>
+</form>

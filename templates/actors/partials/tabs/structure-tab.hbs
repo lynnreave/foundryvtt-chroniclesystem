@@ -1,83 +1,5 @@
 <div class="tab flexrow" data-group="primary" data-tab="structure">
     <section>
-        <section class="structure">
-            <header class="header-field">
-                <span>{{localize "CS.sheets.organization.labels.leadership"}}</span>
-            </header>
-            <table class="key-roles-list hover-table">
-                <colgroup>
-                    <col style="width: 2%" />
-                    <col style="width: 23%;" />
-                    <col style="width: 40%;" />
-                    <col style="width: 35%;" />
-                </colgroup>
-                <thead>
-                <tr>
-                    <th></th>
-                    <th class="text-align-left"><span>{{localize "CS.sheets.organization.labels.role"}}</span></th>
-                    <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.description"}}</span></th>
-                    <th><span>{{localize "CS.sheets.generalLabels.custom"}} {{localize "CS.sheets.generalLabels.name"}}</span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td></td>
-                    <td class="td-left-label"><b>{{toUpperCase (localize "CS.sheets.organization.roles.leader")}}</b></td>
-                    <td class="text-align-left font-small">{{localize "CS.sheets.organization.roles.leaderDesc"}}</td>
-                    <td>
-                        <input
-                                name="system.roles.leader.name"
-                                type="text" value="{{actor.system.roles.leader.name}}"
-                                placeholder="{{localize "CS.sheets.organization.roles.leader"}}"
-                                data-edit="system.roles.leader.name"
-                        />
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td class="td-left-label"><b>{{toUpperCase (localize "CS.sheets.organization.roles.successor")}}</b></td>
-                    <td class="text-align-left font-small">{{localize "CS.sheets.organization.roles.successorDesc"}}</td>
-                    <td>
-                        <input
-                                name="system.roles.successor.name"
-                                type="text"
-                                value="{{actor.system.roles.successor.name}}"
-                                placeholder="{{localize "CS.sheets.organization.roles.successor"}}"
-                                data-edit="system.roles.successor.name"
-                        />
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td class="td-left-label"><b>{{toUpperCase (localize "CS.sheets.organization.roles.superior")}}</b></td>
-                    <td class="text-align-left font-small">{{localize "CS.sheets.organization.roles.superiorDesc"}}</td>
-                    <td>
-                        <input
-                                name="system.roles.superior.name"
-                                type="text"
-                                value="{{actor.system.roles.superior.name}}"
-                                placeholder="{{localize "CS.sheets.organization.roles.superior"}}"
-                                data-edit="system.roles.superior.name"
-                        />
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td class="td-left-label"><b>{{toUpperCase (localize "CS.sheets.organization.roles.administrator")}}</b></td>
-                    <td class="text-align-left font-small">{{localize "CS.sheets.organization.roles.adminDesc"}}</td>
-                    <td>
-                        <input
-                                name="system.roles.administrator.name"
-                                type="text"
-                                value="{{actor.system.roles.administrator.name}}"
-                                placeholder="{{localize "CS.sheets.organization.roles.administrator"}}"
-                                data-edit="system.roles.administrator.name"
-                        />
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </section>
         <section class="positions">
             <header class="header-field">
                 <span>{{localize "CS.sheets.organization.labels.positions"}}</span>
@@ -86,7 +8,8 @@
                 <colgroup>
                     <col style="width: 5%" />
                     <col style="width: 20%;" />
-                    <col style="width: 70%;" />
+                    <col style="width: 55%;" />
+                    <col style="width: 15%;" />
                     <col style="width: 5%;" />
                 </colgroup>
                 <thead>
@@ -94,6 +17,7 @@
                     <th></th>
                     <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.name"}}</span></th>
                     <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.description"}}</span></th>
+                    <th class="center">{{localize "CS.sheets.generalLabels.config"}}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -111,13 +35,40 @@
                     <td class="text-align-left font-small item-edit">{{enrich position.system.description}}</td>
                     <td>
                         <a
+                                class="checkButton equipped {{showIfEquals "9" position.system.equipped "activated" ""}}"
+                                data-item-id="{{_id}}"
+                                data-type="{{showIfEquals "9" position.system.equipped 0 9}}"
+                                title="{{localize "CS.sheets.organization.positions.isLeaderDesc"}}"
+                        >
+                            <i class="fa-solid fa-crown padding-3"></i>
+                        </a>
+                        <a
+                                class="checkButton equipped {{showIfEquals "10" position.system.equipped "activated" ""}}"
+                                data-item-id="{{_id}}"
+                                data-type="{{showIfEquals "10" position.system.equipped 0 10}}"
+                                title="{{localize "CS.sheets.organization.positions.isStewardDesc"}}"
+                        >
+                            <i class="fa-solid fa-scroll padding-3"></i>
+                        </a>
+                        <a
+                                class="checkButton item-flag-toggle {{showIfTrue position.system.isImportant "activated" ""}}"
+                                data-item-id="{{_id}}"
+                                data-name="isImportant"
+                                data-value="{{position.system.isImportant}}"
+                                title="{{localize "CS.sheets.organization.positions.isImportantDesc"}}"
+                        >
+                            <i class="fas fa-star padding-3"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a
                                 class="item-control owned-item-control"
-                                title="{{localize "CS.sheets.generalLabels.delete"}}"
                                 data-index="{{index}}"
                                 data-list="positions"
                                 data-action="delete"
+                                title="{{localize "CS.sheets.generalLabels.delete"}}"
                         >
-                            <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash padding-3"></i>
                         </a>
                     </td>
                 </tr>

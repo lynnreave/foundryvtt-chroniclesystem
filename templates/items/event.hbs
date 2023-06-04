@@ -7,7 +7,11 @@
                 <span>{{localize "CS.sheets.generalLabels.details"}}</span>
             </header>
 
+
             {{#if item.isOwned}}
+                <header class="subheader-field">
+                    <span>{{localize "CS.sheets.generalLabels.modifiers"}}</span>
+                </header>
                 {{> (formGroup)
                         id="system.modifiers.defense"
                         labelText="CS.sheets.house.resources.defense"
@@ -139,7 +143,60 @@
             {{/if}}
         </section>
         <section class="description">
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="3">{{localize "CS.sheets.generalLabels.date"}}</th>
+                </tr>
+                <tr>
+                    <th>{{localize "CS.sheets.generalLabels.year"}}</th>
+                    <th>{{localize "CS.sheets.generalLabels.month"}}</th>
+                    <th>{{localize "CS.sheets.generalLabels.day"}}</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td class="center">
+                        <span class="form-fields">
+                            <input
+                                    class="medium-field center"
+                                    name="system.date.year"
+                                    type="text"
+                                    value="{{item.system.date.year}}"
+                                    placeholder="0"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </td>
+                    <td class="center">
+                        <span class="form-fields">
+                            <input
+                                    class="medium-field center"
+                                    name="system.date.month"
+                                    type="text"
+                                    value="{{item.system.date.month}}"
+                                    placeholder="0"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </td>
+                    <td class="center">
+                        <span class="form-fields">
+                            <input
+                                    class="medium-field center"
+                                    name="system.date.day"
+                                    type="text"
+                                    value="{{item.system.date.day}}"
+                                    placeholder="0"
+                                    data-dtype="Number"
+                            />
+                        </span>
+                    </td>
+                </tr>
+            </table>
             {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+            <button class="item-send-to-chat header-field">
+                Send to Chat
+            </button>
         </section>
     </main>
 </form>

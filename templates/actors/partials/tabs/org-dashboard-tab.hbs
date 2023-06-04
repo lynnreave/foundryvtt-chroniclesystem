@@ -1,0 +1,196 @@
+<div class="tab flexrow" data-group="primary" data-tab="dashboard">
+    <section class="dashboard flexrow">
+        <section class="key-roles flex-3">
+            <header class="header-field">
+                <span>{{localize "CS.sheets.organization.labels.leadership"}}</span>
+            </header>
+            <table class="important-roles-list hover-table">
+                <tbody>
+                {{#each character.importantRoles as |character index|}}
+                    <tr>
+                        <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                            <img class="profile-td-img" src="{{character.positionObj.img}}"/>
+                        </td>
+                        <td class="text-align-left open-actor-sheet" data-id="{{character.id}}">
+                            {{character.positionObj.name}}
+                        </td>
+                        <td class="text-align-left open-actor-sheet" data-id="{{character.id}}">
+                            {{character.name}}
+                        </td>
+                        <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                            <img class="profile-td-img" src="{{character.img}}"/>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </section>
+        <section class="resources flex-7">
+            <section class="resources">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.organization.labels.resources"}}</span>
+                </header>
+                <table class="resources-list hover-table">
+                    <colgroup>
+                        <col style="width: 5%" />
+                        <col style="width: 20%;" />
+                        <col style="width: 15%;" />
+                        <col style="width: 15%;" />
+                        <col style="width: 15%" />
+                        <col style="width: 15%;" />
+                        <col style="width: 15%;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>{{localize "CS.sheets.generalLabels.available"}}</th>
+                        <th>{{localize "CS.sheets.organization.labels.invested"}}</th>
+                        <th>{{localize "CS.sheets.organization.labels.fromEvents"}}</th>
+                        <th>{{localize "CS.sheets.generalLabels.total"}}</th>
+                        <th>{{localize "CS.sheets.generalLabels.rating"}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each character.resourcesList as |resource index|}}
+                        {{#with (lookup ../character [resource])}}
+                        <tr>
+                            <td>
+                                <a
+                                        class="
+                                            checkButton
+                                            actor-flag-toggle
+                                            {{showIfTrue overrideInvested "activated" ""}}
+                                        "
+                                        data-name="{{[resource]}}.overrideInvested"
+                                        data-value="{{overrideInvested}}"
+                                        title="{{localize "CS.sheets.organization.labels.overrideInvested"}}"
+                                >
+                                    <i class="fa-solid fa-keyboard padding-3"></i>
+                                </a>
+                            </td>
+                            <td class="text-align-left">
+                                {{localize (concat "CS.sheets.holdings.labels." [resource])}}
+                            </td>
+                            <td>
+                                <input
+                                        class="small-field center"
+                                        name="system.{{[resource]}}.current"
+                                        type="text"
+                                        value="{{current}}"
+                                        placeholder="0"
+                                        data-dtype="Number"
+                                />
+                            </td>
+                            <td>
+                                {{#if overrideInvested}}
+                                    <input
+                                            class="small-field center"
+                                            name="system.{{[resource]}}.invested"
+                                            type="text"
+                                            value="{{invested}}"
+                                            placeholder="0"
+                                            data-dtype="Number"
+                                    />
+                                {{else}}
+                                    {{investedShow}}
+                                {{/if}}
+                            </td>
+                            <td>{{modifier modifier}}</td>
+                            <td>{{rawTotal}}</td>
+                            <td style="color: white; background-color: RGB(
+                                {{ratingColor.[0]}}, {{ratingColor.[1]}}, {{ratingColor.[2]}}, 0.55
+                                    )"
+                                title="{{localize ratingDesc}}"
+                            >
+                                {{localize ratingLabel}}
+                            </td>
+                        </tr>
+                        {{/with}}
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+            <section class="fortunes">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.holdings.labels.fortunes"}}</span>
+                </header>
+                <table class="fortune-roll-modifiers hover-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            {{localize "CS.sheets.holdings.labels.law"}} {{localize "CS.sheets.generalLabels.modifier"}}
+                        </th>
+                        <th>
+                            {{localize "CS.sheets.holdings.labels.population"}} {{localize "CS.sheets.generalLabels.modifier"}}
+                        </th>
+                        <th>
+                            {{localize "CS.sheets.organization.labels.holdings"}} {{localize "CS.sheets.generalLabels.modifier"}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{modifier character.fortuneLawMod}}</td>
+                        <td>{{modifier character.fortunePopMod}}</td>
+                        <td>
+                            {{#if character.fortunePoolModifier}}
+                                {{modifier character.fortunePoolModifier}}D
+                            {{/if}}
+                            {{modifier character.fortuneModifier}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="fortune-rollers-list hover-table">
+                    <colgroup>
+                        <col style="width: 10%" />
+                        <col style="width: 55%;" />
+                        <col style="width: 35%;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            {{localize "CS.sheets.holdings.labels.fortune"}} {{localize "CS.sheets.generalLabels.roll"}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each character.leaders as |character index|}}
+                        <tr>
+                            <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                                <img class="profile-td-img" src="{{character.img}}"/>
+                            </td>
+                            <td class="text-align-left open-actor-sheet" data-id="{{character.id}}">
+                                {{character.name}}
+                            </td>
+                            <td>
+                                <div class="rollable center" id="formula:{{localize "CS.constants.specialties.stewardship"}}:{{formulaToStr character.fortuneFormula}}">
+                                    <a>{{format-formula character.fortuneFormula}}</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    {{#each character.stewards as |character index|}}
+                        <tr>
+                            <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                                <img class="profile-td-img" src="{{character.img}}"/>
+                            </td>
+                            <td class="text-align-left open-actor-sheet" data-id="{{character.id}}">
+                                {{character.name}}
+                            </td>
+                            <td>
+                                <div class="rollable center" id="formula:{{localize "CS.constants.specialties.stewardship"}}:{{formulaToStr character.fortuneFormula}}">
+                                    <a>{{format-formula character.fortuneFormula}}</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+        </section>
+    </section>
+</div>

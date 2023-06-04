@@ -1,0 +1,39 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{!-- Item Sheet Header --}} {{>
+"systems/chroniclesystem/templates/items/partials/header-delete.hbs"}}
+    <main class="sheet-body flexrow">
+        <section class="details">
+            <header class="header-field">
+                <div class="header-title">
+                    <span>{{localize "CS.sheets.generalLabels.details"}}</span>
+                </div>
+            </header>
+            <table>
+                <tr title="{{localize "CS.sheets.holdings.labels.investmentDesc"}}">
+                    <td><span class="padding-3">
+                        {{localize "CS.sheets.holdings.labels.investment"}}
+                    </span></td>
+                    <td class="center">
+                    <span class="form-fields">
+                        <input
+                                id="system.investment"
+                                class="small-field center"
+                                name="system.investment"
+                                type="text"
+                                value="{{item.system.investment}}"
+                                placeholder="0"
+                                data-dtype="Number"
+                        />
+                    </span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section class="description">
+            {{> "systems/chroniclesystem/templates/items/partials/description.hbs"}}
+            <button class="item-send-to-chat header-field">
+                Send to Chat
+            </button>
+        </section>
+    </main>
+</form>

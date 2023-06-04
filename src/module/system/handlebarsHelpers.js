@@ -50,6 +50,26 @@ export const registerCustomHelpers = function () {
     );
   });
 
+  Handlebars.registerHelper("truncateParagraphString", (content, ln) => {
+    let contentParagraphs = content.split("</p>");
+    let output = contentParagraphs[0].replaceAll("<p>", "").trim()
+    if (output.length > (ln-1)) {
+      output = output.slice(0, ln-1)
+      output += "...";
+    } else if (contentParagraphs.length > 2) {
+      output += "...";
+    }
+    return output;
+  });
+
+  Handlebars.registerHelper('stripHTML', function(param) {
+    let regex = /(<([^>]+)>)/ig
+    let output = param.replaceAll(regex, "");
+    output = output.replaceAll(/(\r\n|\n|\r)/gm, " ");
+    output = output.replaceAll("&nbsp;", "");
+    return output.trim();
+  });
+
   Handlebars.registerHelper("str", (content) => {
     return JSON.stringify(content);
   });
@@ -206,8 +226,14 @@ export const registerCustomHelpers = function () {
   });
 
   Handlebars.registerHelper(
-      "toLowerCase",
-      function (arg1) {
-        return String(arg1).toLowerCase();
+    "toLowerCase",
+    function (arg1) {
+      return String(arg1).toLowerCase();
+  });
+
+  Handlebars.registerHelper(
+      "joinList",
+      function (array, separator) {
+        return array.join(separator);
       });
 };

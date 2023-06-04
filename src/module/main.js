@@ -4,7 +4,7 @@ import { CSAbilityItemSheet } from "./item/sheets/csAbilityItemSheet.js";
 import { CombatChronicle } from "./combat/combat-chronicle.js";
 import { CombatantChronicle } from "./combat/combatant-chronicle.js";
 import { CharacterSheet } from "./actor/character/character/character-sheet.js";
-import { CSEventItemSheet } from "./item/sheets/csEventItemSheet.js";
+import { EventSheet } from "./item/event/event-sheet.js";
 import { CSHoldingItemSheet } from "./item/sheets/csHoldingItemSheet.js";
 import { HouseSheet } from "./actor/house/house-sheet.js";
 import { ItemSheetChronicle } from "./item/item-sheet-chronicle.js";
@@ -24,6 +24,8 @@ import { ActionCombatSheet } from "./item/action/action-combat-sheet.js";
 import { OrderSheet } from "./item/order/order-sheet.js";
 import { MountSheet } from "./item/mount/mount-sheet.js";
 import { OrganizationSheet } from "./actor/organization/organization-sheet.js";
+import { LandSheet } from "./actor/holding/land-sheet.js";
+import { BuildingSheet } from "./item/holding/building-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -67,6 +69,11 @@ Hooks.once("init", async function () {
     types: ["house"],
     makeDefault: true,
   });
+  Actors.registerSheet("chroniclesystem", LandSheet, {
+    label: SystemUtils.localize("CS.sheets.landSheet"),
+    types: ["land"],
+    makeDefault: true,
+  });
   Actors.registerSheet("chroniclesystem", OrganizationSheet, {
     label: SystemUtils.localize("CS.sheets.organizationSheet"),
     types: ["organization"],
@@ -89,9 +96,23 @@ Hooks.once("init", async function () {
     types: ["actionCombat"],
     makeDefault: true,
   });
+  Items.registerSheet("chroniclesystem", BuildingSheet, {
+    label: SystemUtils.localize("CS.sheets.buildingSheet"),
+    types: ["building"],
+    makeDefault: true,
+  });
   Items.registerSheet("chroniclesystem", ItemSheetChronicle, {
     label: SystemUtils.localize("CS.sheets.itemSheet"),
-    types: ["actionIntrigue", "armor", "benefit", "drawback", "equipment", "position"],
+    types: [
+        "actionIntrigue",
+        "armor",
+        "benefit",
+        "drawback",
+        "equipment",
+        "position",
+        "terrain",
+        "terrainFeature"
+    ],
     makeDefault: true,
   });
   Items.registerSheet("chroniclesystem", EffectSheet, {
@@ -99,7 +120,7 @@ Hooks.once("init", async function () {
     types: ["effect"],
     makeDefault: true,
   });
-  Items.registerSheet("chroniclesystem", CSEventItemSheet, {
+  Items.registerSheet("chroniclesystem", EventSheet, {
     label: SystemUtils.localize("CS.sheets.eventItemSheet"),
     types: ["event"],
     makeDefault: true,

@@ -76,6 +76,19 @@ export const FUMBLE_RESULTS = [
 ]
 
 /**
+ * Available organization/house resource types.
+ * @type {Array}
+ */
+export const RESOURCE_TYPES = [
+    {id: 0, name: "CS.constants.resources.defense"},
+    {id: 1, name: "CS.constants.resources.influence"},
+    {id: 2, name: "CS.constants.resources.land"},
+    {id: 3, name: "CS.constants.resources.law"},
+    {id: 4, name: "CS.constants.resources.power"},
+    {id: 5, name: "CS.constants.resources.wealth"}
+]
+
+/**
  * Available unit Actor statuses.
  * @type {Array}
  */

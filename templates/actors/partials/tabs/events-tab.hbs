@@ -3,47 +3,53 @@
         <header class="header-field">
             <span>{{localize "CS.sheets.house.events.title"}}</span>
         </header>
-        <ol class="events-list list">
-            <li class="list-header flexrow">
-                <div class="event-name">{{localize "CS.sheets.house.events.name"}}</div>
-                <div class="event-label center size200">
-                    <label>{{localize "CS.sheets.house.events.modifiers"}}</label>
-                    <div class="flexrow modifiers center">
-                        <div>{{localize "CS.sheets.house.resources.defense"}}</div>
-                        <div>{{localize "CS.sheets.house.resources.influence"}}</div>
-                        <div>{{localize "CS.sheets.house.resources.lands"}}</div>
-                        <div>{{localize "CS.sheets.house.resources.law"}}</div>
-                        <div>{{localize "CS.sheets.house.resources.population"}}</div>
-                        <div>{{localize "CS.sheets.house.resources.power"}}</div>
-                        <div>{{localize "CS.sheets.house.resources.wealth"}}</div>
-                    </div>
-                </div>
-                <div class="item-controls"></div>
-            </li>
-            {{#each actor.system.historicalEvents as |event index| }}
-                <li  class="item event" data-item-id="{{_id}}">
-                    <div class="flexrow">
-                        {{#if ../owner}}
-                            <div class="event-name item-edit field"><a>{{name}}</a></div>
-                        {{else}}
-                            <div class="event-name field">{{name}}</div>
-                        {{/if}}
-                        <div class="size200 center">
-                            <div class="modifiers flexrow center">
-                                <div>{{system.modifiers.defense}}</div>
-                                <div>{{system.modifiers.influence}}</div>
-                                <div>{{system.modifiers.lands}}</div>
-                                <div>{{system.modifiers.law}}</div>
-                                <div>{{system.modifiers.population}}</div>
-                                <div>{{system.modifiers.power}}</div>
-                                <div>{{system.modifiers.wealth}}</div>
-                            </div>
-                        </div>
-                        <div class="item-controls"><a><i class="far fa-caret-square-down"></i></a></div>
-                    </div>
-                    <div class="event-label field description hidden">{{enrich system.description}}</div>
-                </li>
+        <table class="events-list hover-table">
+            <colgroup>
+                <col style="width: 15%;" />
+                <col style="width: 25%;" />
+                <col style="width: 5%;" />
+                <col style="width: 50%;" />
+                <col style="width: 5%;" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th><span>{{localize "CS.sheets.generalLabels.date"}}</span></th>
+                <th></th>
+                <th class="text-align-left"><span></span></th>
+                <th class="text-align-left"><span></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each character.owned.events as |event index|}}
+                <tr class="item" data-item-id="{{_id}}">
+                    <td class="item-edit padding-3 text-align-left">
+                        {{#if event.system.date.year}}{{event.system.date.year}}{{#if event.system.date.month}}-{{event.system.date.month}}{{#if event.system.date.day}}-{{event.system.date.day}}{{/if}}{{/if}}{{/if}}
+                    </td>
+                    <td class="text-align-left item-edit">{{event.name}}</td>
+                    <td class="profile-td-img-container item-edit padding-3">
+                        <img class="profile-td-img" src="{{event.img}}" />
+                    </td>
+                    <td
+                            class="text-align-left font-small item-edit"
+                            title="{{stripHTML event.system.description}}"
+                    >
+                        {{truncateParagraphString event.system.description 200}}
+                    </td>
+                    <td>
+                        <a
+                                class="item-control owned-item-control"
+                                data-index="{{index}}"
+                                data-list="events"
+                                data-action="delete"
+                                title="{{localize "CS.sheets.generalLabels.delete"}}"
+                        >
+                            <i class="fas fa-trash padding-3"></i>
+                        </a>
+                    </td>
+                </tr>
             {{/each}}
-        </ol>
+            </tbody>
+        </table>
     </section>
 </div>

@@ -1,10 +1,10 @@
-import {ItemChronicle} from "./item-chronicle.js";
-import LOGGER from "../../util/logger.js";
-import {CSConstants} from "../system/csConstants.js";
+import {ItemChronicle} from "../item-chronicle.js";
+import LOGGER from "../../../util/logger.js";
+import {CSConstants} from "../../system/csConstants.js";
 
-export class CSEventItem extends ItemChronicle {
+export class Event extends ItemChronicle {
     generateModifiers(choices) {
-        LOGGER.trace("generate historical event modifiers | CSEventItem.cs");
+        LOGGER.trace("generate historical event modifiers | Event.cs");
         let data = this.getCSData();
 
         if (data.playerChoice) {

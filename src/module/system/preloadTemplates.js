@@ -22,8 +22,10 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/chroniclesystem/templates/actors/partials/form-group.hbs',
 
         'systems/chroniclesystem/templates/actors/partials/tabs/associates-tab.hbs',
-        'systems/chroniclesystem/templates/actors/partials/tabs/roles-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/military-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/org-dashboard-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/structure-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/territory-tab.hbs',
 
         'systems/chroniclesystem/templates/actors/partials/tabs/resources-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/events-tab.hbs',

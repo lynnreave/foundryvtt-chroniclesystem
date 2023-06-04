@@ -1,0 +1,203 @@
+<form class="{{cssClass}}" autocomplete="off">
+    {{log actor}}
+    <header class="sheet-header">
+        <div class="header-fields">
+            <div class="complements flexrow">
+                <div class="flex-2 flexrow">
+                    <label class="attribute-label">{{actor.system.owned.terrain.name}}</label>
+                </div>
+                <div class="flex-5 flexrow"></div>
+                <div class="flex-2 flexrow">
+                    <label  class="attribute-label"> {{localize "CS.sheets.holdings.labels.population" }}: </label>
+                    <input  class="medium-field flex2 center" type="text"  name="system.population"  value="{{character.population}}"  data-dtype="Number"/>
+                </div>
+                <div class="flex-1 text-align-right">
+                    <span class="refresh-sheet"><a><i class="fas fa-sync padding-3"></i></a></span>
+                </div>
+            </div>
+            <div class="flexrow">
+                <div class="profile-list-img-container flex-1 center" style="height: 50px;">
+                    <img class="profile-list-img" src="{{actor.system.owned.terrain.img}}" title="{{actor.system.owned.terrain.name}}"/>
+                </div>
+                <h1 class="charname flex-8"><input name="name" type="text" value="{{actor.name}}" placeholder="{{localize "CS.sheets.generalLabels.name"}}"/></h1>
+                <div class="profile-list-img-container flex-1 center" style="height: 50px;">
+                    <img class="profile-list-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        <section class="summary">
+            <header class="header-field">
+                <span>{{localize "CS.sheets.generalLabels.summary"}}</span>
+            </header>
+            <table class="bonuses-table">
+                <colgroup>
+                    <col style="width: 10%;" />
+                    <col style="width: 5%;" />
+                    <col style="width: 25%" />
+                    <col style="width: 5%;" />
+                    <col style="width: 30%" />
+                    <col style="width: 5%;" />
+                    <col style="width: 20%" />
+                </colgroup>
+                <thead><tr><th class="center" colspan="7">{{localize "CS.sheets.generalLabels.bonuses"}}</th></tr></thead>
+                <tr class="white-label padding-3">
+                    <td></td>
+                    <td>
+                        {{#if actor.system.defenseBonus }}
+                            {{modifier actor.system.defenseBonus}}
+                        {{else}}
+                            + 0
+                        {{/if}}
+                    </td>
+                    <td class="text-align-left">{{localize "CS.sheets.holdings.labels.defense"}}</td>
+                    <td>
+                        {{#if actor.system.fortunePoolModifier }}
+                            {{modifier actor.system.fortunePoolModifier}}
+                        {{else}}
+                            + 0
+                        {{/if}}
+                    </td>
+                    <td class="text-align-left">{{localize "CS.sheets.holdings.labels.fortuneDice"}}</td>
+                    <td>
+                        {{#if actor.system.fortuneModifier }}
+                            {{modifier actor.system.fortuneModifier}}
+                        {{else}}
+                            + 0
+                        {{/if}}
+                    </td>
+                    <td class="text-align-left">{{localize "CS.sheets.holdings.labels.fortune"}}</td>
+                </tr>
+            </table>
+            <table class="investments-table">
+                <colgroup>
+                    <col style="width: 33%;" />
+                    <col style="width: 33%;" />
+                    <col style="width: 33%;" />
+                </colgroup>
+                <thead>
+                <tr><th colspan="3">{{localize "CS.sheets.holdings.labels.investments"}}</th></tr>
+                <tr>
+                    <th>{{localize "CS.sheets.holdings.labels.land"}}</th>
+                    <th>{{localize "CS.sheets.holdings.labels.wealth"}}</th>
+                    <th>{{localize "CS.sheets.holdings.labels.defense"}}</th>
+                </tr>
+                </thead>
+                <tr class="white-label padding-3">
+                    <td>{{actor.system.investmentLand}}</td>
+                    <td>{{actor.system.investmentWealth}}</td>
+                    <td>{{actor.system.investmentDefense}}</td>
+                </tr>
+            </table>
+            <table class="benefits-table hover-table">
+                <thead>
+                <tr><th>{{localize "CS.sheets.holdings.labels.otherBenefits"}}</th></tr>
+                </thead>
+                <tbody>
+                {{#each actor.system.benefits as |benefit index|}}
+                <tr class="padding-3"><td class="font-small">{{enrich benefit}}</td></tr>
+                {{/each}}
+                </tbody>
+            </table>
+        </section>
+        <section class="features flexrow">
+            <section class="terrain-features" style="margin-right: 2px;">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.holdings.labels.terrainFeatures"}}</span>
+                </header>
+                <table class="terrain-features-list hover-table">
+                    <colgroup>
+                        <col style="width: 15%" />
+                        <col style="width: 70%;" />
+                        <col style="width: 10%;" />
+                        <col style="width: 5%;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.name"}}</span></th>
+                        <th class="center">{{localize "CS.sheets.holdings.labels.investment"}}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each actor.system.owned.features as |feature index|}}
+                        <tr class="item" data-item-id="{{_id}}">
+                            <td class="profile-td-img-container item-edit">
+                                <img
+                                        class="profile-td-img"
+                                        src="{{feature.img}}"
+                                        title="{{feature.name}}"
+                                />
+                            </td>
+                            <td class="td-left-label item-edit">{{feature.name}}</td>
+                            <td class="center item-edit">{{feature.system.investment}}</td>
+                            <td>
+                                <a
+                                        class="item-control owned-item-control"
+                                        data-index="{{index}}"
+                                        data-list="features"
+                                        data-action="delete"
+                                        title="{{localize "CS.sheets.generalLabels.delete"}}"
+                                >
+                                    <i class="fas fa-trash padding-3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+            <section class="buildings" style="margin-left: 2px;">
+                <header class="header-field">
+                    <span>{{localize "CS.sheets.holdings.labels.buildings"}}</span>
+                </header>
+                <table class="terrain-features-list hover-table">
+                    <colgroup>
+                        <col style="width: 15%" />
+                        <col style="width: 70%;" />
+                        <col style="width: 10%;" />
+                        <col style="width: 5%;" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-align-left"><span>{{localize "CS.sheets.generalLabels.name"}}</span></th>
+                        <th class="center">{{localize "CS.sheets.holdings.labels.investment"}}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each actor.system.owned.buildings as |building index|}}
+                        <tr class="item" data-item-id="{{_id}}">
+                            <td class="profile-td-img-container item-edit">
+                                <img
+                                        class="profile-td-img"
+                                        src="{{showIfFalse building.system.isUnderConstruction building.img "icons/terrain/construction.png"}}"
+                                        title="{{showIfTrue building.system.isUnderConstruction (localize "CS.sheets.holdings.labels.isUnderConstruction") building.name}}"
+                                />
+                            </td>
+                            <td class="td-left-label item-edit">{{building.name}}</td>
+                            <td class="center item-edit">{{building.system.investment}}</td>
+                            <td>
+                                <a
+                                        class="item-control owned-item-control"
+                                        data-index="{{index}}"
+                                        data-list="buildings"
+                                        data-action="delete"
+                                        title="{{localize "CS.sheets.generalLabels.delete"}}"
+                                >
+                                    <i class="fas fa-trash padding-3"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </section>
+        </section>
+    </section>
+</form>
