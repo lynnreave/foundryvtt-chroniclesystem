@@ -208,10 +208,13 @@ export function getCurrentTarget(){
      */
     let targets = Array.from(game.user.targets);
     let target;
+    console.log(game.user.targets)
+    console.log(targets)
     if (targets.length > 0) {
         let targetToken = targets[0];
-        if (targetToken.document && targetToken.document["_actor"]) {
-            target = targetToken.document["_actor"];
+        if (targetToken.document && targetToken.document["actorId"]) {
+            // target = targetToken.document["_actor"];
+            target = game.actors.get(targetToken.document.actorId);
         }
     }
     return target;
@@ -369,14 +372,17 @@ export function getRollTemplateData(actor, rollType, formula, roll, dieResults, 
     // get tool, damage, and target resistance
     let tool;
     let resistance;
+    console.log(rollType)
     if (rollType === "weapon-test") {
         tool = actorData.owned.weapons.find((weapon) => weapon.name === toolName)
+        console.log(tool)
         if (tool) {
             // something was transposing incorrectly so that weapons overrode each other in .owned
             // getWeaponTestDataForActor(templateData.source, tool)
             templateData.test.tool = Object.assign({}, tool);
         }
         // get resistance from target damage resistance
+        console.log(target)
         if (target) {
             resistance = getTransformation(
                 target, "modifiers", CHARACTER_ATTR_CONSTANTS.DAMAGE_TAKEN

@@ -236,6 +236,19 @@ export class ActorSheetChronicle extends ActorSheet {
         }
         return [];
     }
+
+    async _onDropFolder(event, data) {
+        await super._onDropFolder(event, data);
+        fromUuid(data.uuid).then(value => {
+            let folder = value;
+            folder.contents.forEach((doc) => {
+                // TODO: make this more efficient by not running onDropItemCreate per item
+                if (doc.documentName === "Item") {
+                    this._onDropItemCreate(doc);
+                }
+            });
+        })
+    }
     
     async _onDropItemCreate(itemData) {
         let embeddedItem = [];

@@ -287,3 +287,28 @@
   padding-left: 5px;
   padding-right: 5px
 }
+
+.notes-section {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+.notes-text {
+  color: #333333;
+  flex-grow: 1;
+  margin-left: 8px;
+  padding: 4px;
+}
+.notes-text .editor {
+  position: relative;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: auto;
+  height: 100%;
+}
+.notes-text .editor .editor-content {
+  overflow-y: auto;
+  word-break: break-word;
+  height: 100%;
+  min-height: 75px;
+}

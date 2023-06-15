@@ -1,0 +1,48 @@
+<div class="tab flexrow" data-group="primary" data-tab="roles">
+    <section class="roles-list-one">
+        <table class="roles-list hover-table">
+            <tbody>
+            {{#each character.rolesListOne as |character index|}}
+                <tr>
+                    <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                        <img class="profile-td-img" src="{{character.positionObj.img}}"/>
+                    </td>
+                    <td class="text-align-left open-actor-sheet" data-id="{{character.id}}">
+                        {{character.positionObj.name}}
+                    </td>
+                    <td class="text-align-left open-actor-sheet flexcolumn" data-id="{{character.id}}">
+                        <div>{{character.title}}</div>
+                        <div>{{character.name}}</div>
+                    </td>
+                    <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                        <img class="profile-td-img" src="{{character.img}}"/>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </section>
+    <section class="roles-list-two">
+        <table class="roles-list hover-table">
+            <tbody>
+            {{#each character.rolesListTwo as |character index|}}
+                <tr>
+                    <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                        <img class="profile-td-img" src="{{character.positionObj.img}}"/>
+                    </td>
+                    <td class="text-align-left open-actor-sheet" data-id="{{character.id}}">
+                        {{character.positionObj.name}}
+                    </td>
+                    <td class="text-align-left open-actor-sheet flexcolumn" data-id="{{character.id}}">
+                        <div>{{character.title}}</div>
+                        <div>{{character.name}}</div>
+                    </td>
+                    <td class="profile-td-img-container open-actor-sheet" data-id="{{character.id}}">
+                        <img class="profile-td-img" src="{{character.img}}"/>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </section>
+</div>

@@ -11,17 +11,17 @@
                             {{localize "CS.sheets.organization.labels.noLeader"}}
                         {{/if}}
                     </label>
-                    <label class="link-field open-actor-sheet size75">{{actor.system.leaderNamesString}}</label>
+                    <label class="link-field open-actor-sheet size75">
+                        {{actor.system.leaderNamesString}}
+                    </label>
                 </div>
                 <div class="flex-4 flexrow">
+                    {{#if actor.system.stewardPosition}}
                     <label class="attribute-label">
-                        {{#if actor.system.stewardPosition}}
                             {{actor.system.stewardPosition.name}}
-                        {{else}}
-                            {{localize "CS.sheets.organization.labels.noSteward"}}
-                        {{/if}}
                     </label>
                     <label class="link-field open-actor-sheet size75">{{actor.system.stewardNamesString}}</label>
+                    {{/if}}
                 </div>
                 <div class="flex-2 text-align-right">
                     <span class="refresh-sheet"><a><i class="fas fa-sync padding-3"></i></a></span>
@@ -53,20 +53,24 @@
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs flexrow tabs" data-group="primary">
         <a class="item" data-tab="dashboard">{{localize "CS.sheets.generalLabels.dashboard"}}</a>
+        <a class="item" data-tab="roles">{{localize "CS.sheets.organization.labels.roles"}}</a>
         <a class="item" data-tab="territory">{{localize "CS.sheets.organization.labels.territory"}}</a>
         <a class="item" data-tab="military">{{localize "CS.sheets.organization.labels.military"}}</a>
         <a class="item" data-tab="events">{{localize "CS.sheets.house.events.title"}}</a>
         <a class="item" data-tab="structure">{{localize "CS.sheets.organization.labels.structure"}}</a>
         <a class="item" data-tab="associates">{{localize "CS.sheets.organization.labels.associates"}}</a>
+        <a class="item" data-tab="notes">{{localize "CS.sheets.generalLabels.notes"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/org-dashboard-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/roles-and-responsibilities-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/territory-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/military-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/events-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/structure-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/associates-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/notes-tab.hbs"}}
     </section>
 </form>

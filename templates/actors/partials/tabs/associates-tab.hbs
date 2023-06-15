@@ -8,8 +8,8 @@
                 <colgroup>
                     <col style="width: 5%" />
                     <col style="width: 35%;" />
-                    <col style="width: 35%;" />
-                    <col style="width: 15%" />
+                    <col style="width: 30%;" />
+                    <col style="width: 20%" />
                     <col style="width: 10%;" />
                 </colgroup>
                 <thead>
@@ -27,7 +27,9 @@
                     <td class="field img profile-td-img-container open-actor-sheet" data-id="{{associate.id}}">
                         <img class="profile-td-img" src="{{associate.img}}" title="{{associate.name}}" alt="{{associate.img}}" />
                     </td>
-                    <td class="field name text-align-left open-actor-sheet" data-id="{{associate.id}}">{{associate.name}}</td>
+                    <td class="field name text-align-left open-actor-sheet" data-id="{{associate.id}}">
+                        {{associate.title}} {{associate.fullName}}
+                    </td>
                     <td>
                         <span class="form-fields">
                             <select
@@ -84,6 +86,16 @@
                                     title="{{localize "CS.sheets.organization.associates.isEnemyDesc"}}"
                             >
                                 <i class="fa-solid fa-face-angry"></i>
+                            </a>
+                            <a
+                                    class="checkButton padding-3 flex-1 owned-list-item-field-update {{showIfEquals 4 associate.relationship "activated" ""}}"
+                                    data-id="{{id}}"
+                                    data-name="relationship"
+                                    data-value="4"
+                                    data-list="characters"
+                                    title="{{localize "CS.sheets.organization.associates.isDeceasedDesc"}}"
+                            >
+                                <i class="fa-solid fa-skull"></i>
                             </a>
                         </div>
                     </td>

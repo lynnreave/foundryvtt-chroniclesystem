@@ -50,7 +50,7 @@ export class CharacterSheet extends CharacterSheetBase {
         {
           navSelector: ".tabs",
           contentSelector: ".sheet-body",
-          initial: "combat"
+          initial: "actor-description"
         }
       ],
     });

@@ -24,6 +24,7 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/chroniclesystem/templates/actors/partials/tabs/associates-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/military-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/org-dashboard-tab.hbs',
+        'systems/chroniclesystem/templates/actors/partials/tabs/roles-and-responsibilities-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/structure-tab.hbs',
         'systems/chroniclesystem/templates/actors/partials/tabs/territory-tab.hbs',
 
@@ -38,7 +39,9 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/chroniclesystem/templates/components/resource-holdings.hbs',
 
         'systems/chroniclesystem/templates/actors/partials/tabs/warfare-tab.hbs',
-        'systems/chroniclesystem/templates/actors/partials/tabs/formation-tab.hbs'
+        'systems/chroniclesystem/templates/actors/partials/tabs/formation-tab.hbs',
+
+        'systems/chroniclesystem/templates/actors/partials/tabs/notes-tab.hbs'
     ];
     return loadTemplates(templatePaths);
 };

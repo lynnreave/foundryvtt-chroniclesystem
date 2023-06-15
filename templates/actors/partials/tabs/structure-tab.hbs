@@ -7,9 +7,9 @@
             <table class="custom-roles-list hover-table">
                 <colgroup>
                     <col style="width: 5%" />
+                    <col style="width: 25%;" />
+                    <col style="width: 45%;" />
                     <col style="width: 20%;" />
-                    <col style="width: 55%;" />
-                    <col style="width: 15%;" />
                     <col style="width: 5%;" />
                 </colgroup>
                 <thead>
@@ -32,7 +32,9 @@
                         />
                     </td>
                     <td class="td-left-label item-edit">{{position.name}}</td>
-                    <td class="text-align-left font-small item-edit">{{enrich position.system.description}}</td>
+                    <td class="text-align-left font-small item-edit">
+                        {{truncateParagraphString position.system.description}}
+                    </td>
                     <td>
                         <a
                                 class="checkButton equipped {{showIfEquals "9" position.system.equipped "activated" ""}}"

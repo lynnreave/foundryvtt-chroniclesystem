@@ -1,7 +1,13 @@
 <div class="tab description flexrow" data-group="primary" data-tab="actor-description">
     <section class="profile-picture">
-        <div class="profile-img-container flex">
-            <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" alt="{{actor.name}} Picture" />
+        <div class="profile-img-container flex" style="height: 250px; width: 250px; border-style: outset;">
+            <img
+                    class="profile-img"
+                    src="{{actor.img}}"
+                    data-edit="img"
+                    title="{{actor.name}}"
+                    alt="{{actor.name}} Picture"
+            />
         </div>
     </section>
     <section class="general">
@@ -210,14 +216,6 @@
             </div>
         </section>
     </section>
-    <section class="personal-history">
-        <header class="header-field">
-            <span>Personal History</span>
-        </header>
-        <div class="form-group">
-            {{editor character.personalHistory target="system.personalHistory" button=true owner=owner editable=editable}}
-        </div>
-    </section>
     <section class="allies">
         <header class="header-field">
             <span>Allies</span>
@@ -248,14 +246,6 @@
         </header>
         <div class="form-group">
             {{editor character.motto target="system.motto" button=true owner=owner editable=editable}}
-        </div>
-    </section>
-    <section class="notes">
-        <header class="header-field">
-            <span>Notes</span>
-        </header>
-        <div class="form-group">
-            {{editor character.notes target="system.notes" button=true owner=owner editable=editable}}
         </div>
     </section>
 

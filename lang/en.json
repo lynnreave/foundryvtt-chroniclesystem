@@ -133,6 +133,7 @@
         "modifiers": "Modifiers",
         "month": "Month",
         "name": "Name",
+        "notes": "Notes",
         "other": "Other",
         "others": "Others",
         "rating": "Rating",
@@ -141,6 +142,7 @@
         "roll": "Roll",
         "status": "Status",
         "summary": "Summary",
+        "timeline": "Timeline",
         "total": "Total",
         "type": "Type",
         "uses": "Uses",
@@ -188,6 +190,7 @@
       "organization": {
         "labels": {
           "associates": "Associates",
+          "fortunes": "Fortunes",
           "fromEvents": "From Events",
           "holder": "Holder",
           "holdings": "Holdings",
@@ -213,6 +216,7 @@
         "associates": {
           "isAllyDesc": "Is a friend or ally of the organization.",
           "isEnemyDesc": "Is an enemy or rival of the organization.",
+          "isDeceasedDesc": "Is a former or deceased member of the organization.",
           "isMemberDesc": "Is a member or subsidiary of the organization.",
           "isUnrelatedDesc": "Has no relationship to the organization."
         },
@@ -221,6 +225,8 @@
           "isImportantDesc": "Indicates this position is one of the most important in the organization.",
           "isLeaderDesc": "Indicates this position is the leader of the organization.",
           "isStewardDesc": "Indicates this position is in charge of any stewardship roles for the organization.",
+          "title": "Title",
+          "titleDesc": "What this position is commonly referred to within this organization, or the rank held.",
           "weight": "Weight",
           "weightDesc": "A number indicating sorting weight within the organization hierarchy. Higher numbers sort first."
         },
@@ -414,7 +420,8 @@
           "sorcery": "Sorcery"
         },
         "labels": {
-          "fullName": "Full Name"
+          "fullName": "Full Name",
+          "personalHistory": "Personal History"
         }
       },
       "unit": {

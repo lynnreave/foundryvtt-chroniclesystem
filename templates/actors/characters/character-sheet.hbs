@@ -13,7 +13,13 @@
                 <span class="item-controls refresh-sheet flex-1"><a><i class="fas fa-sync"></i></a></span>
             </div>
             <div class="complements flexrow">
-                <label class="attribute-label"> {{localize "CS.sheets.character.labels.fullName"}}: </label>
+                <label class="attribute-label">
+                    {{localize "CS.sheets.organization.positions.title"}}:
+                </label>
+                <input class="medium-field flex2" type="text" name="system.title" value="{{character.title}}"  data-dtype="String"/>
+                <label class="attribute-label">
+                    {{localize "CS.sheets.character.labels.fullName"}}:
+                </label>
                 <input class="medium-field flex2" type="text" name="system.fullName" value="{{character.fullName}}"  data-dtype="String"/>
             </div>
             <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
@@ -31,6 +37,7 @@
         <a class="item" data-tab="relationships">{{localize "CS.sheets.character.tabs.relationships"}}</a>
         <a class="item" data-tab="effects">{{localize "CS.sheets.character.tabs.effects"}}</a>
         <a class="item" data-tab="actor-description">{{localize "CS.sheets.character.tabs.description"}}</a>
+        <a class="item" data-tab="notes">{{localize "CS.sheets.generalLabels.notes"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
@@ -44,5 +51,6 @@
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/relationships-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/effects-tab.hbs"}}
         {{> "systems/chroniclesystem/templates/actors/partials/tabs/description-tab.hbs"}}
+        {{> "systems/chroniclesystem/templates/actors/partials/tabs/notes-tab.hbs"}}
     </section>
 </form>

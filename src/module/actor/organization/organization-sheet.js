@@ -74,24 +74,29 @@ export class OrganizationSheet extends ActorSheetChronicle {
         org.leaderNames = [];
         org.stewards = [];
         org.stewardNames = [];
+        org.roles = [];
         org.importantRoles = [];
         org.owned.characters.forEach((character) => {
             // update pointer data
             // get the target actor
             let targetActor = game.actors.get(character.id);
+            let targetActorData = getData(targetActor);
             // update actor item
             if (targetActor) {
                 character.name = targetActor.name;
+                character.fullName = targetActorData.fullName || character.name;
                 character.img = targetActor.img;
-                character.age = getData(targetActor).age;
+                character.age = targetActorData.age;
                 character.status = getAbilityValue(targetActor, "status");
+                character.title = targetActorData.title;
             }
-            // if (!character.position) { character.position = ""; }
 
             // get coded role holders
             if (org.leaderPosition && character.position && character.position === org.leaderPosition._id) {
                 org.leaders.push(character);
-                org.leaderNames.push(character.name)
+                let characterName = character.name;
+                if (character.title) { characterName = `${character.title} ${character.name}`}
+                org.leaderNames.push(characterName);
             }
             if (org.stewardPosition && character.position && character.position === org.stewardPosition._id) {
                 org.stewards.push(character);
@@ -106,16 +111,28 @@ export class OrganizationSheet extends ActorSheetChronicle {
                 });
                 if (position) {
                     let positionData = getData(position);
+                    character.positionObj = position;
+                    org.roles.push(character);
                     if (positionData.isImportant) {
-                        character.positionObj = position;
                         org.importantRoles.push(character);
                     }
+                    // } else {
+                    //     org.roles.push(character);
+                    // }
                 }
             }
         });
         org.owned.characters = org.owned.characters.sort(function(a, b) {
             return b.status - a.status || a.name.localeCompare(b.name);
         });
+        org.roles = org.roles.sort(function(a, b) {
+            let aPosDat = getData(a.positionObj);
+            let bPosDat = getData(b.positionObj);
+            return bPosDat.weight - aPosDat.weight || a.name.localeCompare(b.name);
+        });
+        let halfRoles = Math.ceil(org.roles.length / 2);
+        org.rolesListOne = org.roles.slice(0, halfRoles);
+        org.rolesListTwo = org.roles.slice(halfRoles);
         org.importantRoles = org.importantRoles.sort(function(a, b) {
             let aPosDat = getData(a.positionObj);
             let bPosDat = getData(b.positionObj);

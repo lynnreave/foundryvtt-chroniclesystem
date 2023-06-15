@@ -1,0 +1,26 @@
+<div class="tab description flexrow" data-group="primary" data-tab="notes">
+    {{#ifEquals "character" actor.type}}
+        <section class="notes-section" style="flex: 0.5;">
+            <header class="header-field">
+                <span>{{localize "CS.sheets.character.labels.personalHistory"}}</span>
+            </header>
+            <div class="editor">
+                <a class="editor-edit"><i class="fas fa-edit"></i></a>
+                <div class="editor-content" data-engine="tinymce" data-edit="system.personalHistory">
+                    {{enrich character.personalHistory}}
+                </div>
+            </div>
+        </section>
+    {{/ifEquals}}
+    <section class="notes-section" style="flex: {{#ifEquals "character" actor.type}}0.5{{/ifEquals}} 1;">
+        <header class="header-field">
+            <span>{{localize "CS.sheets.generalLabels.notes"}}</span>
+        </header>
+        <div class="editor">
+            <a class="editor-edit"><i class="fas fa-edit"></i></a>
+            <div class="editor-content" data-engine="tinymce" data-edit="system.notes">
+                {{enrich character.notes}}
+            </div>
+        </div>
+    </section>
+</div>

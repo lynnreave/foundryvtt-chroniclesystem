@@ -129,6 +129,7 @@
         "character-common"
       ],
       "fullName": "",
+      "title": "",
       "ignoreCombatDefenseAgility": false,
       "ignoreCombatDefenseAthletics": false,
       "ignoreCombatDefenseAwareness": false,
@@ -195,11 +196,14 @@
       }
     },
     "organization": {
+      "description": "",
+      "notes": "",
       "motto": "",
       "leaders": "",
       "leaderPosition": "",
       "stewards": "",
       "stewardPosition": "",
+      "fortunes": true,
       "defense": {
         "current": 0,
         "invested": 0,
