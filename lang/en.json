@@ -421,7 +421,11 @@
         },
         "labels": {
           "fullName": "Full Name",
-          "personalHistory": "Personal History"
+          "personalHistory": "Personal History",
+          "mainHand": "Equip with Main Hand",
+          "offHand": "Equip with Off Hand",
+          "bothHands": "Equip with Both Hands",
+          "defending": "Use Defensively (did not attack with)"
         }
       },
       "unit": {

@@ -190,11 +190,43 @@
                                 <td class="item-controls flexrow">
                                     {{#ifDifferent weapon.system.equipped ../notEquipped}}
                                     {{#ifDifferent 0 weapon.system.defense}}
-                                    <a class="checkButton defending {{showIfTrue weapon.system.isDefending "activated" ""}}" data-item-id="{{_id}}" data-to-state="{{showIfTrue weapon.system.isDefending false true}}"><i class="fas fa-shield-alt"></i></a>
+                                    <a
+                                            class="checkButton defending {{showIfTrue weapon.system.isDefending "activated" ""}}"
+                                            data-item-id="{{_id}}"
+                                            data-to-state="{{showIfTrue weapon.system.isDefending false true}}"
+                                            title="{{localize "CS.sheets.character.labels.defending"}}"
+                                    >
+                                        <i class="fas fa-shield-alt"></i>
+                                    </a>
                                     {{/ifDifferent}}
                                     {{/ifDifferent}}
-                                    <a class="checkButton equipped {{showIfContains "2|4" weapon.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfContains "2|4" weapon.system.equipped 0 2}}" data-type="weapon"><i class="fa fa-hand-paper"></i></a>
-                                    <a class="checkButton equipped off-hand {{showIfContains "3|4" weapon.system.equipped "activated" ""}}" data-item-id="{{_id}}" data-hand="{{showIfContains "3|4" weapon.system.equipped 0 3}}" data-type="weapon"><i class="fa fa-hand-paper"></i></a>
+                                    <a
+                                            class="checkButton equipped {{showIfEquals "2" weapon.system.equipped "activated" ""}}"
+                                            data-item-id="{{_id}}"
+                                            data-hand="{{showIfEquals "2" weapon.system.equipped 0 2}}"
+                                            data-type="weapon"
+                                            title="{{localize "CS.sheets.character.labels.mainHand"}}"
+                                    >
+                                        <i class="fa-solid fa-hand"></i>
+                                    </a>
+                                    <a
+                                            class="checkButton equipped off-hand {{showIfEquals "3" weapon.system.equipped "activated" ""}}"
+                                            data-item-id="{{_id}}"
+                                            data-hand="{{showIfEquals "3" weapon.system.equipped 0 3}}"
+                                            data-type="weapon"
+                                            title="{{localize "CS.sheets.character.labels.offHand"}}"
+                                    >
+                                        <i class="fa-solid fa-hand fa-flip-horizontal"></i>
+                                    </a>
+                                    <a
+                                            class="checkButton equipped {{showIfEquals "4" weapon.system.equipped "activated" ""}}"
+                                            data-item-id="{{_id}}"
+                                            data-hand="{{showIfEquals "4" weapon.system.equipped 0 4}}"
+                                            data-type="weapon"
+                                            title="{{localize "CS.sheets.character.labels.bothHands"}}"
+                                    >
+                                        <i class="fa-solid fa-hands"></i>
+                                    </a>
                                 </td>
                             </tr>
                         {{/each}}

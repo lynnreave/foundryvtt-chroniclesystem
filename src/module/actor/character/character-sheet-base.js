@@ -11,6 +11,7 @@ import { onEquippedChanged } from "../../item/effect/helpers.js";
 import { ChronicleSystem } from "../../system/ChronicleSystem.js";
 import { updateWeaponDefendingState } from "./character/helpers.js";
 import { getWeaponTestDataForActor } from "./helpers.js";
+import { EQUIPPED_CONSTANTS } from "../../constants.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -51,7 +52,7 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     character.owned.abilities = this._checkNull(data.itemsByType['ability']).sort((a, b) => a.name.localeCompare(b.name));
     character.owned.effects = this._checkNull(data.itemsByType['effect']).sort((a, b) => a.name.localeCompare(b.name));
 
-    data.notEquipped = ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED;
+    data.notEquipped = EQUIPPED_CONSTANTS.IS_NOT_EQUIPPED;
 
     character.owned.weapons.forEach((weapon) => {
       getWeaponTestDataForActor(data.actor, weapon);
@@ -140,9 +141,9 @@ export class CharacterSheetBase extends ActorSheetChronicle {
     let collection = [];
     let tempCollection = [];
 
-    let isArmor = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.WEARING;
-    let isCommander = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.COMMANDER;
-    let isMount = parseInt(eventData.hand) === ChronicleSystem.equippedConstants.MOUNTED;
+    let isArmor = parseInt(eventData.hand) === EQUIPPED_CONSTANTS.WEARING;
+    let isCommander = parseInt(eventData.hand) === EQUIPPED_CONSTANTS.COMMANDER;
+    let isMount = parseInt(eventData.hand) === EQUIPPED_CONSTANTS.MOUNTED;
     let isUnequipping = parseInt(eventData.hand) === 0;
 
     if (isUnequipping) {
@@ -155,23 +156,26 @@ export class CharacterSheetBase extends ActorSheetChronicle {
         await document.update({"system.isDefending": false})
       }
     } else {
+      // build list of items to unequip due to the currently equipping item (by type of equip status)
       if (isCommander) {
-        getData(document).equipped = ChronicleSystem.equippedConstants.COMMANDER;
+        getData(document).equipped = EQUIPPED_CONSTANTS.COMMANDER;
         let items = this.actor.getEmbeddedCollection('Item')
-        tempCollection = items.filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.COMMANDER);
+        tempCollection = items.filter((item) => getData(item).equipped === EQUIPPED_CONSTANTS.COMMANDER);
         getData(this.actor).commander = tempCollection[0];
       } else if (isArmor) {
-        getData(document).equipped = ChronicleSystem.equippedConstants.WEARING;
-        tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.WEARING);
+        getData(document).equipped = EQUIPPED_CONSTANTS.WEARING;
+        tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === EQUIPPED_CONSTANTS.WEARING);
       } else if (isMount) {
-          getData(document).equipped = ChronicleSystem.equippedConstants.MOUNTED;
-          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.MOUNTED);
+          getData(document).equipped = EQUIPPED_CONSTANTS.MOUNTED;
+          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === EQUIPPED_CONSTANTS.MOUNTED);
       } else {
-        if (getData(document).isTwoHanded) {
-          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === ChronicleSystem.equippedConstants.MAIN_HAND || getData(item).equipped === ChronicleSystem.equippedConstants.OFFHAND || getData(item).equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
-          getData(document).equipped = ChronicleSystem.equippedConstants.BOTH_HANDS;
+        // if equipping with both hands, unequip all one-handed and two-handed items
+        if (parseInt(eventData.hand) === EQUIPPED_CONSTANTS.BOTH_HANDS) {
+          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === EQUIPPED_CONSTANTS.MAIN_HAND || getData(item).equipped === EQUIPPED_CONSTANTS.OFFHAND || getData(item).equipped === EQUIPPED_CONSTANTS.BOTH_HANDS);
+          getData(document).equipped = EQUIPPED_CONSTANTS.BOTH_HANDS;
+        // else, unequip all same-handed or two handed items
         } else {
-          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === parseInt(eventData.hand) || getData(item).equipped === ChronicleSystem.equippedConstants.BOTH_HANDS);
+          tempCollection = this.actor.getEmbeddedCollection('Item').filter((item) => getData(item).equipped === parseInt(eventData.hand) || getData(item).equipped === EQUIPPED_CONSTANTS.BOTH_HANDS);
           getData(document).equipped = parseInt(eventData.hand);
         }
       }
@@ -179,16 +183,22 @@ export class CharacterSheetBase extends ActorSheetChronicle {
 
     updateTempTransformers(this.actor);
 
+    // update list of items to unequip with unequipped status and push to update list
     tempCollection.forEach((item) => {
-      collection.push({_id: item._id, "system.equipped": ChronicleSystem.equippedConstants.IS_NOT_EQUIPPED});
+      collection.push({_id: item._id, "system.equipped": EQUIPPED_CONSTANTS.IS_NOT_EQUIPPED});
+      // run equipment changed method for each equipment (remove transformers)
       item.onEquippedChanged(this.actor, false);
     });
 
+    // add the main item changing to update list
     collection.push({_id: document._id, "system.equipped": getData(document).equipped});
+    // run on change equipped state (add transformers)
     document.onEquippedChanged(this.actor, getData(document).equipped > 0);
 
+    // save transformer updates for actor
     saveTransformers(this.actor);
 
+    // push update
     this.actor.updateEmbeddedDocuments('Item', collection);
   }
 

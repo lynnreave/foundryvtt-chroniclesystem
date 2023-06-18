@@ -25,7 +25,8 @@ import { TestGame } from "@mocks/game";
 import {
     DEGREES_CONSTANTS,
     CHARACTER_ATTR_CONSTANTS,
-    KEY_CONSTANTS
+    KEY_CONSTANTS,
+    EQUIPPED_CONSTANTS
 // @ts-ignore
 } from "@module/constants";
 import {
@@ -53,12 +54,15 @@ describe("rolls.js", () => {
             let mountDoc1 = {type: "mount", system: {equipped:7}};
             character.owned.mounts = [mountDoc1];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             let mountDoc2 = {system: {equipped:0}};
             targetCharacter.owned.mounts = [mountDoc2];
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
             let output = adjustFormulaByMount(character, formula);
@@ -73,12 +77,15 @@ describe("rolls.js", () => {
             let mountDoc1 = {type: "mount", system: {equipped:7}};
             character.owned.mounts = [mountDoc1];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             let mountDoc2 = {type: "mount", system: {equipped:7}};
             targetCharacter.owned.mounts = [mountDoc2];
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
             let output = adjustFormulaByMount(character, formula);
@@ -93,12 +100,15 @@ describe("rolls.js", () => {
             let mountDoc1 = {type: "mount", system: {equipped:0}};
             character.owned.mounts = [mountDoc1];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             let mountDoc2 = {type: "mount", system: {equipped:0}};
             targetCharacter.owned.mounts = [mountDoc2];
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
             let output = adjustFormulaByMount(character, formula);
@@ -113,10 +123,13 @@ describe("rolls.js", () => {
             let mountDoc1 = {type: "mount", system: {equipped:7}};
             character.owned.mounts = [mountDoc1];
             let targetCharacter: TestCharacter = new TestCharacter();
-            let token: object = {document: {_actor: targetCharacter}};
+            targetCharacter.id = "someId";
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollDef = ["weapon-test", "someWeapon", "5|2|3|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
             let output = adjustFormulaByMount(character, formula);
@@ -144,104 +157,166 @@ describe("rolls.js", () => {
         });
     });
     describe("adjust formula by weapon", () => {
-        test("custom pool modifier", () => {
-            let character: TestCharacter = new TestCharacter();
-            let weaponDoc = {name: "someName", system: {customPoolModifier: 1}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
-            expect(adjustedFormula.pool).toStrictEqual(6)
+        describe("custom modifiers", function () {
+            test("pool modifier", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {name: "someName", system: {customPoolModifier: 1}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                expect(adjustedFormula.pool).toStrictEqual(6)
+            });
+            test("bonus dice modifier", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {name: "someName", system: {customBonusDiceModifier: 1}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                expect(adjustedFormula.bonusDice).toStrictEqual(5)
+            });
+            test("bonus dice modifier", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {name: "someName", system: {customTestModifier: 1}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                expect(adjustedFormula.modifier).toStrictEqual(4)
+            });
         });
-        test("custom bonus dice modifier", () => {
-            let character: TestCharacter = new TestCharacter();
-            let weaponDoc = {name: "someName", system: {customBonusDiceModifier: 1}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
-            expect(adjustedFormula.bonusDice).toStrictEqual(5)
+        describe("training", function () {
+            test("required", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {name: "someName", system: {training: 1}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                expect(adjustedFormula.bonusDice).toStrictEqual(3)
+            });
+            test("insufficient", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {name: "someName", system: {training: 5}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                expect(adjustedFormula.pool).toStrictEqual(4)
+                expect(adjustedFormula.bonusDice).toStrictEqual(0)
+            });
         });
-        test("custom bonus dice modifier", () => {
-            let character: TestCharacter = new TestCharacter();
-            let weaponDoc = {name: "someName", system: {customTestModifier: 1}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
-            expect(adjustedFormula.modifier).toStrictEqual(4)
-        });
-        test("training", () => {
-            let character: TestCharacter = new TestCharacter();
-            let weaponDoc = {name: "someName", system: {training: 1}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
-            expect(adjustedFormula.bonusDice).toStrictEqual(3)
-        });
-        test("training insufficient", () => {
-            let character: TestCharacter = new TestCharacter();
-            let weaponDoc = {name: "someName", system: {training: 5}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
-            expect(adjustedFormula.pool).toStrictEqual(4)
-            expect(adjustedFormula.bonusDice).toStrictEqual(0)
-        });
-        test("mounted unwieldy", () => {
-            let character: TestCharacter = new TestCharacter();
-            let mountDoc = {type: "mount", system: {equipped:7}};
-            character.owned.mounts = [mountDoc];
-            let weaponDoc = {name: "someName", system: {isUnwieldy: true}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
-            let expected = {pool: 3, bonusDice: 4, modifier: 3};
-            let actual = {
-                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
-            };
-            expect(actual).toStrictEqual(expected);
+        describe("mounted", function () {
+            test("mounted unwieldy", () => {
+                let character: TestCharacter = new TestCharacter();
+                let mountDoc = {type: "mount", system: {equipped:7}};
+                character.owned.mounts = [mountDoc];
+                let weaponDoc = {name: "someName", system: {isUnwieldy: true}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {pool: 3, bonusDice: 4, modifier: 3};
+                let actual = {
+                    pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+                };
+                expect(actual).toStrictEqual(expected);
 
-        });
-        test("unmounted unwieldy", () => {
-            let character: TestCharacter = new TestCharacter();
-            let mountDoc = {type: "mount", system: {equipped:0}};
-            character.owned.mounts = [mountDoc];
-            let weaponDoc = {name: "someName", system: {isUnwieldy: true}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
-            let expected = {pool: 5, bonusDice: 4, modifier: 3};
-            let actual = {
-                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
-            };
-            expect(actual).toStrictEqual(expected);
-        });
-        test("mounted weapon while mounted", () => {
-            let character: TestCharacter = new TestCharacter();
-            let mountDoc = {type: "mount", system: {equipped:7}};
-            character.owned.mounts = [mountDoc];
-            let weaponDoc = {name: "someName", system: {isMounted: true}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
-            let expected = {pool: 5, bonusDice: 4, modifier: 3};
-            let actual = {
-                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
-            };
-            expect(actual).toStrictEqual(expected);
+            });
+            test("unmounted unwieldy", () => {
+                let character: TestCharacter = new TestCharacter();
+                let mountDoc = {type: "mount", system: {equipped:0}};
+                character.owned.mounts = [mountDoc];
+                let weaponDoc = {name: "someName", system: {isUnwieldy: true}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {pool: 5, bonusDice: 4, modifier: 3};
+                let actual = {
+                    pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+                };
+                expect(actual).toStrictEqual(expected);
+            });
+            test("mounted weapon while mounted", () => {
+                let character: TestCharacter = new TestCharacter();
+                let mountDoc = {type: "mount", system: {equipped:7}};
+                character.owned.mounts = [mountDoc];
+                let weaponDoc = {name: "someName", system: {isMounted: true}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {pool: 5, bonusDice: 4, modifier: 3};
+                let actual = {
+                    pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+                };
+                expect(actual).toStrictEqual(expected);
 
+            });
+            test("mounted weapon while not mounted", () => {
+                let character: TestCharacter = new TestCharacter();
+                let mountDoc = {type: "mount", system: {equipped:0}};
+                character.owned.mounts = [mountDoc];
+                let weaponDoc = {name: "someName", system: {isMounted: true}};
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let output = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {pool: 3, bonusDice: 4, modifier: 3};
+                let actual = {
+                    pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
+                };
+                expect(actual).toStrictEqual(expected);
+            });
         });
-        test("mounted weapon while not mounted", () => {
-            let character: TestCharacter = new TestCharacter();
-            let mountDoc = {type: "mount", system: {equipped:0}};
-            character.owned.mounts = [mountDoc];
-            let weaponDoc = {name: "someName", system: {isMounted: true}};
-            let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
-            let formula: DiceRollFormula = getFormula(rollDef, character);
-            let output = adjustFormulaByWeapon(character, formula, weaponDoc);
-            let expected = {pool: 3, bonusDice: 4, modifier: 3};
-            let actual = {
-                pool: output.pool, bonusDice: output.bonusDice, modifier: output.modifier
-            };
-            expect(actual).toStrictEqual(expected);
+        describe("two handed", function () {
+            test("two handed weapon in two hands", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {
+                    name: "someName", system: {equipped: EQUIPPED_CONSTANTS.BOTH_HANDS, isTwoHanded: true}
+                };
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {
+                    pool: 5, bonusDice: 4, modifier: 3
+                }
+                let actual = {
+                    pool: adjustedFormula.pool,
+                    bonusDice: adjustedFormula.bonusDice,
+                    modifier: adjustedFormula.modifier
+                }
+                expect(expected).toStrictEqual(actual)
+            });
+            test("two handed weapon in main hand", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {
+                    name: "someName", system: {equipped: EQUIPPED_CONSTANTS.MAIN_HAND, isTwoHanded: true}
+                };
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {
+                    pool: 3, bonusDice: 4, modifier: 3
+                }
+                let actual = {
+                    pool: adjustedFormula.pool,
+                    bonusDice: adjustedFormula.bonusDice,
+                    modifier: adjustedFormula.modifier
+                }
+                expect(expected).toStrictEqual(actual)
+            });
+            test("two handed weapon in off hand", () => {
+                let character: TestCharacter = new TestCharacter();
+                let weaponDoc = {
+                    name: "someName", system: {equipped: EQUIPPED_CONSTANTS.OFFHAND, isTwoHanded: true}
+                };
+                let rollDef = ["weapon-test", weaponDoc.name, "5|4|3|2|0"];
+                let formula: DiceRollFormula = getFormula(rollDef, character);
+                let adjustedFormula = adjustFormulaByWeapon(character, formula, weaponDoc);
+                let expected = {
+                    pool: 3, bonusDice: 4, modifier: 3
+                }
+                let actual = {
+                    pool: adjustedFormula.pool,
+                    bonusDice: adjustedFormula.bonusDice,
+                    modifier: adjustedFormula.modifier
+                }
+                expect(expected).toStrictEqual(actual)
+            });
         });
     });
     describe("get ability test formula", () => {
@@ -487,10 +562,13 @@ describe("rolls.js", () => {
     describe("get current target", () => {
         test("has target", () => {
             let character: TestCharacter = new TestCharacter();
-            let token: object = {document: {_actor: character}};
+            character.id = "someId";
+            let token: object = {document: {actorId: character.id}};
             let game: TestGame = new TestGame();
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(character.id, character);
             expect(getCurrentTarget()).toStrictEqual(character);
         });
         test("has target - negative", () => {
@@ -669,6 +747,7 @@ describe("rolls.js", () => {
             let weaponDoc = Object.assign({}, defaultWeapon)
             character.system.owned.weapons = [weaponDoc];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
@@ -679,10 +758,12 @@ describe("rolls.js", () => {
                 armorDoc._id, armorDoc.system.rating,
                 true, true
             );
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollType: string = "weapon-test";
             let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
@@ -717,6 +798,7 @@ describe("rolls.js", () => {
             };
             character.system.owned.abilities = [abilityDoc];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {intrigueDefense: {total: 5}};
@@ -725,10 +807,12 @@ describe("rolls.js", () => {
                 targetCharacter, "modifiers", CHARACTER_ATTR_CONSTANTS.COMPOSURE_RESISTANCE,
                 KEY_CONSTANTS.DISPOSITION, 4, false, true
             );
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let toolName = "bargain";
             let rollType: string = "persuasion";
             let rollDef: string[] = [rollType, abilityDoc.name, "2|0|0|0|0"];
@@ -754,6 +838,7 @@ describe("rolls.js", () => {
             let weaponDoc = Object.assign({}, defaultWeapon)
             character.system.owned.weapons = [weaponDoc];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
@@ -764,10 +849,12 @@ describe("rolls.js", () => {
                 armorDoc._id, armorDoc.system.rating,
                 true, true
             );
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollType: string = "weapon-test";
             let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
@@ -790,6 +877,7 @@ describe("rolls.js", () => {
             let weaponDoc = Object.assign({}, defaultWeapon)
             character.system.owned.weapons = [weaponDoc];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
@@ -800,10 +888,12 @@ describe("rolls.js", () => {
                 armorDoc._id, armorDoc.system.rating,
                 true, true
             );
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollType: string = "weapon-test";
             let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);
@@ -825,6 +915,7 @@ describe("rolls.js", () => {
             let weaponDoc = Object.assign({}, defaultWeapon)
             character.system.owned.weapons = [weaponDoc];
             let targetCharacter: TestCharacter = new TestCharacter();
+            targetCharacter.id = "someId";
             targetCharacter.name = "Other Name";
             targetCharacter.img = "/other/img/path";
             targetCharacter.system["derivedStats"] = {combatDefense: {total: 5}};
@@ -835,10 +926,12 @@ describe("rolls.js", () => {
                 armorDoc._id, armorDoc.system.rating,
                 true, true
             );
-            let token: object = {document: {_actor: targetCharacter}};
+            let token: object = {document: {actorId: targetCharacter.id}};
             let game: TestGame = new TestGame()
             game.user.targets = [token];
             global.game = game;
+            game["actors"] = new Map();
+            game.actors.set(targetCharacter.id, targetCharacter);
             let rollType: string = "weapon-test";
             let rollDef: string[] = [rollType, weaponDoc.name, "2|0|0|0|0"];
             let formula: DiceRollFormula = getFormula(rollDef, character);

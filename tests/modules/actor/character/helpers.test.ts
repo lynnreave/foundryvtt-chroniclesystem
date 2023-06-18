@@ -13,7 +13,8 @@ import {
 // @ts-ignore
 } from "@actor/character/transformers";
 import {
-  CHARACTER_ATTR_CONSTANTS
+  CHARACTER_ATTR_CONSTANTS,
+  EQUIPPED_CONSTANTS
 // @ts-ignore
 } from "@module/constants";
 
@@ -131,6 +132,80 @@ describe("helpers.js", () => {
           `${abilityDoc.system.rating}d6 + ${specialty.rating}B + ${specialty.modifier}`
       );
       expect(weaponDoc.damageValue).toStrictEqual(abilityDoc.system.rating+2);
+    });
+    describe("adaptable", () => {
+      test("adaptable in one hand", () => {
+        global.game = new TestGame();
+        let character: TestCharacter = new TestCharacter();
+        let swordSpecialty = {name: 'Swords', rating: 1, modifier: 1};
+        let fightingDoc = {
+          _id: "someId", name: "Fighting", type: "ability", system: {
+            rating: 5, modifier: 0, specialties: [swordSpecialty]
+          }
+        }
+        let athleticsDoc = {
+          _id: "someId", name: "Athletics", type: "ability", system: {
+            rating: 4, modifier: 0, specialties: []
+          }
+        }
+        character.owned.abilities = [fightingDoc, athleticsDoc];
+        let weaponDoc = {
+          name: "Sword", damageValue: null, formula: null, system: {
+            specialty: `${fightingDoc.name}:${swordSpecialty.name}`, damage: `@${fightingDoc.name}`,
+            isAdaptable: true, equipped: EQUIPPED_CONSTANTS.MAIN_HAND
+          }
+        };
+        getWeaponTestDataForActor(character, weaponDoc);
+        expect(weaponDoc.damageValue).toStrictEqual(fightingDoc.system.rating);
+      });
+      test("not adaptable in two hands", () => {
+        global.game = new TestGame();
+        let character: TestCharacter = new TestCharacter();
+        let swordSpecialty = {name: 'Swords', rating: 1, modifier: 1};
+        let fightingDoc = {
+          _id: "someId", name: "Fighting", type: "ability", system: {
+            rating: 5, modifier: 0, specialties: [swordSpecialty]
+          }
+        }
+        let athleticsDoc = {
+          _id: "someId", name: "Athletics", type: "ability", system: {
+            rating: 4, modifier: 0, specialties: []
+          }
+        }
+        character.owned.abilities = [fightingDoc, athleticsDoc];
+        let weaponDoc = {
+          name: "Sword", damageValue: null, formula: null, system: {
+            specialty: `${fightingDoc.name}:${swordSpecialty.name}`, damage: `@${fightingDoc.name}`,
+            isAdaptable: false, equipped: EQUIPPED_CONSTANTS.BOTH_HANDS
+          }
+        };
+        getWeaponTestDataForActor(character, weaponDoc);
+        expect(weaponDoc.damageValue).toStrictEqual(fightingDoc.system.rating);
+      });
+      test("adaptable in two hands", () => {
+        global.game = new TestGame();
+        let character: TestCharacter = new TestCharacter();
+        let swordSpecialty = {name: 'Swords', rating: 1, modifier: 1};
+        let fightingDoc = {
+          _id: "someId", name: "Fighting", type: "ability", system: {
+            rating: 5, modifier: 0, specialties: [swordSpecialty]
+          }
+        }
+        let athleticsDoc = {
+          _id: "someId", name: "Athletics", type: "ability", system: {
+            rating: 4, modifier: 0, specialties: []
+          }
+        }
+        character.owned.abilities = [fightingDoc, athleticsDoc];
+        let weaponDoc = {
+          name: "Sword", damageValue: null, formula: null, system: {
+            specialty: `${fightingDoc.name}:${swordSpecialty.name}`, damage: `@${fightingDoc.name}`,
+            isAdaptable: true, equipped: EQUIPPED_CONSTANTS.BOTH_HANDS
+          }
+        };
+        getWeaponTestDataForActor(character, weaponDoc);
+        expect(weaponDoc.damageValue).toStrictEqual(fightingDoc.system.rating + 2);
+      });
     });
   });
   describe("refresh embedded actor data", () => {

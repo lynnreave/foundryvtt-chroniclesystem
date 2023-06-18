@@ -10,6 +10,7 @@ import {
 import SystemUtils from "../../../util/systemUtils.js";
 import {
     CHARACTER_ATTR_CONSTANTS,
+    EQUIPPED_CONSTANTS,
     KEY_CONSTANTS
 } from "../../constants.js";
 import { getTransformation } from "./transformers.js";
@@ -67,6 +68,10 @@ export function getWeaponTestDataForActor(actor, weapon) {
         if (strength && strength.rating && strength.rating > 0) {
             weapon.damageValue += strength.rating;
         }
+    }
+    // handle adaptable quality
+    if (weaponData.isAdaptable && weaponData.equipped === EQUIPPED_CONSTANTS.BOTH_HANDS) {
+        weapon.damageValue += 2;
     }
 
     // get weapon damage modifiers
