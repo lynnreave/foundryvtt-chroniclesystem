@@ -571,6 +571,7 @@
     "constants": {
       "abilities": {
         "agility": "agility",
+        "animal_handling": "animal handling",
         "athletics": "athletics",
         "awareness": "awareness",
         "cunning": "cunning",

@@ -67,7 +67,12 @@
             </li>
             {{#each character.owned.weapons as |weapon index|}}
                 <li  class="item weapon flexrow" data-item-id="{{_id}}">
-                    <div class="weapon-label item-edit field"><a>{{weapon.name}}</a></div>
+                    <div class="weapon-label item-edit field flexrow">
+                        <div class="profile-list-img-container item-edit background-white">
+                            <img class="profile-list-img" src="{{weapon.img}}" title="{{relationship.name}}" />
+                        </div>
+                        <a>{{weapon.name}}</a>
+                    </div>
                     <div class="weapon-testdice rollable field" id="weapon-test:{{weapon.name}}:{{formulaToStr weapon.formula}}">
                         <a>{{format-formula weapon.formula}}</a>
                     </div>

@@ -508,6 +508,30 @@ describe("rolls.js", () => {
             }
             expect(actual).toStrictEqual(expected);
         });
+        test("has specialty modifier", () => {
+            let character: TestCharacter = new TestCharacter();
+            let abilityDoc = Object.assign({}, defaultAbility)
+            let specialty = Object.assign({}, defaultSpecialty)
+            abilityDoc.system["specialties"] = [specialty];
+            character.owned.abilities = [abilityDoc];
+            let transformer = Object.assign({}, defaultTransformer)
+            let modName = `${abilityDoc.name.toLowerCase()}_${specialty.name.toLowerCase()}`
+            character.system["poolMods"][modName] = [transformer]
+            let expected = {
+                pool: abilityDoc.system.rating + transformer.mod,
+                dicePenalty: 0,
+                bonusDice: specialty.rating,
+                modifier: specialty.modifier
+            }
+            let formula: DiceRollFormula = getAbilityTestFormula(character, abilityDoc.name, specialty.name);
+            let actual = {
+                pool: formula.pool,
+                dicePenalty: formula.dicePenalty,
+                bonusDice: formula.bonusDice,
+                modifier: formula.modifier
+            }
+            expect(actual).toStrictEqual(expected);
+        });
     });
     describe("get base influence for technique", () => {
         test("cunning", () => {

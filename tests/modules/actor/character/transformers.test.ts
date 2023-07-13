@@ -286,6 +286,22 @@ describe("transformers.js", () => {
                 character.system[type]["all"] = null;
             }
         });
+        test("multi-word name => type", () => {
+            let character: TestCharacter = new TestCharacter()
+            let testTransformer = Object.assign({}, defaultTransformer);
+            for (let type of transformerTypes) {
+                // clean
+                character[type]["some_attr"] = null;
+                character.system[type]["some_attr"] = null;
+                // test
+                character.system[type]["some_attr"] = [testTransformer];
+                let output = getTransformation(character, type, "some attr");
+                expect(output.total).toBe(testTransformer.mod);
+                // reset
+                character[type]["some_attr"] = null;
+                character.system[type]["some_attr"] = null;
+            }
+        });
     });
     describe("remove all transformers from source", () => {
         test("call => type", () => {

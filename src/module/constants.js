@@ -7,6 +7,7 @@ export const CHARACTER_ATTR_CONSTANTS = {
   PENALTY: "penalty",
 
   AGILITY: "agility",
+  ANIMAL_HANDLING: "animal_handling",
   AWARENESS: "awareness",
   CUNNING: "cunning",
   DECEPTION: "deception",
@@ -87,6 +88,7 @@ export const ORGANIZATION_RESOURCES = {
  */
 export const KEY_CONSTANTS = {
   AGILITY: "CS.constants.abilities.agility",
+  ANIMAL_HANDLING: "CS.constants.abilities.animal_handling",
   ATHLETICS: "CS.constants.abilities.athletics",
   AWARENESS: "CS.constants.abilities.awareness",
   CUNNING: "CS.constants.abilities.cunning",

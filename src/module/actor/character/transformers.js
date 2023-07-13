@@ -136,6 +136,9 @@ export function getTransformation(
     // make sure any temp data is included
     updateTempTransformers(character);
 
+    // account for two-word attributes
+    attr = attr.trim().replaceAll(" ", "_")
+
     // return props
     let total = 0;
     let detail = [];

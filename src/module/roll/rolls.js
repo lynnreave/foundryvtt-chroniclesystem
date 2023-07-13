@@ -137,18 +137,39 @@ export function getAbilityTestFormula(actor, abilityName, specialtyName = null) 
         actor, "modifiers", abilityNameLowerCase,false, true
     );
 
+    // get all transformers to specialty
+    let specialtyPoolMods = {total: 0};
+    let specialtyPenalties = {total: 0};
+    let specialtyBonuses = {total: 0};
+    let specialtyModifiers = {total: 0};
+    if (specialty) {
+        let specialtyLookUp = `${abilityNameLowerCase}_${specialty.name.toLowerCase()}`
+        specialtyPoolMods = getTransformation(
+            actor, "poolMods", specialtyLookUp, false, true
+        );
+        specialtyPenalties = getTransformation(
+            actor, "penalties", specialtyLookUp, false, true
+        );
+        specialtyBonuses = getTransformation(
+            actor, "bonuses", specialtyLookUp, false, true
+        )
+        specialtyModifiers = getTransformation(
+            actor, "modifiers", specialtyLookUp, false, true
+        );
+    }
+
     // get ability data (or use default for non-existent ability)
     let abilityData = ability ? getData(ability) : {rating: 2, modifier: 0};
 
     // update formula dice values w/ ability data and transformations
     // test dice pool
-    formula.pool = abilityData.rating + poolMods.total;
+    formula.pool = abilityData.rating + poolMods.total + specialtyPoolMods.total;
     // test dice pool penalties
-    formula.dicePenalty = penalties.total;
+    formula.dicePenalty = penalties.total + specialtyPenalties.total;
     // bonus dice
-    formula.bonusDice = specValue + bonuses.total;
+    formula.bonusDice = specValue + bonuses.total + specialtyBonuses.total;
     // roll modifier
-    formula.modifier = abilityData.modifier + specModifier + modifiers.total;
+    formula.modifier = abilityData.modifier + specModifier + modifiers.total + specialtyModifiers.total;
 
     // return
     return formula;
