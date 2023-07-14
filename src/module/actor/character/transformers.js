@@ -245,7 +245,9 @@ export function saveTransformers(character) {
         data[`system.${type}`] = character[type]
     }
     let context = { diff: false }
-    character.update(data, context)
+    if (character.isOwner) {
+        character.update(data, context)
+    }
 }
 
 export function updateTempTransformers(character) {

@@ -15,7 +15,7 @@
                     </div>
                     <div class="ability-specialities">
                         {{#each ability.system.specialties as |specialty key|}}
-                            {{#if specialty.rating}}
+                            {{#if (notNull specialty.rating)}}
                             <div class="rollable" id="specialty:{{specialty.name}}:{{../this.name}}">
                                 <a>{{specialty.name}} {{specialty.rating}}B{{modifier specialty.modifier}}</a>&nbsp;
                             </div>

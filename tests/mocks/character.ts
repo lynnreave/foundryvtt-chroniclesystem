@@ -18,6 +18,7 @@ export class TestCharacter {
     owned: object = {
         abilities: []
     };
+    isOwner = true;
     system: object = {
         derivedStats: {
             combatDefense: {

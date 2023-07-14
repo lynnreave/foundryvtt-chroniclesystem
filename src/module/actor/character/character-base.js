@@ -113,8 +113,8 @@ export class CharacterBase extends ActorChronicle {
     this.saveTransformers();
   }
 
-  _onUpdateEmbeddedDocuments(embeddedName, documents, result, options, userId) {
-    super._onUpdateEmbeddedDocuments(
+  _onUpdateDescendantDocuments(embeddedName, documents, result, options, userId) {
+    super._onUpdateDescendantDocuments(
       embeddedName,
       documents,
       result,
@@ -129,7 +129,6 @@ export class CharacterBase extends ActorChronicle {
         item.onEquippedChanged(this, item.getCSData().equipped > 0);
       }
     });
-    // this.saveModifiers();
     this.saveTransformers();
   }
 }
