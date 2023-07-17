@@ -12,6 +12,7 @@ import { ChronicleSystem } from "../../system/ChronicleSystem.js";
 import { updateWeaponDefendingState } from "./character/helpers.js";
 import { getWeaponTestDataForActor } from "./helpers.js";
 import { EQUIPPED_CONSTANTS } from "../../constants.js";
+import { getAbilityTestFormula } from "../../roll/rolls.js";
 
 /**
  * The base ActorSheet entity for Character ActorSheet types.
@@ -54,6 +55,22 @@ export class CharacterSheetBase extends ActorSheetChronicle {
 
     data.notEquipped = EQUIPPED_CONSTANTS.IS_NOT_EQUIPPED;
 
+    // build ability and specialty test data formulas
+    character.owned.abilities.forEach((ability) => {
+      ability.formula = getAbilityTestFormula(data.actor, ability.name, null)
+      // specialty formulas
+      let abilityData = getData(ability);
+      let specialties = [];
+      Object.entries(abilityData.specialties).forEach((specialty, index) => {
+        specialty.formula = getAbilityTestFormula(
+            data.actor, ability.name, specialty[1].name
+        );
+        specialties.push(specialty);
+      });
+      abilityData.specialties = specialties;
+    });
+
+    // build weapon test data formulas
     character.owned.weapons.forEach((weapon) => {
       getWeaponTestDataForActor(data.actor, weapon);
     });

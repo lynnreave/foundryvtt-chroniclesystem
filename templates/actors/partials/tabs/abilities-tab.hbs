@@ -7,7 +7,7 @@
             {{#each character.owned.abilities as |ability key|}}
                 <li  class="item ability flexrow" data-item-id="{{ability._id}}">
                     <div class="ability-value rollable" id="ability:{{ability.name}}">
-                        <a>{{ability.system.rating}}d{{modifier ability.system.modifier}}</a>
+                        <a>{{ability.formula.pool}}{{showIfDifferent 0 ability.formula.dicePenalty (concat "-" ability.formula.dicePenalty) ""}}D{{modifier ability.formula.bonusDice}}{{showIfDifferent 0 ability.formula.bonusDice "B" ""}}{{modifier ability.formula.modifier}}</a>
                     </div>
                     <label class="ability-label item-edit"><a >{{ability.name}}</a></label>
                     <div class="ability-value item-edit">
@@ -15,9 +15,9 @@
                     </div>
                     <div class="ability-specialities">
                         {{#each ability.system.specialties as |specialty key|}}
-                            {{#if (notNull specialty.rating)}}
-                            <div class="rollable" id="specialty:{{specialty.name}}:{{../this.name}}">
-                                <a>{{specialty.name}} {{specialty.rating}}B{{modifier specialty.modifier}}</a>&nbsp;
+                            {{#if (add (add (subtract specialty.formula.bonusDice ability.formula.bonusDice) specialty.formula.modifier) (subtract specialty.formula.pool ability.formula.pool))}}
+                            <div class="rollable" id="specialty:{{specialty.1.name}}:{{../this.name}}">
+                                <a>{{specialty.1.name}} {{#if (subtract specialty.formula.bonusDice ability.formula.bonusDice)}}{{subtract specialty.formula.bonusDice ability.formula.bonusDice}}B{{/if}}{{modifier specialty.formula.modifier}}{{showIfDifferent ability.formula.pool specialty.formula.pool (concat (modifier (subtract specialty.formula.pool ability.formula.pool)) "D") ""}}</a>&nbsp;
                             </div>
                             {{/if}}
                         {{/each}}

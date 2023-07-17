@@ -79,8 +79,8 @@ export class CharacterBase extends ActorChronicle {
 
   updateTempTransformers() { updateTempTransformers(this) }
 
-  _onDeleteEmbeddedDocuments(embeddedName, documents, result, options, userId) {
-    super._onDeleteEmbeddedDocuments(
+  _onDeleteDescendantDocuments(embeddedName, documents, result, options, userId) {
+    super._onDeleteDescendantDocuments(
       embeddedName,
       documents,
       result,
@@ -96,8 +96,8 @@ export class CharacterBase extends ActorChronicle {
     this.saveTransformers();
   }
 
-  _onCreateEmbeddedDocuments(embeddedName, documents, result, options, userId) {
-    super._onCreateEmbeddedDocuments(
+  _onCreateDescendantDocuments(embeddedName, documents, result, options, userId) {
+    super._onCreateDescendantDocuments(
       embeddedName,
       documents,
       result,
