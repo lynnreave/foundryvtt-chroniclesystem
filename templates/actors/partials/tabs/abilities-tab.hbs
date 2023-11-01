@@ -15,9 +15,9 @@
                     </div>
                     <div class="ability-specialities">
                         {{#each ability.system.specialties as |specialty key|}}
-                            {{#if (add (add (subtract specialty.formula.bonusDice ability.formula.bonusDice) specialty.formula.modifier) (subtract specialty.formula.pool ability.formula.pool))}}
+                            {{#if (add (add (showAbs (subtract specialty.formula.bonusDice ability.formula.bonusDice)) (showAbs (subtract specialty.formula.modifier ability.formula.modifier))) (showAbs (subtract specialty.formula.pool ability.formula.pool)))}}
                             <div class="rollable" id="specialty:{{specialty.1.name}}:{{../this.name}}">
-                                <a>{{specialty.1.name}} {{#if (subtract specialty.formula.bonusDice ability.formula.bonusDice)}}{{subtract specialty.formula.bonusDice ability.formula.bonusDice}}B{{/if}}{{modifier specialty.formula.modifier}}{{showIfDifferent ability.formula.pool specialty.formula.pool (concat (modifier (subtract specialty.formula.pool ability.formula.pool)) "D") ""}}</a>&nbsp;
+                                <a>{{specialty.1.name}} {{#if (subtract specialty.formula.bonusDice ability.formula.bonusDice)}}{{subtract specialty.formula.bonusDice ability.formula.bonusDice}}B{{/if}}{{#if (subtract specialty.formula.modifier ability.formula.modifier)}}{{modifier (subtract specialty.formula.modifier ability.formula.modifier)}}{{/if}}{{#if (subtract specialty.formula.pool ability.formula.pool)}}{{modifier (subtract specialty.formula.pool ability.formula.pool)}}D{{/if}}</a>&nbsp;
                             </div>
                             {{/if}}
                         {{/each}}
